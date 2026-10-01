@@ -636,9 +636,6 @@
     }
 
     /* ==========================================================================
-       STEP 3: CLIENT DETAILS FORM (ELEGANT & SPACIOUS)
-       ========================================================================== */
-    /* ==========================================================================
        STEP 3: CLIENT DETAILS FORM (EXACT 535px HEIGHT MATCH)
        ========================================================================== */
     #step3-client {
@@ -855,13 +852,12 @@
       border-radius: var(--burb-radius-lg);
       border: 1px solid var(--burb-border);
       box-shadow: var(--burb-shadow-md);
-      padding: 30px 24px;
+      padding: 40px 30px;
       animation: burbFadeIn 0.25s ease;
       height: 535px;
       max-height: 535px;
       box-sizing: border-box;
       overflow: hidden;
-      display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -1046,7 +1042,7 @@
     </div>
 
     <!-- ==================== STEP 2: SCHEDULE (CALENDAR & TIME SLOTS) ==================== -->
-    <div id="step2-schedule">
+    <div id="step2-schedule" style="display:none;">
       <div class="burb-book-top-row">
         <button class="burb-book-back-link" onclick="goToStep(1)">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
@@ -1132,7 +1128,7 @@
     </div>
 
     <!-- ==================== STEP 3: CLIENT DETAILS ==================== -->
-    <div id="step3-client">
+    <div id="step3-client" style="display:none;">
       <button class="burb-book-back-link" onclick="goToStep(2)">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         <span>Back to Date & Time</span>
@@ -1205,7 +1201,7 @@
     </div>
 
     <!-- ==================== STEP 4: CONFIRMATION ==================== -->
-    <div id="step4-confirm">
+    <div id="step4-confirm" style="display:none;">
       <div class="burb-book-success-icon">✓</div>
       <h2 style="font-size: 22px; color: var(--burb-text-main); font-weight: 700;">Booking Confirmed!</h2>
       <p style="color: var(--burb-text-muted); margin-top: 4px; font-size: 14px;">Your meeting room reservation is successfully secured.</p>
@@ -1270,7 +1266,7 @@
       step1.style.display = (step === 1) ? 'block' : 'none';
       step2.style.display = (step === 2) ? 'block' : 'none';
       step3.style.display = (step === 3) ? 'block' : 'none';
-      step4.style.display = (step === 4) ? 'block' : 'none';
+      step4.style.display = (step === 4) ? 'flex' : 'none';
 
       if (step === 3) populateClientSummary();
       window.scrollTo(0, 0);
@@ -1735,6 +1731,9 @@
       const [h, m] = str24.split(':').map(Number);
       return formatTo12Hr(h, m);
     }
+
+    // Ensure Step 1 is explicitly initialized on initial render
+    goToStep(1);
   </script>
 </body>
 </html>
