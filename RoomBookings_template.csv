@@ -1,0 +1,4 @@
+roomName,bookingDate,startTime,endTime,fullName,email,phone,notes,memberId
+Large Conference Room,2026-10-10T00:00:00.000Z,08:00,09:30,John Doe,john@example.com,+1 555-0199,Quarterly team sync,sample_member_001
+Small Conference Room,2026-10-10T00:00:00.000Z,10:00,11:30,Sarah Smith,sarah@example.com,+1 555-0144,Client presentation,sample_member_002
+Private Office,2026-10-11T00:00:00.000Z,14:00,16:00,Alex Wong,alex@example.com,+1 555-0182,Focused sprint,sample_member_003

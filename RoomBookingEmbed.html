@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coworking Room Booking</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    body {
+      background: transparent;
+      padding: 20px 10px;
+      color: #1e293b;
+    }
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    /* =========================================
+       STEP 1: 3 ROOM CARDS GRID
+    ========================================= */
+    #roomsView {
+      display: block;
+    }
+    .view-title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .view-title h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .view-title p {
+      font-size: 15px;
+      color: #64748b;
+      margin-top: 6px;
+    }
+    .rooms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .room-card {
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .room-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    }
+    .room-image {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      background-color: #f1f5f9;
+    }
+    .room-content {
+      padding: 24px 20px 22px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .room-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 12px;
+    }
+    .room-divider {
+      width: 80%;
+      height: 1px;
+      background: #e2e8f0;
+      margin: 16px auto;
+    }
+    .room-meta {
+      font-size: 15px;
+      color: #64748b;
+      margin-bottom: 22px;
+    }
+    .btn-book-card {
+      margin-top: auto;
+      width: 100%;
+      padding: 12px;
+      background: #1f5582;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .btn-book-card:hover {
+      background: #174063;
+    }
+
+    /* =========================================
+       STEP 2: SCHEDULE YOUR SERVICE (CALENDAR & AVAILABILITY)
+    ========================================= */
+    #scheduleView {
+      display: none;
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+      padding: 32px 28px;
+    }
+    .nav-back-link {
+      background: none;
+      border: none;
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 16px;
+      padding: 0;
+    }
+    .nav-back-link:hover {
+      color: #0f172a;
+    }
+    .schedule-header {
+      margin-bottom: 24px;
+    }
+    .schedule-header h2 {
+      font-size: 26px;
+      font-weight: 500;
+      color: #1e293b;
+    }
+    .schedule-header p {
+      font-size: 14px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    .sub-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 10px;
+      margin-bottom: 24px;
+    }
+    .sub-bar h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .tz-indicator {
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    /* 3 Column Layout for Schedule View */
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr 280px;
+      gap: 28px;
+      align-items: start;
+    }
+    @media (max-width: 960px) {
+      .schedule-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Column 1: Mini Calendar */
+    .calendar-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .cal-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .cal-nav-btn {
+      background: none;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      color: #334155;
+    }
+    .cal-nav-btn:hover:not(:disabled) {
+      background: #f1f5f9;
+    }
+    .cal-nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    .cal-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .cal-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+    .cal-days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .cal-day-cell {
+      height: 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      position: relative;
+      background: transparent;
+      border: none;
+      color: #1e293b;
+      transition: background 0.15s;
+    }
+    .cal-day-cell:hover:not(.disabled):not(.selected) {
+      background: #f1f5f9;
+    }
+    .cal-day-cell.disabled {
+      color: #cbd5e1;
+      cursor: not-allowed;
+    }
+    .cal-day-cell.has-dot::after {
+      content: '';
+      width: 4px;
+      height: 4px;
+      background-color: #1f5582;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 3px;
+    }
+    .cal-day-cell.selected {
+      background: #1f5582;
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .cal-day-cell.selected::after {
+      background-color: #ffffff;
+    }
+
+    /* Column 2: Availability Slots */
+    .availability-col h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 14px;
+    }
+    .slots-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      max-height: 380px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .slot-btn {
+      padding: 11px 8px;
+      border: 1px solid #94a3b8;
+      background: #ffffff;
+      color: #1e293b;
+      border-radius: 4px;
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+    .slot-btn:hover:not(.disabled):not(.selected) {
+      border-color: #1f5582;
+      color: #1f5582;
+      background: #f8fafc;
+    }
+    .slot-btn.selected {
+      background: #1f5582;
+      color: #ffffff;
+      border-color: #1f5582;
+    }
+    .slot-btn.slot-booked {
+      background: #f8fafc;
+      border-color: #e2e8f0;
+      color: #94a3b8;
+      cursor: not-allowed;
+      text-decoration: line-through;
+      position: relative;
+    }
+    .slot-booked-badge {
+      font-size: 10px;
+      text-decoration: none;
+      color: #dc2626;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Stop Time selector box below slots */
+    .stop-time-container {
+      margin-top: 18px;
+      padding: 14px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      display: none;
+    }
+    .stop-time-container label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+    .stop-time-select {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+      outline: none;
+    }
+
+    /* Column 3: Service Details Card */
+    .service-details-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      background: #ffffff;
+    }
+    .service-details-card h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #0f172a;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+    }
+    .sd-room-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1f5582;
+      margin-bottom: 6px;
+    }
+    .sd-time-info {
+      font-size: 13px;
+      color: #475569;
+      line-height: 1.5;
+      margin-bottom: 18px;
+      padding: 8px 10px;
+      background: #f8fafc;
+      border-radius: 6px;
+      border-left: 3px solid #1f5582;
+      display: none;
+    }
+    .btn-next-step {
+      width: 100%;
+      padding: 12px;
+      background: #1f5582;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-next-step:hover:not(:disabled) {
+      background: #174063;
+    }
+    .btn-next-step:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+    }
+
+    /* =========================================
+       STEP 3: CLIENT DETAILS FORM
+    ========================================= */
+    #clientDetailsView {
+      display: none;
+      max-width: 600px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+      padding: 32px 28px;
+    }
+    .client-header {
+      margin-bottom: 20px;
+    }
+    .client-header h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .client-header p {
+      font-size: 14px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+    .booking-summary-pill {
+      background: #f1f5f9;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 22px;
+      font-size: 13.5px;
+      color: #334155;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border-left: 4px solid #1f5582;
+    }
+    .form-row {
+      margin-bottom: 16px;
+    }
+    .form-row label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .form-input:focus {
+      border-color: #1f5582;
+      box-shadow: 0 0 0 3px rgba(31, 85, 130, 0.15);
+    }
+    .btn-final-book {
+      width: 100%;
+      padding: 13px;
+      background: #1f5582;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-final-book:hover:not(:disabled) {
+      background: #174063;
+    }
+    .btn-final-book:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    /* =========================================
+       STEP 4: CONFIRMATION SUCCESS VIEW
+    ========================================= */
+    #confirmationView {
+      display: none;
+      max-width: 520px;
+      margin: 0 auto;
+      text-align: center;
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      padding: 40px 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    }
+    .success-icon {
+      width: 60px;
+      height: 60px;
+      background: #dcfce7;
+      color: #16a34a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 16px;
+    }
+    .confirmation-details {
+      margin: 20px auto;
+      padding: 16px;
+      background: #f8fafc;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 14px;
+      color: #334155;
+      line-height: 1.6;
+    }
+    .btn-reset {
+      margin-top: 16px;
+      padding: 11px 24px;
+      background: #1f5582;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Alerts and Spinners */
+    .alert {
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-top: 14px;
+      display: none;
+    }
+    .alert-error {
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+    }
+    .alert-success {
+      background: #f0fdf4;
+      color: #16a34a;
+      border: 1px solid #bbf7d0;
+    }
+    .spinner {
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top: 2px solid #ffffff;
+      width: 16px;
+      height: 16px;
+      animation: spin 0.8s linear infinite;
+      display: none;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- ==================== VIEW 1: 3 ROOM CARDS ==================== -->
+    <div id="roomsView">
+      <div class="view-title">
+        <h1>Book a Meeting Space</h1>
+        <p>Select a room to view availability and book custom times.</p>
+      </div>
+
+      <div class="rooms-grid">
+        <!-- Card 1: Large Conference Room -->
+        <div class="room-card">
+          <img class="room-image" src="https://static.wixstatic.com/media/b95dae_36530dbd512d44ed9fad2ae9963a3e09~mv2.jpg" alt="Large Conference Room">
+          <div class="room-content">
+            <h3 class="room-name">Large Conference Room</h3>
+            <div class="room-divider"></div>
+            <div class="room-meta">30 min</div>
+            <button class="btn-book-card" onclick="selectRoom('Large Conference Room')">Book Now</button>
+          </div>
+        </div>
+
+        <!-- Card 2: Small Conference Room -->
+        <div class="room-card">
+          <img class="room-image" src="https://static.wixstatic.com/media/b95dae_c726334b29934448aa5eaf1fb5835d7a~mv2.jpg" alt="Small Conference Room">
+          <div class="room-content">
+            <h3 class="room-name">Small Conference Room</h3>
+            <div class="room-divider"></div>
+            <div class="room-meta">30 min</div>
+            <button class="btn-book-card" onclick="selectRoom('Small Conference Room')">Book Now</button>
+          </div>
+        </div>
+
+        <!-- Card 3: Private Office -->
+        <div class="room-card">
+          <img class="room-image" src="https://static.wixstatic.com/media/b95dae_0ab92caf5971498590ef9ea22c48d87e~mv2.jpg" alt="Private Office">
+          <div class="room-content">
+            <h3 class="room-name">Private Office</h3>
+            <div class="room-divider"></div>
+            <div class="room-meta">30 min</div>
+            <button class="btn-book-card" onclick="selectRoom('Private Office')">Book Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== VIEW 2: SCHEDULE YOUR SERVICE (CALENDAR & SLOTS) ==================== -->
+    <div id="scheduleView">
+      <button class="nav-back-link" onclick="goToStep(1)">← Back to Rooms</button>
+      
+      <div class="schedule-header">
+        <h2>Schedule your service</h2>
+        <p>Check out our availability and book the date and time that works for you</p>
+      </div>
+
+      <div class="sub-bar">
+        <h3>Select a Date and Time</h3>
+        <span class="tz-indicator">Time zone: Local / EDT ⌵</span>
+      </div>
+
+      <div class="schedule-grid">
+        
+        <!-- Column 1: Mini Calendar -->
+        <div class="calendar-card">
+          <div class="cal-nav">
+            <button class="cal-nav-btn" id="prevMonthBtn" onclick="changeMonth(-1)">&lt;</button>
+            <div class="cal-title" id="calMonthYearTitle">October 2026</div>
+            <button class="cal-nav-btn" id="nextMonthBtn" onclick="changeMonth(1)">&gt;</button>
+          </div>
+          <div class="cal-weekdays">
+            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+          </div>
+          <div class="cal-days-grid" id="calDaysGrid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Column 2: Availability Slots -->
+        <div class="availability-col">
+          <h4 id="availabilityHeading">Availability for Thursday, October 1</h4>
+          <div class="slots-grid" id="slotsGrid">
+            <!-- Dynamically populated with 30-min slots, booked slots will show filled up/disabled -->
+          </div>
+
+          <!-- Stop Time / End Time selector -->
+          <div class="stop-time-container" id="stopTimeContainer">
+            <label for="stopTimeDropdown">Select Stop Time (Duration):</label>
+            <select id="stopTimeDropdown" class="stop-time-select" onchange="onStopTimeSelected()">
+              <!-- Options populated dynamically based on Start Time -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Column 3: Service Details Card -->
+        <div class="service-details-card">
+          <h4>Service Details</h4>
+          <div class="sd-room-title" id="sdRoomTitle">Large Conference Room</div>
+          <div class="sd-time-info" id="sdTimeInfo"></div>
+          
+          <button class="btn-next-step" id="nextToDetailsBtn" disabled onclick="goToStep(3)">Next</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== VIEW 3: CLIENT DETAILS FORM ==================== -->
+    <div id="clientDetailsView">
+      <button class="nav-back-link" onclick="goToStep(2)">← Back to Date & Time</button>
+      
+      <div class="client-header">
+        <h2>Enter Your Details</h2>
+        <p>Please enter your contact information to finalize the booking.</p>
+      </div>
+
+      <div class="booking-summary-pill" id="clientBookingSummary">
+        <!-- Summary will be populated dynamically -->
+      </div>
+
+      <form id="clientForm" onsubmit="event.preventDefault(); submitFinalBooking();">
+        <div class="form-row">
+          <label for="clientName">Full Name *</label>
+          <input type="text" id="clientName" class="form-input" placeholder="e.g. John Doe" required>
+        </div>
+
+        <div class="form-row">
+          <label for="clientEmail">Email Address *</label>
+          <input type="email" id="clientEmail" class="form-input" placeholder="e.g. john@example.com" required>
+        </div>
+
+        <div class="form-row">
+          <label for="clientPhone">Phone Number *</label>
+          <input type="tel" id="clientPhone" class="form-input" placeholder="e.g. (781) 400-2347" required>
+        </div>
+
+        <div class="form-row">
+          <label for="clientNotes">Additional Notes / Meeting Purpose (Optional)</label>
+          <textarea id="clientNotes" class="form-input" rows="2" placeholder="e.g. Need projector, 6 attendees"></textarea>
+        </div>
+
+        <button type="submit" id="finalBookBtn" class="btn-final-book">
+          <span class="spinner" id="finalSpinner"></span>
+          <span id="finalBtnText">Book Now</span>
+        </button>
+
+        <div class="alert" id="clientAlert"></div>
+      </form>
+    </div>
+
+    <!-- ==================== VIEW 4: CONFIRMATION SUCCESS ==================== -->
+    <div id="confirmationView">
+      <div class="success-icon">✓</div>
+      <h2>Booking Confirmed!</h2>
+      <p style="color: #64748b; margin-top: 6px;">Your meeting room reservation is successfully secured.</p>
+      
+      <div class="confirmation-details" id="confDetailsText">
+        <!-- Details inserted dynamically -->
+      </div>
+
+      <button class="btn-reset" onclick="goToStep(1)">Book Another Room</button>
+    </div>
+
+  </div>
+
+  <script>
+    // State management
+    const state = {
+      roomName: '',
+      currentYear: new Date().getFullYear(),
+      currentMonth: new Date().getMonth(),
+      selectedDate: new Date(),
+      startTime: '',
+      endTime: '',
+      bookedIntervals: [] // [{ startTime: "09:00", endTime: "10:30" }]
+    };
+
+    const CONFIG = {
+      startHour: 8,       // 08:00 AM
+      endHour: 18,        // 06:00 PM
+      stepMinutes: 30
+    };
+
+    // DOM Elements
+    const roomsView = document.getElementById('roomsView');
+    const scheduleView = document.getElementById('scheduleView');
+    const clientDetailsView = document.getElementById('clientDetailsView');
+    const confirmationView = document.getElementById('confirmationView');
+
+    const calMonthYearTitle = document.getElementById('calMonthYearTitle');
+    const calDaysGrid = document.getElementById('calDaysGrid');
+    const availabilityHeading = document.getElementById('availabilityHeading');
+    const slotsGrid = document.getElementById('slotsGrid');
+    const stopTimeContainer = document.getElementById('stopTimeContainer');
+    const stopTimeDropdown = document.getElementById('stopTimeDropdown');
+    const sdRoomTitle = document.getElementById('sdRoomTitle');
+    const sdTimeInfo = document.getElementById('sdTimeInfo');
+    const nextToDetailsBtn = document.getElementById('nextToDetailsBtn');
+    const clientBookingSummary = document.getElementById('clientBookingSummary');
+    const finalBookBtn = document.getElementById('finalBookBtn');
+    const finalSpinner = document.getElementById('finalSpinner');
+    const finalBtnText = document.getElementById('finalBtnText');
+    const clientAlert = document.getElementById('clientAlert');
+    const confDetailsText = document.getElementById('confDetailsText');
+
+    // 1. Navigation Flow
+    function goToStep(step) {
+      roomsView.style.display = (step === 1) ? 'block' : 'none';
+      scheduleView.style.display = (step === 2) ? 'block' : 'none';
+      clientDetailsView.style.display = (step === 3) ? 'block' : 'none';
+      confirmationView.style.display = (step === 4) ? 'block' : 'none';
+
+      if (step === 3) {
+        populateClientSummary();
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 2. Select Room (from Step 1)
+    function selectRoom(name) {
+      state.roomName = name;
+      state.startTime = '';
+      state.endTime = '';
+      state.selectedDate = new Date();
+      state.currentYear = state.selectedDate.getFullYear();
+      state.currentMonth = state.selectedDate.getMonth();
+
+      sdRoomTitle.textContent = name;
+      updateServiceDetails();
+
+      goToStep(2);
+      renderCalendar();
+      fetchBookedSlotsForDate();
+    }
+
+    // 3. Calendar Engine
+    function renderCalendar() {
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      calMonthYearTitle.textContent = `${monthNames[state.currentMonth]} ${state.currentYear}`;
+
+      calDaysGrid.innerHTML = '';
+
+      const firstDayIndex = new Date(state.currentYear, state.currentMonth, 1).getDay();
+      const totalDaysInMonth = new Date(state.currentYear, state.currentMonth + 1, 0).getDate();
+
+      const today = new Date();
+      today.setHours(0,0,0,0);
+
+      // Disable prev month button if viewing current month
+      const currentCalMonth = new Date(state.currentYear, state.currentMonth, 1);
+      const minMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      document.getElementById('prevMonthBtn').disabled = currentCalMonth <= minMonth;
+
+      // Blank padding days
+      for (let i = 0; i < firstDayIndex; i++) {
+        const blank = document.createElement('div');
+        blank.className = 'cal-day-cell disabled';
+        calDaysGrid.appendChild(blank);
+      }
+
+      // Month days
+      for (let day = 1; day <= totalDaysInMonth; day++) {
+        const cellDate = new Date(state.currentYear, state.currentMonth, day);
+        cellDate.setHours(0,0,0,0);
+
+        const btn = document.createElement('button');
+        btn.className = 'cal-day-cell';
+        btn.textContent = day;
+
+        const isPast = cellDate < today;
+        if (isPast) {
+          btn.classList.add('disabled');
+          btn.disabled = true;
+        } else {
+          btn.classList.add('has-dot');
+          btn.onclick = () => onSelectDate(cellDate);
+        }
+
+        const isSelected = cellDate.getTime() === state.selectedDate.setHours(0,0,0,0);
+        if (isSelected) {
+          btn.classList.add('selected');
+        }
+
+        calDaysGrid.appendChild(btn);
+      }
+    }
+
+    function changeMonth(offset) {
+      state.currentMonth += offset;
+      if (state.currentMonth < 0) {
+        state.currentMonth = 11;
+        state.currentYear--;
+      } else if (state.currentMonth > 11) {
+        state.currentMonth = 0;
+        state.currentYear++;
+      }
+      renderCalendar();
+    }
+
+    function onSelectDate(date) {
+      state.selectedDate = new Date(date);
+      state.startTime = '';
+      state.endTime = '';
+      stopTimeContainer.style.display = 'none';
+      updateServiceDetails();
+      renderCalendar();
+      fetchBookedSlotsForDate();
+    }
+
+    // 4. Fetch Booked Slots from Wix Velo
+    function fetchBookedSlotsForDate() {
+      const options = { weekday: 'long', month: 'long', day: 'numeric' };
+      availabilityHeading.textContent = `Availability for ${state.selectedDate.toLocaleDateString('en-US', options)}`;
+      slotsGrid.innerHTML = '<div style="grid-column: span 2; padding: 20px; text-align: center; color: #64748b;">Loading available slots...</div>';
+
+      const isoDate = state.selectedDate.toISOString().split('T')[0];
+
+      // Request from Wix Velo
+      window.parent.postMessage({
+        action: 'GET_BOOKED_SLOTS',
+        payload: {
+          roomName: state.roomName,
+          bookingDate: isoDate
+        }
+      }, '*');
+    }
+
+    // Listen to messages from Wix Page Code
+    window.addEventListener('message', (event) => {
+      const { action, bookedSlots, success, message } = event.data || {};
+
+      // A) Booked slots received
+      if (action === 'BOOKED_SLOTS_RESPONSE') {
+        state.bookedIntervals = bookedSlots || [];
+        renderTimeSlots();
+      }
+
+      // B) Final Booking Response
+      if (action === 'BOOKING_RESPONSE') {
+        setFinalLoading(false);
+        if (success) {
+          showConfirmation();
+        } else {
+          showClientAlert(message || "An error occurred while booking.", "error");
+        }
+      }
+    });
+
+    // 5. Render 30-min Time Slots (Marking booked slots as disabled/fill-up)
+    function renderTimeSlots() {
+      slotsGrid.innerHTML = '';
+
+      for (let h = CONFIG.startHour; h < CONFIG.endHour; h++) {
+        for (let m = 0; m < 60; m += CONFIG.stepMinutes) {
+          const time24 = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+          const time12 = formatTo12Hr(h, m);
+
+          const slotBtn = document.createElement('button');
+          slotBtn.type = 'button';
+          slotBtn.className = 'slot-btn';
+
+          // Check if this slot overlaps with an existing booking in CMS
+          const isSlotBooked = isTimeWithinBookings(time24);
+
+          if (isSlotBooked) {
+            slotBtn.classList.add('slot-booked');
+            slotBtn.disabled = true;
+            slotBtn.innerHTML = `<span>${time12}</span><span class="slot-booked-badge">Booked</span>`;
+          } else {
+            slotBtn.innerHTML = `<span>${time12}</span>`;
+            if (state.startTime === time24) {
+              slotBtn.classList.add('selected');
+            }
+            slotBtn.onclick = () => onSelectStartTime(time24, slotBtn);
+          }
+
+          slotsGrid.appendChild(slotBtn);
+        }
+      }
+    }
+
+    function isTimeWithinBookings(timeStr) {
+      const checkMins = timeToMins(timeStr);
+      return state.bookedIntervals.some(b => {
+        const startMins = timeToMins(b.startTime);
+        const endMins = timeToMins(b.endTime);
+        // A slot is unavailable if it falls within [start, end)
+        return checkMins >= startMins && checkMins < endMins;
+      });
+    }
+
+    // 6. Handle Start Time Selection & Populate Stop Times
+    function onSelectStartTime(timeStr, btnElement) {
+      state.startTime = timeStr;
+      
+      // Update UI active slot
+      document.querySelectorAll('.slot-btn').forEach(btn => btn.classList.remove('selected'));
+      btnElement.classList.add('selected');
+
+      // Populate Stop Time Dropdown
+      populateStopTimes(timeStr);
+      stopTimeContainer.style.display = 'block';
+    }
+
+    function populateStopTimes(startTimeStr) {
+      stopTimeDropdown.innerHTML = '<option value="" disabled selected>Select stop time</option>';
+      const startMins = timeToMins(startTimeStr);
+
+      // Find the next booked start time to avoid booking across another booking
+      let nextBookedMins = CONFIG.endHour * 60;
+      state.bookedIntervals.forEach(b => {
+        const bStart = timeToMins(b.startTime);
+        if (bStart > startMins && bStart < nextBookedMins) {
+          nextBookedMins = bStart;
+        }
+      });
+
+      let firstValidEnd = '';
+
+      for (let m = startMins + CONFIG.stepMinutes; m <= nextBookedMins; m += CONFIG.stepMinutes) {
+        const endHour = Math.floor(m / 60);
+        const endMin = m % 60;
+        const time24 = `${String(endHour).padStart(2, '0')}:${String(endMin).padStart(2, '0')}`;
+        const time12 = formatTo12Hr(endHour, endMin);
+        const durationMins = m - startMins;
+        const durationText = durationMins < 60 ? `${durationMins} min` : `${durationMins / 60} hr${durationMins > 60 ? 's' : ''}`;
+
+        const opt = document.createElement('option');
+        opt.value = time24;
+        opt.textContent = `${time12} (${durationText})`;
+        stopTimeDropdown.appendChild(opt);
+
+        if (!firstValidEnd) firstValidEnd = time24;
+      }
+
+      // Default to 1st increment (30 mins)
+      if (firstValidEnd) {
+        stopTimeDropdown.value = firstValidEnd;
+        state.endTime = firstValidEnd;
+      }
+
+      updateServiceDetails();
+    }
+
+    function onStopTimeSelected() {
+      state.endTime = stopTimeDropdown.value;
+      updateServiceDetails();
+    }
+
+    // 7. Update Service Details Sidebar
+    function updateServiceDetails() {
+      if (state.startTime && state.endTime) {
+        const dateStr = state.selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const start12 = formatTo12HrStr(state.startTime);
+        const end12 = formatTo12HrStr(state.endTime);
+
+        sdTimeInfo.innerHTML = `<strong>Date:</strong> ${dateStr}<br><strong>Time:</strong> ${start12} – ${end12}`;
+        sdTimeInfo.style.display = 'block';
+        nextToDetailsBtn.disabled = false;
+      } else {
+        sdTimeInfo.style.display = 'none';
+        nextToDetailsBtn.disabled = true;
+      }
+    }
+
+    // 8. Populate Client Summary (Step 3)
+    function populateClientSummary() {
+      const dateStr = state.selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+      const start12 = formatTo12HrStr(state.startTime);
+      const end12 = formatTo12HrStr(state.endTime);
+
+      clientBookingSummary.innerHTML = `
+        <div><strong>Room:</strong> ${state.roomName}</div>
+        <div><strong>Date:</strong> ${dateStr}</div>
+        <div><strong>Reserved Time:</strong> ${start12} – ${end12}</div>
+      `;
+    }
+
+    // 9. Submit Final Booking (Step 3 -> Wix Velo)
+    function submitFinalBooking() {
+      const name = document.getElementById('clientName').value.trim();
+      const email = document.getElementById('clientEmail').value.trim();
+      const phone = document.getElementById('clientPhone').value.trim();
+      const notes = document.getElementById('clientNotes').value.trim();
+
+      if (!name || !email || !phone) {
+        showClientAlert("Please fill in your name, email, and phone number.", "error");
+        return;
+      }
+
+      setFinalLoading(true);
+      hideClientAlert();
+
+      const isoDate = state.selectedDate.toISOString().split('T')[0];
+
+      // Send to Wix Velo
+      window.parent.postMessage({
+        action: 'SUBMIT_BOOKING',
+        payload: {
+          roomName: state.roomName,
+          bookingDate: isoDate,
+          startTime: state.startTime,
+          endTime: state.endTime,
+          fullName: name,
+          email: email,
+          phone: phone,
+          notes: notes
+        }
+      }, '*');
+    }
+
+    function showConfirmation() {
+      const dateStr = state.selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+      const name = document.getElementById('clientName').value;
+      const email = document.getElementById('clientEmail').value;
+
+      confDetailsText.innerHTML = `
+        <strong>Reserved Room:</strong> ${state.roomName}<br>
+        <strong>Date & Time:</strong> ${dateStr}, ${formatTo12HrStr(state.startTime)} – ${formatTo12HrStr(state.endTime)}<br>
+        <strong>Name:</strong> ${name}<br>
+        <strong>Email:</strong> ${email}
+      `;
+
+      goToStep(4);
+    }
+
+    function setFinalLoading(isLoading) {
+      finalBookBtn.disabled = isLoading;
+      finalSpinner.style.display = isLoading ? 'inline-block' : 'none';
+      finalBtnText.textContent = isLoading ? 'Securing reservation...' : 'Book Now';
+    }
+
+    function showClientAlert(msg, type) {
+      clientAlert.textContent = msg;
+      clientAlert.className = `alert alert-${type}`;
+      clientAlert.style.display = 'block';
+    }
+
+    function hideClientAlert() {
+      clientAlert.style.display = 'none';
+    }
+
+    // Helper functions
+    function timeToMins(str) {
+      if (!str) return 0;
+      const [h, m] = str.split(':').map(Number);
+      return h * 60 + m;
+    }
+
+    function formatTo12Hr(h, m) {
+      const suffix = h >= 12 ? 'pm' : 'am';
+      const hr12 = h % 12 === 0 ? 12 : h % 12;
+      return `${hr12}:${String(m).padStart(2, '0')} ${suffix}`;
+    }
+
+    function formatTo12HrStr(str24) {
+      if (!str24) return '';
+      const [h, m] = str24.split(':').map(Number);
+      return formatTo12Hr(h, m);
+    }
+  </script>
+</body>
+</html>
