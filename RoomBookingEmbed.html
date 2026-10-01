@@ -13,141 +13,153 @@
       padding: 0;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
-    body {
+    html, body {
       background: transparent;
-      padding: 20px 10px;
       color: #1e293b;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
-    .container {
-      max-width: 1080px;
+    
+    /* UNIFIED WRAPPER: Ensures consistent height across all steps to prevent Wix iframe scrollbars */
+    .app-viewport {
+      width: 100%;
+      max-width: 1020px;
       margin: 0 auto;
+      min-height: 590px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 12px 10px;
     }
 
-    /* =========================================
-       STEP 1: 3 ROOM CARDS GRID
-    ========================================= */
-    #roomsView {
+    /* STEP 1: ROOMS GRID */
+    #step1-rooms {
       display: block;
+      animation: fadeIn 0.25s ease;
     }
     .view-title {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
     .view-title h1 {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 700;
       color: #0f172a;
     }
     .view-title p {
-      font-size: 15px;
+      font-size: 14px;
       color: #64748b;
-      margin-top: 6px;
+      margin-top: 4px;
     }
     .rooms-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 820px) {
+      .rooms-grid {
+        grid-template-columns: 1fr;
+      }
     }
     .room-card {
       background: #ffffff;
       border-radius: 12px;
       border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
       overflow: hidden;
       display: flex;
       flex-direction: column;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .room-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
     }
     .room-image {
       width: 100%;
-      height: 220px;
+      height: 160px;
       object-fit: cover;
       background-color: #f1f5f9;
     }
     .room-content {
-      padding: 24px 20px 22px;
+      padding: 16px;
       text-align: center;
       display: flex;
       flex-direction: column;
       flex-grow: 1;
     }
     .room-name {
-      font-size: 20px;
+      font-size: 17px;
       font-weight: 600;
       color: #1e293b;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
     .room-divider {
       width: 80%;
       height: 1px;
       background: #e2e8f0;
-      margin: 16px auto;
+      margin: 10px auto;
     }
     .room-meta {
-      font-size: 15px;
+      font-size: 13.5px;
       color: #64748b;
-      margin-bottom: 22px;
+      margin-bottom: 14px;
     }
     .btn-book-card {
       margin-top: auto;
       width: 100%;
-      padding: 12px;
+      padding: 11px;
       background: #1f5582;
       color: #ffffff;
       border: none;
       border-radius: 6px;
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s ease;
+      transition: background 0.2s;
     }
     .btn-book-card:hover {
       background: #174063;
     }
 
-    /* =========================================
-       STEP 2: SCHEDULE YOUR SERVICE (CALENDAR & AVAILABILITY)
-    ========================================= */
-    #scheduleView {
+    /* STEP 2: SCHEDULE (CALENDAR & TIME RANGE) */
+    #step2-schedule {
       display: none;
       background: #ffffff;
-      border-radius: 14px;
+      border-radius: 12px;
       border: 1px solid #e2e8f0;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-      padding: 32px 28px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+      padding: 22px 24px;
+      animation: fadeIn 0.25s ease;
     }
     .nav-back-link {
       background: none;
       border: none;
       color: #64748b;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       padding: 0;
     }
     .nav-back-link:hover {
       color: #0f172a;
     }
     .schedule-header {
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
     .schedule-header h2 {
-      font-size: 26px;
-      font-weight: 500;
+      font-size: 22px;
+      font-weight: 600;
       color: #1e293b;
     }
     .schedule-header p {
-      font-size: 14px;
+      font-size: 13.5px;
       color: #64748b;
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
     .sub-bar {
@@ -155,27 +167,26 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid #e2e8f0;
-      padding-bottom: 10px;
-      margin-bottom: 24px;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
     }
     .sub-bar h3 {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
       color: #0f172a;
     }
     .tz-indicator {
-      font-size: 13px;
+      font-size: 12.5px;
       color: #64748b;
     }
 
-    /* 3 Column Layout for Schedule View */
     .schedule-grid {
       display: grid;
-      grid-template-columns: 280px 1fr 280px;
-      gap: 28px;
+      grid-template-columns: 260px 1fr 240px;
+      gap: 20px;
       align-items: start;
     }
-    @media (max-width: 960px) {
+    @media (max-width: 900px) {
       .schedule-grid {
         grid-template-columns: 1fr;
       }
@@ -185,26 +196,26 @@
     .calendar-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 16px;
+      border-radius: 8px;
+      padding: 12px;
     }
     .cal-nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
     }
     .cal-nav-btn {
       background: none;
       border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      width: 30px;
-      height: 30px;
+      border-radius: 4px;
+      width: 26px;
+      height: 26px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
       color: #334155;
     }
     .cal-nav-btn:hover:not(:disabled) {
@@ -215,7 +226,7 @@
       cursor: not-allowed;
     }
     .cal-title {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       color: #0f172a;
     }
@@ -223,31 +234,30 @@
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       text-align: center;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 500;
       color: #64748b;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .cal-days-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
+      gap: 2px;
     }
     .cal-day-cell {
-      height: 36px;
+      height: 32px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      border-radius: 6px;
-      font-size: 13px;
+      border-radius: 4px;
+      font-size: 12.5px;
       font-weight: 500;
       cursor: pointer;
       position: relative;
       background: transparent;
       border: none;
       color: #1e293b;
-      transition: background 0.15s;
     }
     .cal-day-cell:hover:not(.disabled):not(.selected) {
       background: #f1f5f9;
@@ -263,7 +273,7 @@
       background-color: #1f5582;
       border-radius: 50%;
       position: absolute;
-      bottom: 3px;
+      bottom: 2px;
     }
     .cal-day-cell.selected {
       background: #1f5582;
@@ -274,133 +284,157 @@
       background-color: #ffffff;
     }
 
-    /* Column 2: Availability Slots */
-    .availability-col h4 {
-      font-size: 15px;
+    /* Column 2: Time Range & Slots */
+    .time-selection-col {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .time-range-header {
+      font-size: 14px;
       font-weight: 600;
       color: #0f172a;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
+    }
+    
+    /* Prominent "From Time" and "To Time" Selectors */
+    .range-inputs-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      background: #ffffff;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1.5px solid #cbd5e1;
+      margin-bottom: 12px;
+    }
+    .range-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #1f5582;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .range-select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #1e293b;
+      background: #ffffff;
+      outline: none;
+    }
+    .range-select:focus {
+      border-color: #1f5582;
+    }
+
+    .duration-indicator {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-size: 12.5px;
+      color: #1e40af;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    /* Slots Quick-Click Grid */
+    .slots-label {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 6px;
+      font-weight: 500;
     }
     .slots-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      max-height: 380px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      max-height: 135px;
       overflow-y: auto;
-      padding-right: 4px;
+      padding-right: 2px;
     }
-    .slot-btn {
-      padding: 11px 8px;
-      border: 1px solid #94a3b8;
-      background: #ffffff;
-      color: #1e293b;
-      border-radius: 4px;
-      font-size: 13.5px;
-      font-weight: 500;
-      cursor: pointer;
+    .slot-pill {
+      padding: 6px 2px;
+      font-size: 12px;
       text-align: center;
-      transition: all 0.15s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2px;
+      border-radius: 4px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      cursor: pointer;
+      color: #334155;
+      transition: all 0.15s;
     }
-    .slot-btn:hover:not(.disabled):not(.selected) {
+    .slot-pill:hover:not(.booked):not(.in-range) {
       border-color: #1f5582;
       color: #1f5582;
-      background: #f8fafc;
     }
-    .slot-btn.selected {
+    .slot-pill.in-range {
       background: #1f5582;
       color: #ffffff;
       border-color: #1f5582;
+      font-weight: 600;
     }
-    .slot-btn.slot-booked {
-      background: #f8fafc;
+    .slot-pill.booked {
+      background: #f1f5f9;
       border-color: #e2e8f0;
       color: #94a3b8;
       cursor: not-allowed;
       text-decoration: line-through;
-      position: relative;
-    }
-    .slot-booked-badge {
-      font-size: 10px;
-      text-decoration: none;
-      color: #dc2626;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
-    /* Stop Time selector box below slots */
-    .stop-time-container {
-      margin-top: 18px;
-      padding: 14px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      display: none;
-    }
-    .stop-time-container label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: #334155;
-      margin-bottom: 6px;
-    }
-    .stop-time-select {
-      width: 100%;
-      padding: 9px 12px;
-      border-radius: 6px;
-      border: 1px solid #cbd5e1;
-      font-size: 14px;
-      outline: none;
-    }
-
-    /* Column 3: Service Details Card */
+    /* Column 3: Service Details */
     .service-details-card {
       border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 20px;
+      border-radius: 8px;
+      padding: 16px;
       background: #ffffff;
+      display: flex;
+      flex-direction: column;
     }
     .service-details-card h4 {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
       color: #0f172a;
       border-bottom: 1px solid #e2e8f0;
-      padding-bottom: 10px;
-      margin-bottom: 14px;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
     }
     .sd-room-title {
       font-size: 15px;
       font-weight: 600;
       color: #1f5582;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
     .sd-time-info {
       font-size: 13px;
       color: #475569;
       line-height: 1.5;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       padding: 8px 10px;
       background: #f8fafc;
       border-radius: 6px;
       border-left: 3px solid #1f5582;
-      display: none;
     }
     .btn-next-step {
+      margin-top: auto;
       width: 100%;
-      padding: 12px;
+      padding: 11px;
       background: #1f5582;
       color: #ffffff;
       border: none;
       border-radius: 4px;
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s;
     }
     .btn-next-step:hover:not(:disabled) {
       background: #174063;
@@ -410,78 +444,83 @@
       cursor: not-allowed;
     }
 
-    /* =========================================
-       STEP 3: CLIENT DETAILS FORM
-    ========================================= */
-    #clientDetailsView {
+    /* STEP 3: CLIENT DETAILS */
+    #step3-client {
       display: none;
       max-width: 600px;
       margin: 0 auto;
       background: #ffffff;
-      border-radius: 14px;
+      border-radius: 12px;
       border: 1px solid #e2e8f0;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-      padding: 32px 28px;
-    }
-    .client-header {
-      margin-bottom: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+      padding: 24px 28px;
+      animation: fadeIn 0.25s ease;
     }
     .client-header h2 {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 700;
       color: #0f172a;
     }
     .client-header p {
-      font-size: 14px;
+      font-size: 13.5px;
       color: #64748b;
-      margin-top: 4px;
+      margin-top: 2px;
+      margin-bottom: 14px;
     }
     .booking-summary-pill {
-      background: #f1f5f9;
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin-bottom: 22px;
-      font-size: 13.5px;
-      color: #334155;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      border-left: 4px solid #1f5582;
-    }
-    .form-row {
+      background: #f8fafc;
+      border-radius: 6px;
+      padding: 10px 14px;
       margin-bottom: 16px;
-    }
-    .form-row label {
-      display: block;
       font-size: 13px;
+      color: #334155;
+      border-left: 4px solid #1f5582;
+      line-height: 1.4;
+    }
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 540px) {
+      .form-grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+    .form-group {
+      margin-bottom: 12px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 12.5px;
       font-weight: 600;
       color: #334155;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     .form-input {
       width: 100%;
-      padding: 11px 14px;
+      padding: 9px 12px;
       border: 1.5px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 14px;
+      border-radius: 6px;
+      font-size: 13.5px;
       outline: none;
-      transition: all 0.2s;
     }
     .form-input:focus {
       border-color: #1f5582;
-      box-shadow: 0 0 0 3px rgba(31, 85, 130, 0.15);
+      box-shadow: 0 0 0 3px rgba(31, 85, 130, 0.12);
     }
     .btn-final-book {
       width: 100%;
-      padding: 13px;
+      padding: 12px;
       background: #1f5582;
       color: #ffffff;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 6px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -495,45 +534,44 @@
       cursor: not-allowed;
     }
 
-    /* =========================================
-       STEP 4: CONFIRMATION SUCCESS VIEW
-    ========================================= */
-    #confirmationView {
+    /* STEP 4: CONFIRMATION */
+    #step4-confirm {
       display: none;
-      max-width: 520px;
+      max-width: 500px;
       margin: 0 auto;
       text-align: center;
       background: #ffffff;
-      border-radius: 14px;
+      border-radius: 12px;
       border: 1px solid #e2e8f0;
-      padding: 40px 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+      padding: 32px 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+      animation: fadeIn 0.25s ease;
     }
     .success-icon {
-      width: 60px;
-      height: 60px;
+      width: 52px;
+      height: 52px;
       background: #dcfce7;
       color: #16a34a;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
-      margin: 0 auto 16px;
+      font-size: 24px;
+      margin: 0 auto 12px;
     }
     .confirmation-details {
-      margin: 20px auto;
-      padding: 16px;
+      margin: 16px auto;
+      padding: 14px;
       background: #f8fafc;
-      border-radius: 8px;
+      border-radius: 6px;
       text-align: left;
-      font-size: 14px;
+      font-size: 13.5px;
       color: #334155;
-      line-height: 1.6;
+      line-height: 1.5;
     }
     .btn-reset {
-      margin-top: 16px;
-      padding: 11px 24px;
+      margin-top: 14px;
+      padding: 10px 20px;
       background: #1f5582;
       color: #ffffff;
       border: none;
@@ -542,13 +580,13 @@
       cursor: pointer;
     }
 
-    /* Alerts and Spinners */
+    /* Alerts and Spinner */
     .alert {
-      padding: 12px 14px;
-      border-radius: 8px;
-      font-size: 13px;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 12.5px;
       font-weight: 500;
-      margin-top: 14px;
+      margin-top: 10px;
       display: none;
     }
     .alert-error {
@@ -565,8 +603,8 @@
       border: 2px solid rgba(255,255,255,0.3);
       border-radius: 50%;
       border-top: 2px solid #ffffff;
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       animation: spin 0.8s linear infinite;
       display: none;
     }
@@ -574,57 +612,61 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
 
-  <div class="container">
+  <div class="app-viewport">
     
-    <!-- ==================== VIEW 1: 3 ROOM CARDS ==================== -->
-    <div id="roomsView">
+    <!-- ==================== STEP 1: 3 ROOM CARDS ==================== -->
+    <div id="step1-rooms">
       <div class="view-title">
         <h1>Book a Meeting Space</h1>
-        <p>Select a room to view availability and book custom times.</p>
+        <p>Select a room to choose your date, start time, and stop time.</p>
       </div>
 
       <div class="rooms-grid">
-        <!-- Card 1: Large Conference Room -->
+        <!-- Large Conference Room -->
         <div class="room-card">
           <img class="room-image" src="https://static.wixstatic.com/media/b95dae_36530dbd512d44ed9fad2ae9963a3e09~mv2.jpg" alt="Large Conference Room">
           <div class="room-content">
             <h3 class="room-name">Large Conference Room</h3>
             <div class="room-divider"></div>
-            <div class="room-meta">30 min</div>
+            <div class="room-meta">30 min increments</div>
             <button class="btn-book-card" onclick="selectRoom('Large Conference Room')">Book Now</button>
           </div>
         </div>
 
-        <!-- Card 2: Small Conference Room -->
+        <!-- Small Conference Room -->
         <div class="room-card">
           <img class="room-image" src="https://static.wixstatic.com/media/b95dae_c726334b29934448aa5eaf1fb5835d7a~mv2.jpg" alt="Small Conference Room">
           <div class="room-content">
             <h3 class="room-name">Small Conference Room</h3>
             <div class="room-divider"></div>
-            <div class="room-meta">30 min</div>
+            <div class="room-meta">30 min increments</div>
             <button class="btn-book-card" onclick="selectRoom('Small Conference Room')">Book Now</button>
           </div>
         </div>
 
-        <!-- Card 3: Private Office -->
+        <!-- Private Office -->
         <div class="room-card">
           <img class="room-image" src="https://static.wixstatic.com/media/b95dae_0ab92caf5971498590ef9ea22c48d87e~mv2.jpg" alt="Private Office">
           <div class="room-content">
             <h3 class="room-name">Private Office</h3>
             <div class="room-divider"></div>
-            <div class="room-meta">30 min</div>
+            <div class="room-meta">30 min increments</div>
             <button class="btn-book-card" onclick="selectRoom('Private Office')">Book Now</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ==================== VIEW 2: SCHEDULE YOUR SERVICE (CALENDAR & SLOTS) ==================== -->
-    <div id="scheduleView">
+    <!-- ==================== STEP 2: SCHEDULE (CALENDAR & TIME RANGE) ==================== -->
+    <div id="step2-schedule">
       <button class="nav-back-link" onclick="goToStep(1)">← Back to Rooms</button>
       
       <div class="schedule-header">
@@ -634,7 +676,7 @@
 
       <div class="sub-bar">
         <h3>Select a Date and Time</h3>
-        <span class="tz-indicator">Time zone: Local / EDT ⌵</span>
+        <span class="tz-indicator">Time zone: Eastern Daylight Time (EDT) ⌵</span>
       </div>
 
       <div class="schedule-grid">
@@ -649,32 +691,45 @@
           <div class="cal-weekdays">
             <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
           </div>
-          <div class="cal-days-grid" id="calDaysGrid">
-            <!-- Dynamically populated -->
-          </div>
+          <div class="cal-days-grid" id="calDaysGrid"></div>
         </div>
 
-        <!-- Column 2: Availability Slots -->
-        <div class="availability-col">
-          <h4 id="availabilityHeading">Availability for Thursday, October 1</h4>
-          <div class="slots-grid" id="slotsGrid">
-            <!-- Dynamically populated with 30-min slots, booked slots will show filled up/disabled -->
+        <!-- Column 2: Explicit "From" & "To" Time Selection -->
+        <div class="time-selection-col">
+          <div class="time-range-header" id="availabilityHeading">Availability for Oct 1</div>
+          
+          <!-- Crystal Clear "From Time" and "To Time" Controls -->
+          <div class="range-inputs-wrapper">
+            <div class="range-field">
+              <label for="fromTimeSelect">From (Start):</label>
+              <select id="fromTimeSelect" class="range-select" onchange="onFromTimeChanged()">
+                <option value="" disabled selected>Select Start</option>
+              </select>
+            </div>
+            <div class="range-field">
+              <label for="toTimeSelect">To (End):</label>
+              <select id="toTimeSelect" class="range-select" onchange="onToTimeChanged()" disabled>
+                <option value="" disabled selected>Select End</option>
+              </select>
+            </div>
           </div>
 
-          <!-- Stop Time / End Time selector -->
-          <div class="stop-time-container" id="stopTimeContainer">
-            <label for="stopTimeDropdown">Select Stop Time (Duration):</label>
-            <select id="stopTimeDropdown" class="stop-time-select" onchange="onStopTimeSelected()">
-              <!-- Options populated dynamically based on Start Time -->
-            </select>
+          <!-- Duration display badge -->
+          <div class="duration-indicator" id="durationBadge">
+            <span id="durationText">Choose a Start and Stop time</span>
+            <span id="rangeHoursBadge" style="font-weight: 700;"></span>
           </div>
+
+          <!-- Quick 30-min Slot Pills -->
+          <div class="slots-label">Quick select slot (Booked slots are disabled):</div>
+          <div class="slots-grid" id="slotsGrid"></div>
         </div>
 
         <!-- Column 3: Service Details Card -->
         <div class="service-details-card">
           <h4>Service Details</h4>
           <div class="sd-room-title" id="sdRoomTitle">Large Conference Room</div>
-          <div class="sd-time-info" id="sdTimeInfo"></div>
+          <div class="sd-time-info" id="sdTimeInfo">Please choose date & time range</div>
           
           <button class="btn-next-step" id="nextToDetailsBtn" disabled onclick="goToStep(3)">Next</button>
         </div>
@@ -682,8 +737,8 @@
       </div>
     </div>
 
-    <!-- ==================== VIEW 3: CLIENT DETAILS FORM ==================== -->
-    <div id="clientDetailsView">
+    <!-- ==================== STEP 3: CLIENT DETAILS ==================== -->
+    <div id="step3-client">
       <button class="nav-back-link" onclick="goToStep(2)">← Back to Date & Time</button>
       
       <div class="client-header">
@@ -691,29 +746,29 @@
         <p>Please enter your contact information to finalize the booking.</p>
       </div>
 
-      <div class="booking-summary-pill" id="clientBookingSummary">
-        <!-- Summary will be populated dynamically -->
-      </div>
+      <div class="booking-summary-pill" id="clientBookingSummary"></div>
 
       <form id="clientForm" onsubmit="event.preventDefault(); submitFinalBooking();">
-        <div class="form-row">
-          <label for="clientName">Full Name *</label>
-          <input type="text" id="clientName" class="form-input" placeholder="e.g. John Doe" required>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="clientName">Full Name *</label>
+            <input type="text" id="clientName" class="form-input" placeholder="John Doe" required>
+          </div>
+          <div class="form-group">
+            <label for="clientEmail">Email Address *</label>
+            <input type="email" id="clientEmail" class="form-input" placeholder="john@example.com" required>
+          </div>
         </div>
 
-        <div class="form-row">
-          <label for="clientEmail">Email Address *</label>
-          <input type="email" id="clientEmail" class="form-input" placeholder="e.g. john@example.com" required>
-        </div>
-
-        <div class="form-row">
-          <label for="clientPhone">Phone Number *</label>
-          <input type="tel" id="clientPhone" class="form-input" placeholder="e.g. (781) 400-2347" required>
-        </div>
-
-        <div class="form-row">
-          <label for="clientNotes">Additional Notes / Meeting Purpose (Optional)</label>
-          <textarea id="clientNotes" class="form-input" rows="2" placeholder="e.g. Need projector, 6 attendees"></textarea>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="clientPhone">Phone Number *</label>
+            <input type="tel" id="clientPhone" class="form-input" placeholder="(781) 400-2347" required>
+          </div>
+          <div class="form-group">
+            <label for="clientNotes">Meeting Notes / Details</label>
+            <input type="text" id="clientNotes" class="form-input" placeholder="e.g. 6 guests, presentation">
+          </div>
         </div>
 
         <button type="submit" id="finalBookBtn" class="btn-final-book">
@@ -725,15 +780,13 @@
       </form>
     </div>
 
-    <!-- ==================== VIEW 4: CONFIRMATION SUCCESS ==================== -->
-    <div id="confirmationView">
+    <!-- ==================== STEP 4: CONFIRMATION ==================== -->
+    <div id="step4-confirm">
       <div class="success-icon">✓</div>
-      <h2>Booking Confirmed!</h2>
-      <p style="color: #64748b; margin-top: 6px;">Your meeting room reservation is successfully secured.</p>
+      <h2 style="font-size: 22px; color: #0f172a;">Booking Confirmed!</h2>
+      <p style="color: #64748b; margin-top: 4px; font-size: 13.5px;">Your meeting room reservation is successfully secured.</p>
       
-      <div class="confirmation-details" id="confDetailsText">
-        <!-- Details inserted dynamically -->
-      </div>
+      <div class="confirmation-details" id="confDetailsText"></div>
 
       <button class="btn-reset" onclick="goToStep(1)">Book Another Room</button>
     </div>
@@ -749,7 +802,7 @@
       selectedDate: new Date(),
       startTime: '',
       endTime: '',
-      bookedIntervals: [] // [{ startTime: "09:00", endTime: "10:30" }]
+      bookedIntervals: []
     };
 
     const CONFIG = {
@@ -759,17 +812,21 @@
     };
 
     // DOM Elements
-    const roomsView = document.getElementById('roomsView');
-    const scheduleView = document.getElementById('scheduleView');
-    const clientDetailsView = document.getElementById('clientDetailsView');
-    const confirmationView = document.getElementById('confirmationView');
+    const step1 = document.getElementById('step1-rooms');
+    const step2 = document.getElementById('step2-schedule');
+    const step3 = document.getElementById('step3-client');
+    const step4 = document.getElementById('step4-confirm');
 
     const calMonthYearTitle = document.getElementById('calMonthYearTitle');
     const calDaysGrid = document.getElementById('calDaysGrid');
     const availabilityHeading = document.getElementById('availabilityHeading');
+    const fromTimeSelect = document.getElementById('fromTimeSelect');
+    const toTimeSelect = document.getElementById('toTimeSelect');
+    const durationBadge = document.getElementById('durationBadge');
+    const durationText = document.getElementById('durationText');
+    const rangeHoursBadge = document.getElementById('rangeHoursBadge');
     const slotsGrid = document.getElementById('slotsGrid');
-    const stopTimeContainer = document.getElementById('stopTimeContainer');
-    const stopTimeDropdown = document.getElementById('stopTimeDropdown');
+
     const sdRoomTitle = document.getElementById('sdRoomTitle');
     const sdTimeInfo = document.getElementById('sdTimeInfo');
     const nextToDetailsBtn = document.getElementById('nextToDetailsBtn');
@@ -780,20 +837,18 @@
     const clientAlert = document.getElementById('clientAlert');
     const confDetailsText = document.getElementById('confDetailsText');
 
-    // 1. Navigation Flow
+    // 1. Navigation Flow (Keeps uniform layout height)
     function goToStep(step) {
-      roomsView.style.display = (step === 1) ? 'block' : 'none';
-      scheduleView.style.display = (step === 2) ? 'block' : 'none';
-      clientDetailsView.style.display = (step === 3) ? 'block' : 'none';
-      confirmationView.style.display = (step === 4) ? 'block' : 'none';
+      step1.style.display = (step === 1) ? 'block' : 'none';
+      step2.style.display = (step === 2) ? 'block' : 'none';
+      step3.style.display = (step === 3) ? 'block' : 'none';
+      step4.style.display = (step === 4) ? 'block' : 'none';
 
-      if (step === 3) {
-        populateClientSummary();
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (step === 3) populateClientSummary();
+      window.scrollTo(0, 0);
     }
 
-    // 2. Select Room (from Step 1)
+    // 2. Select Room
     function selectRoom(name) {
       state.roomName = name;
       state.startTime = '';
@@ -803,39 +858,35 @@
       state.currentMonth = state.selectedDate.getMonth();
 
       sdRoomTitle.textContent = name;
-      updateServiceDetails();
+      updateSidebarDetails();
 
       goToStep(2);
       renderCalendar();
       fetchBookedSlotsForDate();
     }
 
-    // 3. Calendar Engine
+    // 3. Mini Calendar
     function renderCalendar() {
       const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
       calMonthYearTitle.textContent = `${monthNames[state.currentMonth]} ${state.currentYear}`;
 
       calDaysGrid.innerHTML = '';
-
       const firstDayIndex = new Date(state.currentYear, state.currentMonth, 1).getDay();
       const totalDaysInMonth = new Date(state.currentYear, state.currentMonth + 1, 0).getDate();
 
       const today = new Date();
       today.setHours(0,0,0,0);
 
-      // Disable prev month button if viewing current month
       const currentCalMonth = new Date(state.currentYear, state.currentMonth, 1);
       const minMonth = new Date(today.getFullYear(), today.getMonth(), 1);
       document.getElementById('prevMonthBtn').disabled = currentCalMonth <= minMonth;
 
-      // Blank padding days
       for (let i = 0; i < firstDayIndex; i++) {
         const blank = document.createElement('div');
         blank.className = 'cal-day-cell disabled';
         calDaysGrid.appendChild(blank);
       }
 
-      // Month days
       for (let day = 1; day <= totalDaysInMonth; day++) {
         const cellDate = new Date(state.currentYear, state.currentMonth, day);
         cellDate.setHours(0,0,0,0);
@@ -844,8 +895,7 @@
         btn.className = 'cal-day-cell';
         btn.textContent = day;
 
-        const isPast = cellDate < today;
-        if (isPast) {
+        if (cellDate < today) {
           btn.classList.add('disabled');
           btn.disabled = true;
         } else {
@@ -853,8 +903,7 @@
           btn.onclick = () => onSelectDate(cellDate);
         }
 
-        const isSelected = cellDate.getTime() === state.selectedDate.setHours(0,0,0,0);
-        if (isSelected) {
+        if (cellDate.getTime() === state.selectedDate.setHours(0,0,0,0)) {
           btn.classList.add('selected');
         }
 
@@ -878,182 +927,205 @@
       state.selectedDate = new Date(date);
       state.startTime = '';
       state.endTime = '';
-      stopTimeContainer.style.display = 'none';
-      updateServiceDetails();
+      toTimeSelect.disabled = true;
+      toTimeSelect.innerHTML = '<option value="" disabled selected>Select End</option>';
+      updateSidebarDetails();
       renderCalendar();
       fetchBookedSlotsForDate();
     }
 
-    // 4. Fetch Booked Slots from Wix Velo
+    // 4. Fetch Slots from Wix Velo
     function fetchBookedSlotsForDate() {
-      const options = { weekday: 'long', month: 'long', day: 'numeric' };
+      const options = { weekday: 'short', month: 'short', day: 'numeric' };
       availabilityHeading.textContent = `Availability for ${state.selectedDate.toLocaleDateString('en-US', options)}`;
-      slotsGrid.innerHTML = '<div style="grid-column: span 2; padding: 20px; text-align: center; color: #64748b;">Loading available slots...</div>';
-
+      
       const isoDate = state.selectedDate.toISOString().split('T')[0];
-
-      // Request from Wix Velo
       window.parent.postMessage({
         action: 'GET_BOOKED_SLOTS',
-        payload: {
-          roomName: state.roomName,
-          bookingDate: isoDate
-        }
+        payload: { roomName: state.roomName, bookingDate: isoDate }
       }, '*');
     }
 
-    // Listen to messages from Wix Page Code
     window.addEventListener('message', (event) => {
       const { action, bookedSlots, success, message } = event.data || {};
-
-      // A) Booked slots received
       if (action === 'BOOKED_SLOTS_RESPONSE') {
         state.bookedIntervals = bookedSlots || [];
-        renderTimeSlots();
+        populateFromTimeDropdown();
+        renderQuickSlotsGrid();
       }
-
-      // B) Final Booking Response
       if (action === 'BOOKING_RESPONSE') {
         setFinalLoading(false);
-        if (success) {
-          showConfirmation();
-        } else {
-          showClientAlert(message || "An error occurred while booking.", "error");
-        }
+        if (success) showConfirmation();
+        else showClientAlert(message || "An error occurred while booking.", "error");
       }
     });
 
-    // 5. Render 30-min Time Slots (Marking booked slots as disabled/fill-up)
-    function renderTimeSlots() {
-      slotsGrid.innerHTML = '';
+    // 5. Populate "From" (Start Time) Dropdown & Slots
+    function populateFromTimeDropdown() {
+      fromTimeSelect.innerHTML = '<option value="" disabled selected>Select Start</option>';
+      toTimeSelect.innerHTML = '<option value="" disabled selected>Select End</option>';
+      toTimeSelect.disabled = true;
 
       for (let h = CONFIG.startHour; h < CONFIG.endHour; h++) {
         for (let m = 0; m < 60; m += CONFIG.stepMinutes) {
-          const time24 = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-          const time12 = formatTo12Hr(h, m);
+          const t24 = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+          const t12 = formatTo12Hr(h, m);
+          const isBooked = isTimeWithinBookings(t24);
 
-          const slotBtn = document.createElement('button');
-          slotBtn.type = 'button';
-          slotBtn.className = 'slot-btn';
-
-          // Check if this slot overlaps with an existing booking in CMS
-          const isSlotBooked = isTimeWithinBookings(time24);
-
-          if (isSlotBooked) {
-            slotBtn.classList.add('slot-booked');
-            slotBtn.disabled = true;
-            slotBtn.innerHTML = `<span>${time12}</span><span class="slot-booked-badge">Booked</span>`;
-          } else {
-            slotBtn.innerHTML = `<span>${time12}</span>`;
-            if (state.startTime === time24) {
-              slotBtn.classList.add('selected');
-            }
-            slotBtn.onclick = () => onSelectStartTime(time24, slotBtn);
-          }
-
-          slotsGrid.appendChild(slotBtn);
+          const opt = document.createElement('option');
+          opt.value = t24;
+          opt.textContent = isBooked ? `${t12} (Booked)` : t12;
+          if (isBooked) opt.disabled = true;
+          fromTimeSelect.appendChild(opt);
         }
       }
     }
 
-    function isTimeWithinBookings(timeStr) {
-      const checkMins = timeToMins(timeStr);
-      return state.bookedIntervals.some(b => {
-        const startMins = timeToMins(b.startTime);
-        const endMins = timeToMins(b.endTime);
-        // A slot is unavailable if it falls within [start, end)
-        return checkMins >= startMins && checkMins < endMins;
-      });
+    function renderQuickSlotsGrid() {
+      slotsGrid.innerHTML = '';
+      for (let h = CONFIG.startHour; h < CONFIG.endHour; h++) {
+        for (let m = 0; m < 60; m += CONFIG.stepMinutes) {
+          const t24 = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+          const t12 = formatTo12Hr(h, m);
+          const isBooked = isTimeWithinBookings(t24);
+
+          const pill = document.createElement('div');
+          pill.className = 'slot-pill';
+          pill.textContent = t12;
+
+          if (isBooked) {
+            pill.classList.add('booked');
+            pill.title = "This slot is already booked";
+          } else {
+            pill.onclick = () => {
+              fromTimeSelect.value = t24;
+              onFromTimeChanged();
+            };
+          }
+
+          // Highlight if in selected range
+          if (state.startTime && state.endTime) {
+            const startM = timeToMins(state.startTime);
+            const endM = timeToMins(state.endTime);
+            const curM = timeToMins(t24);
+            if (curM >= startM && curM < endM) {
+              pill.classList.add('in-range');
+            }
+          }
+
+          slotsGrid.appendChild(pill);
+        }
+      }
     }
 
-    // 6. Handle Start Time Selection & Populate Stop Times
-    function onSelectStartTime(timeStr, btnElement) {
-      state.startTime = timeStr;
-      
-      // Update UI active slot
-      document.querySelectorAll('.slot-btn').forEach(btn => btn.classList.remove('selected'));
-      btnElement.classList.add('selected');
+    // 6. Handle "From" Selection -> Populate "To" Options
+    function onFromTimeChanged() {
+      const selectedStart = fromTimeSelect.value;
+      state.startTime = selectedStart;
+      state.endTime = '';
 
-      // Populate Stop Time Dropdown
-      populateStopTimes(timeStr);
-      stopTimeContainer.style.display = 'block';
-    }
+      toTimeSelect.innerHTML = '<option value="" disabled selected>Select End</option>';
+      toTimeSelect.disabled = false;
 
-    function populateStopTimes(startTimeStr) {
-      stopTimeDropdown.innerHTML = '<option value="" disabled selected>Select stop time</option>';
-      const startMins = timeToMins(startTimeStr);
+      const startMins = timeToMins(selectedStart);
 
-      // Find the next booked start time to avoid booking across another booking
-      let nextBookedMins = CONFIG.endHour * 60;
+      // Find the next booked start time so reservation cannot cross into an existing booking
+      let maxAllowedMins = CONFIG.endHour * 60;
       state.bookedIntervals.forEach(b => {
         const bStart = timeToMins(b.startTime);
-        if (bStart > startMins && bStart < nextBookedMins) {
-          nextBookedMins = bStart;
+        if (bStart > startMins && bStart < maxAllowedMins) {
+          maxAllowedMins = bStart;
         }
       });
 
-      let firstValidEnd = '';
-
-      for (let m = startMins + CONFIG.stepMinutes; m <= nextBookedMins; m += CONFIG.stepMinutes) {
-        const endHour = Math.floor(m / 60);
-        const endMin = m % 60;
-        const time24 = `${String(endHour).padStart(2, '0')}:${String(endMin).padStart(2, '0')}`;
-        const time12 = formatTo12Hr(endHour, endMin);
-        const durationMins = m - startMins;
-        const durationText = durationMins < 60 ? `${durationMins} min` : `${durationMins / 60} hr${durationMins > 60 ? 's' : ''}`;
+      let defaultEnd = '';
+      for (let m = startMins + CONFIG.stepMinutes; m <= maxAllowedMins; m += CONFIG.stepMinutes) {
+        const h = Math.floor(m / 60);
+        const min = m % 60;
+        const t24 = `${String(h).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+        const t12 = formatTo12Hr(h, min);
+        const durationM = m - startMins;
+        const durStr = durationM < 60 ? `${durationM} min` : `${durationM / 60} hr${durationM > 60 ? 's' : ''}`;
 
         const opt = document.createElement('option');
-        opt.value = time24;
-        opt.textContent = `${time12} (${durationText})`;
-        stopTimeDropdown.appendChild(opt);
+        opt.value = t24;
+        opt.textContent = `${t12} (${durStr})`;
+        toTimeSelect.appendChild(opt);
 
-        if (!firstValidEnd) firstValidEnd = time24;
+        if (!defaultEnd) defaultEnd = t24;
       }
 
       // Default to 1st increment (30 mins)
-      if (firstValidEnd) {
-        stopTimeDropdown.value = firstValidEnd;
-        state.endTime = firstValidEnd;
+      if (defaultEnd) {
+        toTimeSelect.value = defaultEnd;
+        state.endTime = defaultEnd;
       }
 
-      updateServiceDetails();
+      updateDurationAndSidebar();
+      renderQuickSlotsGrid();
     }
 
-    function onStopTimeSelected() {
-      state.endTime = stopTimeDropdown.value;
-      updateServiceDetails();
+    function onToTimeChanged() {
+      state.endTime = toTimeSelect.value;
+      updateDurationAndSidebar();
+      renderQuickSlotsGrid();
     }
 
-    // 7. Update Service Details Sidebar
-    function updateServiceDetails() {
+    function updateDurationAndSidebar() {
       if (state.startTime && state.endTime) {
-        const dateStr = state.selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        const start12 = formatTo12HrStr(state.startTime);
-        const end12 = formatTo12HrStr(state.endTime);
+        const startM = timeToMins(state.startTime);
+        const endM = timeToMins(state.endTime);
+        const diffM = endM - startM;
 
-        sdTimeInfo.innerHTML = `<strong>Date:</strong> ${dateStr}<br><strong>Time:</strong> ${start12} – ${end12}`;
-        sdTimeInfo.style.display = 'block';
+        const hr = Math.floor(diffM / 60);
+        const min = diffM % 60;
+        let durationFormatted = '';
+        if (hr > 0 && min > 0) durationFormatted = `${hr} hr ${min} min`;
+        else if (hr > 0) durationFormatted = `${hr} hour${hr > 1 ? 's' : ''}`;
+        else durationFormatted = `${min} minutes`;
+
+        const s12 = formatTo12HrStr(state.startTime);
+        const e12 = formatTo12HrStr(state.endTime);
+
+        durationText.textContent = `${s12} – ${e12}`;
+        rangeHoursBadge.textContent = `(${durationFormatted})`;
         nextToDetailsBtn.disabled = false;
+
+        const dateStr = state.selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        sdTimeInfo.innerHTML = `<strong>Date:</strong> ${dateStr}<br><strong>Time:</strong> ${s12} to ${e12} (${durationFormatted})`;
       } else {
-        sdTimeInfo.style.display = 'none';
+        durationText.textContent = 'Choose a Start and Stop time';
+        rangeHoursBadge.textContent = '';
         nextToDetailsBtn.disabled = true;
+        sdTimeInfo.textContent = 'Please choose date & time range';
       }
     }
 
-    // 8. Populate Client Summary (Step 3)
+    function updateSidebarDetails() {
+      updateDurationAndSidebar();
+    }
+
+    function isTimeWithinBookings(timeStr) {
+      const checkM = timeToMins(timeStr);
+      return state.bookedIntervals.some(b => {
+        const sM = timeToMins(b.startTime);
+        const eM = timeToMins(b.endTime);
+        return checkM >= sM && checkM < eM;
+      });
+    }
+
+    // 7. Client Summary & Submit
     function populateClientSummary() {
-      const dateStr = state.selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-      const start12 = formatTo12HrStr(state.startTime);
-      const end12 = formatTo12HrStr(state.endTime);
+      const dateStr = state.selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+      const s12 = formatTo12HrStr(state.startTime);
+      const e12 = formatTo12HrStr(state.endTime);
 
       clientBookingSummary.innerHTML = `
-        <div><strong>Room:</strong> ${state.roomName}</div>
-        <div><strong>Date:</strong> ${dateStr}</div>
-        <div><strong>Reserved Time:</strong> ${start12} – ${end12}</div>
+        <strong>Room:</strong> ${state.roomName}<br>
+        <strong>Reservation:</strong> ${dateStr} &nbsp;|&nbsp; <strong>${s12} to ${e12}</strong>
       `;
     }
 
-    // 9. Submit Final Booking (Step 3 -> Wix Velo)
     function submitFinalBooking() {
       const name = document.getElementById('clientName').value.trim();
       const email = document.getElementById('clientEmail').value.trim();
@@ -1061,7 +1133,7 @@
       const notes = document.getElementById('clientNotes').value.trim();
 
       if (!name || !email || !phone) {
-        showClientAlert("Please fill in your name, email, and phone number.", "error");
+        showClientAlert("Please fill in your name, email, and phone.", "error");
         return;
       }
 
@@ -1069,8 +1141,6 @@
       hideClientAlert();
 
       const isoDate = state.selectedDate.toISOString().split('T')[0];
-
-      // Send to Wix Velo
       window.parent.postMessage({
         action: 'SUBMIT_BOOKING',
         payload: {
@@ -1087,17 +1157,16 @@
     }
 
     function showConfirmation() {
-      const dateStr = state.selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+      const dateStr = state.selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
       const name = document.getElementById('clientName').value;
       const email = document.getElementById('clientEmail').value;
 
       confDetailsText.innerHTML = `
-        <strong>Reserved Room:</strong> ${state.roomName}<br>
+        <strong>Room:</strong> ${state.roomName}<br>
         <strong>Date & Time:</strong> ${dateStr}, ${formatTo12HrStr(state.startTime)} – ${formatTo12HrStr(state.endTime)}<br>
         <strong>Name:</strong> ${name}<br>
         <strong>Email:</strong> ${email}
       `;
-
       goToStep(4);
     }
 
@@ -1117,7 +1186,6 @@
       clientAlert.style.display = 'none';
     }
 
-    // Helper functions
     function timeToMins(str) {
       if (!str) return 0;
       const [h, m] = str.split(':').map(Number);
