@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Coworking Room Booking</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
   <style>
-    /* ==========================================================================
-       THEME VARIABLES & RESET
-       ========================================================================== */
     :root {
       --burb-primary: #1F5582;
       --burb-primary-hover: #164367;
@@ -18,40 +17,36 @@
       --burb-primary-light: #eff6fb;
       --burb-primary-tint: #e0eef8;
       --burb-primary-border: #bfd6ea;
-      
+
       --burb-bg-surface: #ffffff;
       --burb-bg-muted: #f8fafc;
       --burb-bg-subtle: #f1f5f9;
-      
       --burb-border: #e2e8f0;
       --burb-border-hover: #cbd5e1;
-      
       --burb-text-main: #0f172a;
       --burb-text-body: #334155;
       --burb-text-muted: #64748b;
       --burb-text-disabled: #94a3b8;
-      
       --burb-danger: #dc2626;
       --burb-danger-bg: #fef2f2;
       --burb-danger-border: #fecaca;
       --burb-success: #16a34a;
       --burb-success-bg: #f0fdf4;
       --burb-success-border: #bbf7d0;
-
       --burb-radius-sm: 6px;
       --burb-radius-md: 10px;
       --burb-radius-lg: 16px;
       --burb-radius-pill: 9999px;
-
       --burb-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04);
       --burb-shadow-md: 0 6px 20px rgba(15, 23, 42, 0.07);
       --burb-shadow-lg: 0 12px 30px rgba(15, 23, 42, 0.1);
-
       --burb-transition: 180ms ease;
       --burb-font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -59,7 +54,8 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    html, body {
+    html,
+    body {
       background: transparent;
       color: var(--burb-text-body);
       overflow: hidden;
@@ -74,15 +70,19 @@
       width: 5px;
       height: 5px;
     }
+
     ::-webkit-scrollbar-track {
       background: transparent;
     }
+
     ::-webkit-scrollbar-thumb {
       background: #cbd5e1;
       border-radius: 4px;
     }
 
-    button:focus-visible, input:focus-visible, select:focus-visible {
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
       outline: 2px solid var(--burb-primary);
       outline-offset: 2px;
     }
@@ -103,8 +103,15 @@
     }
 
     @keyframes burbFadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* ==========================================================================
@@ -120,26 +127,31 @@
       box-sizing: border-box;
       overflow: hidden;
     }
+
     .burb-book-hero-header {
       text-align: center;
       margin-bottom: 12px;
     }
+
     .burb-book-hero-header h1 {
       font-size: 22px;
       font-weight: 700;
       color: var(--burb-text-main);
       letter-spacing: -0.01em;
     }
+
     .burb-book-hero-header p {
       font-size: 13px;
       color: var(--burb-text-muted);
       margin-top: 2px;
     }
+
     .burb-book-rooms-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 18px;
     }
+
     .burb-book-room-card {
       background: var(--burb-bg-surface);
       border-radius: var(--burb-radius-lg);
@@ -152,11 +164,13 @@
       box-sizing: border-box;
       transition: transform var(--burb-transition), box-shadow var(--burb-transition), border-color var(--burb-transition);
     }
+
     .burb-book-room-card:hover {
       transform: translateY(-4px);
       box-shadow: var(--burb-shadow-lg);
       border-color: var(--burb-primary-border);
     }
+
     /* Generous balanced room photo */
     .burb-book-room-img-wrap {
       width: 100%;
@@ -164,15 +178,18 @@
       overflow: hidden;
       background: var(--burb-bg-subtle);
     }
+
     .burb-book-room-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform 0.4s ease;
     }
+
     .burb-book-room-card:hover .burb-book-room-img {
       transform: scale(1.04);
     }
+
     .burb-book-room-content {
       padding: 16px 18px 18px;
       text-align: center;
@@ -181,18 +198,21 @@
       justify-content: space-between;
       flex-grow: 1;
     }
+
     .burb-book-room-title {
       font-size: 17.5px;
       font-weight: 700;
       color: var(--burb-text-main);
       letter-spacing: -0.01em;
     }
+
     .burb-book-room-divider {
       width: 44px;
       height: 1px;
       background: var(--burb-border);
       margin: 8px auto;
     }
+
     .burb-book-room-tag {
       font-size: 12.5px;
       color: var(--burb-text-muted);
@@ -202,6 +222,7 @@
       justify-content: center;
       gap: 6px;
     }
+
     .burb-book-btn-primary {
       width: 100%;
       padding: 11px 16px;
@@ -218,10 +239,12 @@
       gap: 8px;
       transition: background var(--burb-transition), box-shadow var(--burb-transition);
     }
+
     .burb-book-btn-primary:hover:not(:disabled) {
       background: var(--burb-primary-hover);
       box-shadow: 0 4px 14px rgba(31, 85, 130, 0.25);
     }
+
     .burb-book-btn-primary:disabled {
       background: #cbd5e1;
       color: #94a3b8;
@@ -245,6 +268,7 @@
       box-sizing: border-box;
       overflow: hidden;
     }
+
     .burb-book-top-row {
       display: flex;
       justify-content: space-between;
@@ -252,6 +276,7 @@
       margin-bottom: 6px;
       height: 24px;
     }
+
     .burb-book-back-link {
       background: none;
       border: none;
@@ -265,19 +290,23 @@
       padding: 2px 0;
       transition: color var(--burb-transition);
     }
+
     .burb-book-back-link:hover {
       color: var(--burb-primary);
     }
+
     .burb-book-schedule-head h2 {
       font-size: 20px;
       font-weight: 700;
       color: var(--burb-text-main);
     }
+
     .burb-book-schedule-head p {
       font-size: 13px;
       color: var(--burb-text-muted);
       margin-top: 2px;
     }
+
     .burb-book-subbar {
       display: flex;
       justify-content: space-between;
@@ -287,11 +316,13 @@
       margin-bottom: 10px;
       height: 26px;
     }
+
     .burb-book-subbar h3 {
       font-size: 14.5px;
       font-weight: 600;
       color: var(--burb-text-main);
     }
+
     .burb-book-tz {
       font-size: 12px;
       color: var(--burb-text-muted);
@@ -321,12 +352,14 @@
       height: 100%;
       box-sizing: border-box;
     }
+
     .burb-book-cal-nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 8px;
     }
+
     .burb-book-cal-btn {
       background: var(--burb-bg-muted);
       border: 1px solid var(--burb-border);
@@ -341,19 +374,23 @@
       color: var(--burb-text-body);
       transition: background var(--burb-transition);
     }
+
     .burb-book-cal-btn:hover:not(:disabled) {
       background: var(--burb-primary-light);
       color: var(--burb-primary);
     }
+
     .burb-book-cal-btn:disabled {
       opacity: 0.3;
       cursor: not-allowed;
     }
+
     .burb-book-cal-month-title {
       font-size: 14.5px;
       font-weight: 700;
       color: var(--burb-text-main);
     }
+
     .burb-book-cal-weekdays {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -364,12 +401,14 @@
       margin-bottom: 6px;
       text-transform: uppercase;
     }
+
     .burb-book-cal-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 3px;
       flex-grow: 1;
     }
+
     .cal-day-cell {
       height: 35px;
       display: flex;
@@ -386,13 +425,16 @@
       color: var(--burb-text-main);
       transition: background var(--burb-transition);
     }
+
     .cal-day-cell:hover:not(.disabled):not(.selected) {
       background: var(--burb-bg-subtle);
     }
+
     .cal-day-cell.disabled {
       color: #cbd5e1;
       cursor: not-allowed;
     }
+
     .cal-day-cell.has-dot::after {
       content: '';
       width: 4px;
@@ -402,12 +444,14 @@
       position: absolute;
       bottom: 2px;
     }
+
     .cal-day-cell.selected {
       background: var(--burb-primary) !important;
       color: #ffffff !important;
       font-weight: 700;
       box-shadow: 0 2px 6px rgba(31, 85, 130, 0.35);
     }
+
     .cal-day-cell.selected::after {
       background-color: #ffffff;
     }
@@ -424,6 +468,7 @@
       height: 100%;
       box-sizing: border-box;
     }
+
     .burb-book-time-title {
       font-size: 14px;
       font-weight: 700;
@@ -433,6 +478,7 @@
       align-items: center;
       gap: 6px;
     }
+
     .burb-book-click-hint {
       font-size: 11.5px;
       color: var(--burb-primary);
@@ -447,6 +493,35 @@
       font-weight: 500;
     }
 
+    .burb-live-sync-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--burb-primary);
+      background: var(--burb-primary-light);
+      padding: 2px 7px;
+      border-radius: var(--burb-radius-pill);
+      margin-left: 6px;
+      vertical-align: middle;
+      letter-spacing: 0;
+    }
+
+    .burb-pulse-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--burb-primary);
+      animation: burbPulse 1.2s infinite ease-in-out;
+    }
+
+    @keyframes burbPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.8); }
+    }
+
     /* Slots Grid with smooth internal scrollbar */
     .burb-book-slots-grid {
       display: grid;
@@ -459,6 +534,7 @@
       margin-bottom: 8px;
       flex-grow: 1;
     }
+
     .slot-pill {
       padding: 9px 8px;
       font-size: 12.5px;
@@ -475,24 +551,28 @@
       justify-content: center;
       gap: 5px;
     }
+
     .slot-pill:hover:not(.booked):not(.selected):not(.in-range) {
       border-color: var(--burb-primary);
       color: var(--burb-primary);
       background: var(--burb-primary-light);
       transform: translateY(-1px);
     }
+
     .slot-pill.selected {
       background: var(--burb-primary) !important;
       color: #ffffff !important;
       border-color: var(--burb-primary) !important;
       box-shadow: 0 2px 8px rgba(31, 85, 130, 0.3);
     }
+
     .slot-pill.in-range {
       background: var(--burb-primary-tint) !important;
       color: var(--burb-primary) !important;
       border-color: var(--burb-primary) !important;
       border-style: dashed;
     }
+
     .slot-pill.booked {
       background: var(--burb-bg-subtle) !important;
       border-color: #e2e8f0 !important;
@@ -501,6 +581,7 @@
       text-decoration: line-through;
       font-size: 11.5px;
     }
+
     .slot-pill.booked::after {
       content: 'Booked';
       font-size: 9px;
@@ -525,12 +606,14 @@
       gap: 8px;
       margin-top: auto;
     }
+
     .burb-book-range-item {
       flex: 1;
       display: flex;
       align-items: center;
       gap: 5px;
     }
+
     .burb-book-range-label {
       font-size: 11px;
       font-weight: 700;
@@ -538,10 +621,12 @@
       text-transform: uppercase;
       white-space: nowrap;
     }
+
     .burb-book-select-wrap {
       flex: 1;
       position: relative;
     }
+
     .burb-book-select-wrap::after {
       content: '';
       position: absolute;
@@ -555,6 +640,7 @@
       border-top: 4px solid #64748b;
       pointer-events: none;
     }
+
     .burb-book-select {
       width: 100%;
       padding: 6px 18px 6px 8px;
@@ -568,10 +654,12 @@
       outline: none;
       cursor: pointer;
     }
+
     .burb-book-range-arrow {
       color: var(--burb-text-muted);
       font-size: 12px;
     }
+
     .burb-book-duration-pill {
       background: var(--burb-primary-light);
       color: var(--burb-primary);
@@ -597,6 +685,7 @@
       height: 100%;
       box-sizing: border-box;
     }
+
     .burb-book-details-card h4 {
       font-size: 14.5px;
       font-weight: 700;
@@ -605,12 +694,14 @@
       padding-bottom: 8px;
       margin-bottom: 10px;
     }
+
     .burb-book-sd-room {
       font-size: 15.5px;
       font-weight: 700;
       color: var(--burb-primary);
       margin-bottom: 10px;
     }
+
     .burb-book-sd-box {
       font-size: 13px;
       color: var(--burb-text-body);
@@ -622,15 +713,18 @@
       border-left: 3.5px solid var(--burb-primary);
       flex-grow: 1;
     }
+
     .burb-book-sd-item {
       display: flex;
       align-items: flex-start;
       gap: 7px;
       margin-bottom: 6px;
     }
+
     .burb-book-sd-item:last-child {
       margin-bottom: 0;
     }
+
     .burb-book-sd-icon {
       color: var(--burb-primary);
       flex-shrink: 0;
@@ -655,15 +749,18 @@
       box-sizing: border-box;
       overflow: hidden;
     }
+
     .burb-book-form-head {
       margin-bottom: 10px;
     }
+
     .burb-book-form-head h2 {
       font-size: 20px;
       font-weight: 700;
       color: var(--burb-text-main);
       letter-spacing: -0.01em;
     }
+
     .burb-book-form-head p {
       font-size: 13px;
       color: var(--burb-text-muted);
@@ -679,18 +776,21 @@
       margin-bottom: 10px;
       box-shadow: var(--burb-shadow-sm);
     }
+
     .burb-book-ticket-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 14px;
     }
+
     .burb-book-ticket-col {
       display: flex;
       align-items: center;
       gap: 10px;
       flex: 1;
     }
+
     .burb-book-ticket-icon {
       width: 32px;
       height: 32px;
@@ -704,6 +804,7 @@
       flex-shrink: 0;
       box-shadow: 0 1px 3px rgba(31, 85, 130, 0.08);
     }
+
     .burb-book-ticket-sub {
       font-size: 10.5px;
       font-weight: 700;
@@ -712,6 +813,7 @@
       text-transform: uppercase;
       margin-bottom: 1px;
     }
+
     .burb-book-ticket-title {
       font-size: 13.5px;
       font-weight: 700;
@@ -721,11 +823,13 @@
       flex-wrap: wrap;
       gap: 5px;
     }
+
     .burb-book-ticket-sep {
       width: 1px;
       height: 30px;
       background: var(--burb-border);
     }
+
     .burb-book-dur-tag {
       font-size: 10.5px;
       font-weight: 700;
@@ -743,28 +847,34 @@
       gap: 12px;
       margin-bottom: 8px;
     }
+
     .burb-book-form-grid.single-col {
       grid-template-columns: 1fr;
     }
+
     .burb-book-input-group {
       display: flex;
       flex-direction: column;
     }
+
     .burb-book-label-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 4px;
     }
+
     .burb-book-input-group label {
       font-size: 12.5px;
       font-weight: 600;
       color: var(--burb-text-body);
     }
+
     .burb-book-req {
       color: var(--burb-danger);
       font-weight: 700;
     }
+
     .burb-book-opt-tag {
       font-size: 11px;
       font-weight: 500;
@@ -774,11 +884,13 @@
       border-radius: var(--burb-radius-pill);
       padding: 1px 6px;
     }
+
     .burb-book-input-icon-wrap {
       position: relative;
       display: flex;
       align-items: center;
     }
+
     .burb-book-field-icon {
       position: absolute;
       left: 12px;
@@ -786,6 +898,7 @@
       pointer-events: none;
       transition: color var(--burb-transition);
     }
+
     .burb-book-input {
       width: 100%;
       padding: 9px 12px 9px 36px;
@@ -797,11 +910,13 @@
       outline: none;
       transition: border-color var(--burb-transition), box-shadow var(--burb-transition);
     }
+
     .burb-book-input:focus {
       border-color: var(--burb-primary);
       box-shadow: 0 0 0 3px rgba(31, 85, 130, 0.12);
     }
-    .burb-book-input:focus ~ .burb-book-field-icon,
+
+    .burb-book-input:focus~.burb-book-field-icon,
     .burb-book-input-icon-wrap:focus-within .burb-book-field-icon {
       color: var(--burb-primary);
     }
@@ -825,6 +940,7 @@
       transition: border-color var(--burb-transition), box-shadow var(--burb-transition);
       box-sizing: border-box;
     }
+
     .burb-book-textarea:focus {
       border-color: var(--burb-primary);
       box-shadow: 0 0 0 3px rgba(31, 85, 130, 0.12);
@@ -864,6 +980,7 @@
       justify-content: center;
       align-items: center;
     }
+
     .burb-book-success-icon {
       width: 60px;
       height: 60px;
@@ -877,6 +994,7 @@
       font-size: 28px;
       margin: 0 auto 14px;
     }
+
     .burb-book-conf-box {
       margin: 18px auto;
       padding: 16px 20px;
@@ -901,13 +1019,15 @@
       margin-top: 10px;
       display: none;
     }
+
     .burb-book-alert-error {
       background: var(--burb-danger-bg);
       color: var(--burb-danger);
       border: 1px solid var(--burb-danger-border);
     }
+
     .burb-book-spinner {
-      border: 2px solid rgba(255,255,255,0.3);
+      border: 2px solid rgba(255, 255, 255, 0.3);
       border-radius: 50%;
       border-top: 2px solid #ffffff;
       width: 14px;
@@ -915,34 +1035,50 @@
       animation: burbSpin 0.75s linear infinite;
       display: none;
     }
+
     @keyframes burbSpin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
     /* Responsive */
     @media (max-width: 900px) {
-      html, body {
+
+      html,
+      body {
         overflow-y: auto !important;
       }
+
       .burb-book-viewport {
         height: auto !important;
         max-height: none !important;
         overflow: visible !important;
       }
-      #step1-rooms, #step2-schedule, #step3-client, #step4-confirm {
+
+      #step1-rooms,
+      #step2-schedule,
+      #step3-client,
+      #step4-confirm {
         height: auto !important;
         max-height: none !important;
         overflow: visible !important;
       }
+
       .burb-book-rooms-grid {
         grid-template-columns: 1fr;
       }
+
       .burb-book-schedule-cols {
         grid-template-columns: 1fr 1fr;
         height: auto !important;
         max-height: none !important;
       }
+
       .burb-book-details-card {
         grid-column: span 2;
         margin-top: 10px;
@@ -954,6 +1090,7 @@
         grid-template-columns: 1fr;
         gap: 16px;
       }
+
       .burb-book-details-card {
         grid-column: span 1;
         position: sticky;
@@ -964,27 +1101,32 @@
         z-index: 10;
         padding: 14px;
       }
+
       .burb-book-sd-box {
         display: none;
       }
+
       .burb-book-form-grid {
         grid-template-columns: 1fr;
       }
+
       .burb-book-ticket-inner {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
       }
+
       .burb-book-ticket-sep {
         display: none;
       }
     }
   </style>
 </head>
+
 <body>
 
   <div class="burb-book-viewport">
-    
+
     <!-- ==================== STEP 1: 3 ROOM CARDS ==================== -->
     <div id="step1-rooms">
       <div class="burb-book-hero-header">
@@ -996,13 +1138,19 @@
         <!-- Large Conference Room -->
         <div class="burb-book-room-card">
           <div class="burb-book-room-img-wrap">
-            <img class="burb-book-room-img" src="https://static.wixstatic.com/media/b95dae_36530dbd512d44ed9fad2ae9963a3e09~mv2.jpg" alt="Large Conference Room">
+            <img class="burb-book-room-img"
+              src="https://static.wixstatic.com/media/b95dae_36530dbd512d44ed9fad2ae9963a3e09~mv2.jpg"
+              alt="Large Conference Room">
           </div>
           <div class="burb-book-room-content">
             <h3 class="burb-book-room-title">Large Conference Room</h3>
             <div class="burb-book-room-divider"></div>
             <div class="burb-book-room-tag">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
               <span>30 min increments</span>
             </div>
             <button class="burb-book-btn-primary" onclick="selectRoom('Large Conference Room')">Book Now</button>
@@ -1012,13 +1160,19 @@
         <!-- Small Conference Room -->
         <div class="burb-book-room-card">
           <div class="burb-book-room-img-wrap">
-            <img class="burb-book-room-img" src="https://static.wixstatic.com/media/b95dae_c726334b29934448aa5eaf1fb5835d7a~mv2.jpg" alt="Small Conference Room">
+            <img class="burb-book-room-img"
+              src="https://static.wixstatic.com/media/b95dae_c726334b29934448aa5eaf1fb5835d7a~mv2.jpg"
+              alt="Small Conference Room">
           </div>
           <div class="burb-book-room-content">
             <h3 class="burb-book-room-title">Small Conference Room</h3>
             <div class="burb-book-room-divider"></div>
             <div class="burb-book-room-tag">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
               <span>30 min increments</span>
             </div>
             <button class="burb-book-btn-primary" onclick="selectRoom('Small Conference Room')">Book Now</button>
@@ -1028,13 +1182,19 @@
         <!-- Private Office -->
         <div class="burb-book-room-card">
           <div class="burb-book-room-img-wrap">
-            <img class="burb-book-room-img" src="https://static.wixstatic.com/media/b95dae_0ab92caf5971498590ef9ea22c48d87e~mv2.jpg" alt="Private Office">
+            <img class="burb-book-room-img"
+              src="https://static.wixstatic.com/media/b95dae_0ab92caf5971498590ef9ea22c48d87e~mv2.jpg"
+              alt="Private Office">
           </div>
           <div class="burb-book-room-content">
             <h3 class="burb-book-room-title">Private Office</h3>
             <div class="burb-book-room-divider"></div>
             <div class="burb-book-room-tag">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
               <span>30 min increments</span>
             </div>
             <button class="burb-book-btn-primary" onclick="selectRoom('Private Office')">Book Now</button>
@@ -1047,18 +1207,22 @@
     <div id="step2-schedule" style="display:none;">
       <div class="burb-book-top-row">
         <button class="burb-book-back-link" onclick="goToStep(1)">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
           <span>Back to Rooms</span>
         </button>
         <div class="burb-book-tz">Time zone: Eastern Daylight Time (EDT) ⌵</div>
       </div>
-      
+
       <div class="burb-book-subbar">
         <h3>Schedule your service — Select Date & Time</h3>
       </div>
 
       <div class="burb-book-schedule-cols">
-        
+
         <!-- Column 1: Mini Calendar -->
         <div class="burb-book-cal-card">
           <div class="burb-book-cal-nav">
@@ -1075,7 +1239,11 @@
         <!-- Column 2: Interactive Slots Table & Compact Range -->
         <div class="burb-book-time-panel">
           <div class="burb-book-time-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
             <span id="availabilityHeading">Availability for Oct 1</span>
           </div>
 
@@ -1096,7 +1264,7 @@
                 </select>
               </div>
             </div>
-            
+
             <span class="burb-book-range-arrow">→</span>
 
             <div class="burb-book-range-item">
@@ -1120,9 +1288,9 @@
         <div class="burb-book-details-card">
           <h4>Service Details</h4>
           <div class="burb-book-sd-room" id="sdRoomTitle">Large Conference Room</div>
-          
+
           <div class="burb-book-sd-box" id="sdTimeInfo">Please choose a slot</div>
-          
+
           <button class="burb-book-btn-primary" id="nextToDetailsBtn" disabled onclick="goToStep(3)">Next</button>
         </div>
 
@@ -1132,10 +1300,14 @@
     <!-- ==================== STEP 3: CLIENT DETAILS ==================== -->
     <div id="step3-client" style="display:none;">
       <button class="burb-book-back-link" onclick="goToStep(2)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
         <span>Back to Date & Time</span>
       </button>
-      
+
       <div class="burb-book-form-head">
         <h2>Enter Your Details</h2>
         <p>Please provide your contact information to finalize the booking.</p>
@@ -1151,7 +1323,11 @@
             </div>
             <div class="burb-book-input-icon-wrap">
               <input type="text" id="clientName" class="burb-book-input" placeholder="e.g. John Doe" required>
-              <svg class="burb-book-field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <svg class="burb-book-field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
             </div>
           </div>
           <div class="burb-book-input-group">
@@ -1160,7 +1336,11 @@
             </div>
             <div class="burb-book-input-icon-wrap">
               <input type="email" id="clientEmail" class="burb-book-input" placeholder="e.g. john@example.com" required>
-              <svg class="burb-book-field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              <svg class="burb-book-field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
             </div>
           </div>
         </div>
@@ -1172,7 +1352,12 @@
             </div>
             <div class="burb-book-input-icon-wrap">
               <input type="tel" id="clientPhone" class="burb-book-input" placeholder="e.g. (781) 400-2347" required>
-              <svg class="burb-book-field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              <svg class="burb-book-field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                </path>
+              </svg>
             </div>
           </div>
         </div>
@@ -1183,18 +1368,26 @@
               <label for="clientNotes">Meeting Notes & Special Requests</label>
               <span class="burb-book-opt-tag">Optional</span>
             </div>
-            <textarea id="clientNotes" class="burb-book-textarea" rows="4" placeholder="e.g. Number of guests, presentation needs, AV/whiteboard equipment, room arrangement, or special requests..."></textarea>
+            <textarea id="clientNotes" class="burb-book-textarea" rows="4"
+              placeholder="e.g. Number of guests, presentation needs, AV/whiteboard equipment, room arrangement, or special requests..."></textarea>
           </div>
         </div>
 
         <button type="submit" id="finalBookBtn" class="burb-book-btn-primary" style="margin-top: 8px;">
           <span class="burb-book-spinner" id="finalSpinner"></span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
           <span id="finalBtnText">Book Now</span>
         </button>
 
         <div class="burb-book-security-note">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
           <span>Instant reservation • Double-booking protected • Safe & secure</span>
         </div>
 
@@ -1206,11 +1399,13 @@
     <div id="step4-confirm" style="display:none;">
       <div class="burb-book-success-icon">✓</div>
       <h2 style="font-size: 22px; color: var(--burb-text-main); font-weight: 700;">Booking Confirmed!</h2>
-      <p style="color: var(--burb-text-muted); margin-top: 4px; font-size: 14px;">Your meeting room reservation is successfully secured.</p>
-      
+      <p style="color: var(--burb-text-muted); margin-top: 4px; font-size: 14px;">Your meeting room reservation is
+        successfully secured.</p>
+
       <div class="burb-book-conf-box" id="confDetailsText"></div>
 
-      <button class="burb-book-btn-primary" style="max-width: 220px; margin: 16px auto 0;" onclick="goToStep(1)">Book Another Room</button>
+      <button class="burb-book-btn-primary" style="max-width: 220px; margin: 16px auto 0;" onclick="goToStep(1)">Book
+        Another Room</button>
     </div>
 
   </div>
@@ -1301,7 +1496,7 @@
       const totalDaysInMonth = new Date(state.currentYear, state.currentMonth + 1, 0).getDate();
 
       const today = new Date();
-      today.setHours(0,0,0,0);
+      today.setHours(0, 0, 0, 0);
 
       const currentCalMonth = new Date(state.currentYear, state.currentMonth, 1);
       const minMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -1316,7 +1511,7 @@
 
       for (let day = 1; day <= totalDaysInMonth; day++) {
         const cellDate = new Date(state.currentYear, state.currentMonth, day);
-        cellDate.setHours(0,0,0,0);
+        cellDate.setHours(0, 0, 0, 0);
 
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -1331,7 +1526,7 @@
           btn.onclick = () => onSelectDate(cellDate);
         }
 
-        if (cellDate.getTime() === state.selectedDate.setHours(0,0,0,0)) {
+        if (cellDate.getTime() === state.selectedDate.setHours(0, 0, 0, 0)) {
           btn.classList.add('selected');
         }
 
@@ -1362,31 +1557,91 @@
       fetchBookedSlotsForDate();
     }
 
-    // 4. Fetch Slots from Wix Velo
+    // High-performance In-Memory Cache for fetched slot intervals
+    const bookedSlotsCache = {};
+
+    // 4. Fetch Slots from Wix Velo (Instant 0ms Optimistic Render + Background Live Verification)
     function fetchBookedSlotsForDate() {
       const options = { weekday: 'short', month: 'short', day: 'numeric' };
-      availabilityHeading.textContent = `Availability for ${state.selectedDate.toLocaleDateString('en-US', options)}`;
-      
-      slotsGrid.innerHTML = '<div style="grid-column: span 2; padding: 12px; text-align: center; color: var(--burb-text-muted); font-size: 12.5px;">Loading slots…</div>';
-
+      const dateText = state.selectedDate.toLocaleDateString('en-US', options);
       const isoDate = state.selectedDate.toISOString().split('T')[0];
+      const cacheKey = `${state.roomName}_${isoDate}`;
+
+      // 1. Instant Cache Hit (0ms) - already fetched previously in this session
+      if (bookedSlotsCache[cacheKey] !== undefined) {
+        state.bookedIntervals = bookedSlotsCache[cacheKey];
+        availabilityHeading.innerHTML = `<span>Availability for ${dateText}</span>`;
+        populateFromTimeDropdown();
+        renderQuickSlotsGrid();
+        return;
+      }
+
+      // 2. Instant 0ms Optimistic Render: Display all slots immediately so user never waits!
+      state.bookedIntervals = [];
+      populateFromTimeDropdown();
+      renderQuickSlotsGrid();
+
+      // Show sleek, non-blocking live checking badge next to the date heading
+      availabilityHeading.innerHTML = `Availability for ${dateText} <span id="slotLiveBadge" class="burb-live-sync-badge"><span class="burb-pulse-dot"></span> Checking live...</span>`;
+
+      // 3. Query Wix Velo in the background
       window.parent.postMessage({
         action: 'GET_BOOKED_SLOTS',
         payload: { roomName: state.roomName, bookingDate: isoDate }
       }, '*');
+
+      // 4. Safe timeout (2.5s) to clear the badge if Velo/network is delayed
+      clearTimeout(window._slotSyncTimer);
+      window._slotSyncTimer = setTimeout(() => {
+        const badge = document.getElementById('slotLiveBadge');
+        if (badge) badge.remove();
+      }, 2500);
     }
 
     window.addEventListener('message', (event) => {
-      const { action, bookedSlots, success, message } = event.data || {};
+      const { action, bookedSlots, roomName, bookingDate, success, message } = event.data || {};
       if (action === 'BOOKED_SLOTS_RESPONSE') {
-        state.bookedIntervals = bookedSlots || [];
-        populateFromTimeDropdown();
-        renderQuickSlotsGrid();
+        clearTimeout(window._slotSyncTimer);
+        const isoDate = state.selectedDate.toISOString().split('T')[0];
+        const resRoom = roomName || state.roomName;
+        const resDate = bookingDate || isoDate;
+        const cacheKey = `${resRoom}_${resDate}`;
+
+        bookedSlotsCache[cacheKey] = bookedSlots || [];
+
+        // If response matches current active room and date, update UI
+        if (resRoom === state.roomName && resDate === isoDate) {
+          state.bookedIntervals = bookedSlots || [];
+
+          // If current selection is in booked interval, clear selection
+          if (state.startTime && isTimeWithinBookings(state.startTime)) {
+            state.startTime = '';
+            state.endTime = '';
+            toTimeSelect.disabled = true;
+            toTimeSelect.innerHTML = '<option value="" disabled selected>End</option>';
+            updateDurationAndSidebar();
+          }
+
+          // Show temporary verified badge
+          const badge = document.getElementById('slotLiveBadge');
+          if (badge) {
+            badge.innerHTML = '<span style="color:#16a34a; font-weight:600;">✓ Live verified</span>';
+            setTimeout(() => { if (badge) badge.remove(); }, 1600);
+          }
+
+          populateFromTimeDropdown();
+          renderQuickSlotsGrid();
+        }
       }
       if (action === 'BOOKING_RESPONSE') {
         setFinalLoading(false);
-        if (success) showConfirmation();
-        else showClientAlert(message || "An error occurred while booking.", "error");
+        if (success) {
+          const isoDate = state.selectedDate.toISOString().split('T')[0];
+          delete bookedSlotsCache[`${state.roomName}_${isoDate}`];
+          showConfirmation();
+        } else {
+          showClientAlert(message || "An error occurred while booking.", "error");
+        }
       }
     });
 
@@ -1572,7 +1827,7 @@
         nextToDetailsBtn.disabled = false;
 
         const dateStr = state.selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-        
+
         sdTimeInfo.innerHTML = `
           <div class="burb-book-sd-item">
             <svg class="burb-book-sd-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
@@ -1738,4 +1993,5 @@
     goToStep(1);
   </script>
 </body>
+
 </html>

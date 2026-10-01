@@ -27,12 +27,26 @@ $w.onReady(function () {
     }
 });
 
+// In-memory slots cache to make repeat requests 0ms instant
+const veloSlotsCache = {};
+
 /**
  * Query booked slots for the selected date & room
  */
 async function handleGetBookedSlots(payload) {
     const { roomName, bookingDate } = payload || {};
     if (!roomName || !bookingDate) return;
+
+    const cacheKey = `${roomName}_${bookingDate}`;
+    if (veloSlotsCache[cacheKey]) {
+        $w('#html1').postMessage({
+            action: 'BOOKED_SLOTS_RESPONSE',
+            roomName: roomName,
+            bookingDate: bookingDate,
+            bookedSlots: veloSlotsCache[cacheKey]
+        });
+        return;
+    }
 
     try {
         const startOfDay = new Date(bookingDate);
@@ -45,12 +59,15 @@ async function handleGetBookedSlots(payload) {
             .eq('roomName', roomName)
             .ge('bookingDate', startOfDay)
             .le('bookingDate', endOfDay)
+            .limit(100)
             .find();
 
         const bookedSlots = results.items.map(b => ({
             startTime: b.startTime,
             endTime: b.endTime
         }));
+
+        veloSlotsCache[cacheKey] = bookedSlots;
 
         $w('#html1').postMessage({
             action: 'BOOKED_SLOTS_RESPONSE',
@@ -126,6 +143,9 @@ async function handleBookingSubmission(data) {
             notes: notes || '',
             memberId
         });
+
+        // Invalidate cache for this room & date so new slot is immediately reflected
+        delete veloSlotsCache[`${roomName}_${bookingDate}`];
 
         sendResponse(true, "Booking confirmed! Your room is successfully reserved.");
 
