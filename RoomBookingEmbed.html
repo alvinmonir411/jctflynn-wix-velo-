@@ -62,12 +62,12 @@
     html, body {
       background: transparent;
       color: var(--burb-text-body);
-      overflow-x: hidden;
-      overflow-y: auto;
+      overflow: hidden;
       font-size: 14px;
       line-height: 1.5;
       margin: 0;
       padding: 0;
+      height: 100%;
     }
 
     ::-webkit-scrollbar {
@@ -87,17 +87,19 @@
       outline-offset: 2px;
     }
 
-    /* SPACIOUS UNIFIED VIEWPORT (Consistent tall height across all views) */
+    /* EXACT UNIFIED COMPONENT HEIGHT (565px total across all views) */
     .burb-book-viewport {
       width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 20px 14px;
+      padding: 14px;
       box-sizing: border-box;
-      min-height: 660px;
+      height: 565px;
+      max-height: 565px;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      overflow: hidden;
     }
 
     @keyframes burbFadeIn {
@@ -106,52 +108,57 @@
     }
 
     /* ==========================================================================
-       STEP 1: 3 ROOM CARDS GRID (Taller images, grand presentation)
+       STEP 1: 3 ROOM CARDS GRID (EXACT 535px HEIGHT)
        ========================================================================== */
     #step1-rooms {
       display: block;
       animation: burbFadeIn 0.25s ease;
+      height: 535px;
+      max-height: 535px;
+      box-sizing: border-box;
+      overflow: hidden;
     }
     .burb-book-hero-header {
       text-align: center;
-      margin-bottom: 28px;
+      margin-bottom: 16px;
     }
     .burb-book-hero-header h1 {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 700;
       color: var(--burb-text-main);
       letter-spacing: -0.01em;
     }
     .burb-book-hero-header p {
-      font-size: 15px;
+      font-size: 13.5px;
       color: var(--burb-text-muted);
-      margin-top: 6px;
+      margin-top: 3px;
     }
     .burb-book-rooms-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+      gap: 20px;
     }
     .burb-book-room-card {
       background: var(--burb-bg-surface);
       border-radius: var(--burb-radius-lg);
       border: 1px solid var(--burb-border);
-      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+      box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      min-height: 500px;
+      height: 468px;
+      box-sizing: border-box;
       transition: transform var(--burb-transition), box-shadow var(--burb-transition), border-color var(--burb-transition);
     }
     .burb-book-room-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-4px);
       box-shadow: var(--burb-shadow-lg);
       border-color: var(--burb-primary-border);
     }
     /* Generous taller room photo */
     .burb-book-room-img-wrap {
       width: 100%;
-      height: 270px;
+      height: 250px;
       overflow: hidden;
       background: var(--burb-bg-subtle);
     }
@@ -165,7 +172,7 @@
       transform: scale(1.04);
     }
     .burb-book-room-content {
-      padding: 26px 24px 28px;
+      padding: 18px 18px 20px;
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -173,7 +180,7 @@
       flex-grow: 1;
     }
     .burb-book-room-title {
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 700;
       color: var(--burb-text-main);
       letter-spacing: -0.01em;
@@ -182,25 +189,25 @@
       width: 50%;
       height: 1px;
       background: var(--burb-border);
-      margin: 14px auto;
+      margin: 10px auto;
     }
     .burb-book-room-tag {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--burb-text-muted);
-      margin-bottom: 22px;
+      margin-bottom: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
+      gap: 6px;
     }
     .burb-book-btn-primary {
       width: 100%;
-      padding: 14px 20px;
+      padding: 12px 18px;
       background: var(--burb-primary);
       color: #ffffff;
       border: none;
       border-radius: var(--burb-radius-sm);
-      font-size: 15.5px;
+      font-size: 14.5px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
@@ -221,7 +228,7 @@
     }
 
     /* ==========================================================================
-       STEP 2: SCHEDULE (CALENDAR & TIME SLOTS - SPACIOUS & BALANCED)
+       STEP 2: SCHEDULE (EXACT 535px HEIGHT MATCH)
        ========================================================================== */
     #step2-schedule {
       display: none;
@@ -229,40 +236,43 @@
       border-radius: var(--burb-radius-lg);
       border: 1px solid var(--burb-border);
       box-shadow: var(--burb-shadow-md);
-      padding: 28px 30px;
+      padding: 16px 20px;
       animation: burbFadeIn 0.25s ease;
-      min-height: 660px;
+      height: 535px;
+      max-height: 535px;
       box-sizing: border-box;
+      overflow: hidden;
     }
     .burb-book-top-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 6px;
+      height: 24px;
     }
     .burb-book-back-link {
       background: none;
       border: none;
       color: var(--burb-text-muted);
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 0;
+      padding: 2px 0;
       transition: color var(--burb-transition);
     }
     .burb-book-back-link:hover {
       color: var(--burb-primary);
     }
     .burb-book-schedule-head h2 {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 700;
       color: var(--burb-text-main);
     }
     .burb-book-schedule-head p {
-      font-size: 13.5px;
+      font-size: 13px;
       color: var(--burb-text-muted);
       margin-top: 2px;
     }
@@ -271,16 +281,17 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--burb-border);
-      padding-bottom: 10px;
-      margin-bottom: 20px;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+      height: 26px;
     }
     .burb-book-subbar h3 {
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 600;
       color: var(--burb-text-main);
     }
     .burb-book-tz {
-      font-size: 12.5px;
+      font-size: 12px;
       color: var(--burb-text-muted);
     }
 
@@ -288,8 +299,11 @@
     .burb-book-schedule-cols {
       display: grid;
       grid-template-columns: 290px 1fr 280px;
-      gap: 22px;
+      gap: 18px;
       align-items: stretch;
+      height: 440px;
+      max-height: 440px;
+      box-sizing: border-box;
     }
 
     /* Column 1: Mini Calendar */
@@ -297,28 +311,31 @@
       background: var(--burb-bg-surface);
       border: 1px solid var(--burb-border);
       border-radius: var(--burb-radius-md);
-      padding: 18px 16px;
+      padding: 12px 12px;
       box-shadow: var(--burb-shadow-sm);
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      box-sizing: border-box;
     }
     .burb-book-cal-nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
     .burb-book-cal-btn {
       background: var(--burb-bg-muted);
       border: 1px solid var(--burb-border);
       border-radius: var(--burb-radius-sm);
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 13.5px;
+      font-size: 13px;
       color: var(--burb-text-body);
       transition: background var(--burb-transition);
     }
@@ -331,7 +348,7 @@
       cursor: not-allowed;
     }
     .burb-book-cal-month-title {
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 700;
       color: var(--burb-text-main);
     }
@@ -342,23 +359,23 @@
       font-size: 11px;
       font-weight: 600;
       color: var(--burb-text-muted);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       text-transform: uppercase;
     }
     .burb-book-cal-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
+      gap: 3px;
       flex-grow: 1;
     }
     .cal-day-cell {
-      height: 38px;
+      height: 35px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       border-radius: var(--burb-radius-sm);
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 500;
       cursor: pointer;
       position: relative;
@@ -381,7 +398,7 @@
       background-color: var(--burb-primary);
       border-radius: 50%;
       position: absolute;
-      bottom: 3px;
+      bottom: 2px;
     }
     .cal-day-cell.selected {
       background: var(--burb-primary) !important;
@@ -398,47 +415,51 @@
       background: var(--burb-bg-muted);
       border: 1px solid var(--burb-border);
       border-radius: var(--burb-radius-md);
-      padding: 18px 20px;
+      padding: 12px 14px;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      box-sizing: border-box;
     }
     .burb-book-time-title {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--burb-text-main);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
       gap: 6px;
     }
     .burb-book-click-hint {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--burb-primary);
       background: var(--burb-primary-light);
       border: 1px dashed var(--burb-primary-border);
       border-radius: var(--burb-radius-sm);
-      padding: 6px 10px;
-      margin-bottom: 12px;
+      padding: 4px 8px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       font-weight: 500;
     }
 
-    /* Taller Slots Grid (Displays 6-7 rows comfortably) */
+    /* Slots Grid with smooth internal scrollbar */
     .burb-book-slots-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 9px;
-      max-height: 285px;
+      gap: 8px;
+      height: 250px;
+      max-height: 250px;
       overflow-y: auto;
       padding-right: 4px;
-      margin-bottom: 14px;
+      margin-bottom: 8px;
       flex-grow: 1;
     }
     .slot-pill {
-      padding: 10px 10px;
-      font-size: 13px;
+      padding: 9px 8px;
+      font-size: 12.5px;
       text-align: center;
       border-radius: var(--burb-radius-sm);
       border: 1.5px solid #cbd5e1;
@@ -476,16 +497,16 @@
       color: var(--burb-text-disabled) !important;
       cursor: not-allowed !important;
       text-decoration: line-through;
-      font-size: 12px;
+      font-size: 11.5px;
     }
     .slot-pill.booked::after {
       content: 'Booked';
-      font-size: 9.5px;
+      font-size: 9px;
       text-decoration: none;
       color: var(--burb-danger);
       background: var(--burb-danger-bg);
       border: 1px solid var(--burb-danger-border);
-      padding: 1px 4px;
+      padding: 1px 3px;
       border-radius: 3px;
       margin-left: 3px;
       font-weight: 700;
@@ -496,20 +517,20 @@
       background: var(--burb-bg-surface);
       border: 1px solid var(--burb-border);
       border-radius: var(--burb-radius-sm);
-      padding: 10px 14px;
+      padding: 7px 10px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       margin-top: auto;
     }
     .burb-book-range-item {
       flex: 1;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
     .burb-book-range-label {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--burb-primary);
       text-transform: uppercase;
@@ -522,22 +543,22 @@
     .burb-book-select-wrap::after {
       content: '';
       position: absolute;
-      right: 8px;
+      right: 7px;
       top: 50%;
       transform: translateY(-50%);
       width: 0;
       height: 0;
-      border-left: 3.5px solid transparent;
-      border-right: 3.5px solid transparent;
-      border-top: 4.5px solid #64748b;
+      border-left: 3px solid transparent;
+      border-right: 3px solid transparent;
+      border-top: 4px solid #64748b;
       pointer-events: none;
     }
     .burb-book-select {
       width: 100%;
-      padding: 7px 22px 7px 10px;
+      padding: 6px 18px 6px 8px;
       border: 1px solid var(--burb-border);
       border-radius: 4px;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       color: var(--burb-text-main);
       background: var(--burb-bg-surface);
@@ -547,15 +568,15 @@
     }
     .burb-book-range-arrow {
       color: var(--burb-text-muted);
-      font-size: 13px;
+      font-size: 12px;
     }
     .burb-book-duration-pill {
       background: var(--burb-primary-light);
       color: var(--burb-primary);
       border: 1px solid var(--burb-primary-border);
       border-radius: var(--burb-radius-pill);
-      padding: 3px 10px;
-      font-size: 12px;
+      padding: 2px 7px;
+      font-size: 11px;
       font-weight: 700;
       white-space: nowrap;
       display: none;
@@ -566,41 +587,44 @@
       background: var(--burb-bg-surface);
       border: 1px solid var(--burb-border);
       border-radius: var(--burb-radius-md);
-      padding: 22px 20px;
+      padding: 16px 16px;
       box-shadow: var(--burb-shadow-sm);
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      box-sizing: border-box;
     }
     .burb-book-details-card h4 {
-      font-size: 15.5px;
+      font-size: 14.5px;
       font-weight: 700;
       color: var(--burb-text-main);
       border-bottom: 1px solid var(--burb-border);
-      padding-bottom: 10px;
-      margin-bottom: 14px;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
     }
     .burb-book-sd-room {
-      font-size: 16.5px;
+      font-size: 15.5px;
       font-weight: 700;
       color: var(--burb-primary);
-      margin-bottom: 14px;
+      margin-bottom: 10px;
     }
     .burb-book-sd-box {
-      font-size: 13.5px;
+      font-size: 13px;
       color: var(--burb-text-body);
-      line-height: 1.7;
-      margin-bottom: 20px;
-      padding: 16px 16px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+      padding: 12px 12px;
       background: var(--burb-bg-muted);
       border-radius: var(--burb-radius-sm);
-      border-left: 4px solid var(--burb-primary);
+      border-left: 3.5px solid var(--burb-primary);
       flex-grow: 1;
     }
     .burb-book-sd-item {
       display: flex;
       align-items: flex-start;
-      gap: 8px;
-      margin-bottom: 7px;
+      gap: 7px;
+      margin-bottom: 6px;
     }
     .burb-book-sd-item:last-child {
       margin-bottom: 0;
@@ -614,6 +638,9 @@
     /* ==========================================================================
        STEP 3: CLIENT DETAILS FORM (ELEGANT & SPACIOUS)
        ========================================================================== */
+    /* ==========================================================================
+       STEP 3: CLIENT DETAILS FORM (EXACT 535px HEIGHT MATCH)
+       ========================================================================== */
     #step3-client {
       display: none;
       max-width: 680px;
@@ -622,24 +649,26 @@
       border-radius: var(--burb-radius-lg);
       border: 1px solid var(--burb-border);
       box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-      padding: 36px 38px;
+      padding: 20px 32px;
       animation: burbFadeIn 0.25s ease;
-      min-height: 660px;
+      height: 535px;
+      max-height: 535px;
       box-sizing: border-box;
+      overflow: hidden;
     }
     .burb-book-form-head {
-      margin-bottom: 18px;
+      margin-bottom: 10px;
     }
     .burb-book-form-head h2 {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 700;
       color: var(--burb-text-main);
       letter-spacing: -0.01em;
     }
     .burb-book-form-head p {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--burb-text-muted);
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
     /* Executive Boarding Pass Reservation Ticket */
@@ -647,25 +676,25 @@
       background: linear-gradient(135deg, #f8fafc 0%, #eff6fb 100%);
       border: 1px solid var(--burb-primary-border);
       border-radius: var(--burb-radius-md);
-      padding: 16px 20px;
-      margin-bottom: 22px;
+      padding: 10px 14px;
+      margin-bottom: 10px;
       box-shadow: var(--burb-shadow-sm);
     }
     .burb-book-ticket-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 14px;
     }
     .burb-book-ticket-col {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       flex: 1;
     }
     .burb-book-ticket-icon {
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       background: #ffffff;
       border: 1px solid var(--burb-primary-border);
       border-radius: var(--burb-radius-sm);
@@ -677,33 +706,33 @@
       box-shadow: 0 1px 3px rgba(31, 85, 130, 0.08);
     }
     .burb-book-ticket-sub {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       color: var(--burb-primary);
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      margin-bottom: 2px;
+      margin-bottom: 1px;
     }
     .burb-book-ticket-title {
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
       color: var(--burb-text-main);
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 5px;
     }
     .burb-book-ticket-sep {
       width: 1px;
-      height: 36px;
+      height: 30px;
       background: var(--burb-border);
     }
     .burb-book-dur-tag {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       background: var(--burb-primary);
       color: #ffffff;
-      padding: 2px 8px;
+      padding: 1px 6px;
       border-radius: var(--burb-radius-pill);
       white-space: nowrap;
     }
@@ -712,8 +741,8 @@
     .burb-book-form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 16px;
+      gap: 12px;
+      margin-bottom: 8px;
     }
     .burb-book-form-grid.single-col {
       grid-template-columns: 1fr;
@@ -726,10 +755,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     .burb-book-input-group label {
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       color: var(--burb-text-body);
     }
@@ -738,13 +767,13 @@
       font-weight: 700;
     }
     .burb-book-opt-tag {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 500;
       color: var(--burb-text-muted);
       background: var(--burb-bg-muted);
       border: 1px solid var(--burb-border);
       border-radius: var(--burb-radius-pill);
-      padding: 1px 8px;
+      padding: 1px 6px;
     }
     .burb-book-input-icon-wrap {
       position: relative;
@@ -753,17 +782,17 @@
     }
     .burb-book-field-icon {
       position: absolute;
-      left: 14px;
+      left: 12px;
       color: #94a3b8;
       pointer-events: none;
       transition: color var(--burb-transition);
     }
     .burb-book-input {
       width: 100%;
-      padding: 12px 14px 12px 40px;
+      padding: 9px 12px 9px 36px;
       border: 1.5px solid var(--burb-border);
       border-radius: var(--burb-radius-sm);
-      font-size: 14px;
+      font-size: 13.5px;
       color: var(--burb-text-main);
       background: var(--burb-bg-surface);
       outline: none;
@@ -781,17 +810,18 @@
     /* Big Spacious Meeting Notes Textarea */
     .burb-book-textarea {
       width: 100%;
-      min-height: 105px;
-      max-height: 220px;
-      padding: 12px 14px;
+      height: 75px;
+      min-height: 75px;
+      max-height: 90px;
+      padding: 9px 12px;
       border: 1.5px solid var(--burb-border);
       border-radius: var(--burb-radius-sm);
-      font-size: 13.5px;
-      line-height: 1.55;
+      font-size: 13px;
+      line-height: 1.5;
       color: var(--burb-text-main);
       background: var(--burb-bg-surface);
       outline: none;
-      resize: vertical;
+      resize: none;
       font-family: inherit;
       transition: border-color var(--burb-transition), box-shadow var(--burb-transition);
       box-sizing: border-box;
@@ -804,16 +834,18 @@
     /* Footnote */
     .burb-book-security-note {
       text-align: center;
-      margin-top: 12px;
-      font-size: 12px;
+      margin-top: 8px;
+      font-size: 11.5px;
       color: var(--burb-text-muted);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 5px;
     }
 
-    /* STEP 4: CONFIRMATION */
+    /* ==========================================================================
+       STEP 4: CONFIRMATION (EXACT 535px HEIGHT MATCH)
+       ========================================================================== */
     #step4-confirm {
       display: none;
       max-width: 580px;
@@ -823,14 +855,20 @@
       border-radius: var(--burb-radius-lg);
       border: 1px solid var(--burb-border);
       box-shadow: var(--burb-shadow-md);
-      padding: 60px 40px;
+      padding: 30px 24px;
       animation: burbFadeIn 0.25s ease;
-      min-height: 660px;
+      height: 535px;
+      max-height: 535px;
       box-sizing: border-box;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
     .burb-book-success-icon {
-      width: 68px;
-      height: 68px;
+      width: 60px;
+      height: 60px;
       background: var(--burb-success-bg);
       color: var(--burb-success);
       border: 1px solid var(--burb-success-border);
@@ -838,19 +876,22 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 30px;
-      margin: 0 auto 18px;
+      font-size: 28px;
+      margin: 0 auto 14px;
     }
     .burb-book-conf-box {
-      margin: 24px auto;
-      padding: 22px 24px;
+      margin: 18px auto;
+      padding: 16px 20px;
       background: var(--burb-bg-muted);
       border-radius: var(--burb-radius-sm);
       text-align: left;
-      font-size: 14px;
+      font-size: 13.5px;
       color: var(--burb-text-body);
-      line-height: 1.8;
+      line-height: 1.7;
       border: 1px solid var(--burb-border);
+      width: 100%;
+      max-width: 440px;
+      box-sizing: border-box;
     }
 
     /* Alerts and Spinner */
@@ -859,7 +900,7 @@
       border-radius: var(--burb-radius-sm);
       font-size: 12.5px;
       font-weight: 500;
-      margin-top: 12px;
+      margin-top: 10px;
       display: none;
     }
     .burb-book-alert-error {
@@ -883,11 +924,26 @@
 
     /* Responsive */
     @media (max-width: 900px) {
+      html, body {
+        overflow-y: auto !important;
+      }
+      .burb-book-viewport {
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      #step1-rooms, #step2-schedule, #step3-client, #step4-confirm {
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
       .burb-book-rooms-grid {
         grid-template-columns: 1fr;
       }
       .burb-book-schedule-cols {
         grid-template-columns: 1fr 1fr;
+        height: auto !important;
+        max-height: none !important;
       }
       .burb-book-details-card {
         grid-column: span 2;
@@ -919,7 +975,7 @@
       .burb-book-ticket-inner {
         flex-direction: column;
         align-items: flex-start;
-        gap: 12px;
+        gap: 10px;
       }
       .burb-book-ticket-sep {
         display: none;
