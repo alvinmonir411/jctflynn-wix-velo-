@@ -31,6 +31,21 @@ $w.onReady(function () {
 const veloSlotsCache = {};
 
 /**
+ * Safely parse YYYY-MM-DD string into startOfDay and endOfDay bounds
+ * avoiding timezone offset shifts.
+ */
+function getDateBounds(dateStr) {
+    if (!dateStr) return { startOfDay: new Date(), endOfDay: new Date() };
+    const parts = dateStr.split('-').map(Number);
+    const y = parts[0];
+    const m = parts[1] - 1;
+    const d = parts[2];
+    const startOfDay = new Date(y, m, d, 0, 0, 0, 0);
+    const endOfDay = new Date(y, m, d, 23, 59, 59, 999);
+    return { startOfDay, endOfDay };
+}
+
+/**
  * Query booked slots for the selected date & room
  */
 async function handleGetBookedSlots(payload) {
@@ -49,11 +64,7 @@ async function handleGetBookedSlots(payload) {
     }
 
     try {
-        const startOfDay = new Date(bookingDate);
-        startOfDay.setHours(0, 0, 0, 0);
-
-        const endOfDay = new Date(bookingDate);
-        endOfDay.setHours(23, 59, 59, 999);
+        const { startOfDay, endOfDay } = getDateBounds(bookingDate);
 
         const results = await wixData.query(CONFIG.collectionName)
             .eq('roomName', roomName)
@@ -103,11 +114,7 @@ async function handleBookingSubmission(data) {
     }
 
     try {
-        const startOfDay = new Date(bookingDate);
-        startOfDay.setHours(0, 0, 0, 0);
-
-        const endOfDay = new Date(bookingDate);
-        endOfDay.setHours(23, 59, 59, 999);
+        const { startOfDay, endOfDay } = getDateBounds(bookingDate);
 
         // Overlap verification
         const results = await wixData.query(CONFIG.collectionName)

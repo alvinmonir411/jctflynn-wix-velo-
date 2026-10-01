@@ -1560,11 +1560,19 @@
     // High-performance In-Memory Cache for fetched slot intervals
     const bookedSlotsCache = {};
 
+    // Helper: Format date as YYYY-MM-DD using local calendar day (strictly prevents UTC timezone date shifts)
+    function getLocalDateISO(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
     // 4. Fetch Slots from Wix Velo (Instant 0ms Optimistic Render + Background Live Verification)
     function fetchBookedSlotsForDate() {
       const options = { weekday: 'short', month: 'short', day: 'numeric' };
       const dateText = state.selectedDate.toLocaleDateString('en-US', options);
-      const isoDate = state.selectedDate.toISOString().split('T')[0];
+      const isoDate = getLocalDateISO(state.selectedDate);
       const cacheKey = `${state.roomName}_${isoDate}`;
 
       // 1. Instant Cache Hit (0ms) - already fetched previously in this session
@@ -1602,7 +1610,7 @@
       const { action, bookedSlots, roomName, bookingDate, success, message } = event.data || {};
       if (action === 'BOOKED_SLOTS_RESPONSE') {
         clearTimeout(window._slotSyncTimer);
-        const isoDate = state.selectedDate.toISOString().split('T')[0];
+        const isoDate = getLocalDateISO(state.selectedDate);
         const resRoom = roomName || state.roomName;
         const resDate = bookingDate || isoDate;
         const cacheKey = `${resRoom}_${resDate}`;
@@ -1636,7 +1644,7 @@
       if (action === 'BOOKING_RESPONSE') {
         setFinalLoading(false);
         if (success) {
-          const isoDate = state.selectedDate.toISOString().split('T')[0];
+          const isoDate = getLocalDateISO(state.selectedDate);
           delete bookedSlotsCache[`${state.roomName}_${isoDate}`];
           showConfirmation();
         } else {
@@ -1919,7 +1927,7 @@
       setFinalLoading(true);
       hideClientAlert();
 
-      const isoDate = state.selectedDate.toISOString().split('T')[0];
+      const isoDate = getLocalDateISO(state.selectedDate);
       window.parent.postMessage({
         action: 'SUBMIT_BOOKING',
         payload: {
