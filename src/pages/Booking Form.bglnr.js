@@ -31,18 +31,25 @@ $w.onReady(function () {
 const veloSlotsCache = {};
 
 /**
- * Safely parse YYYY-MM-DD string into startOfDay and endOfDay bounds
- * avoiding timezone offset shifts.
+ * Safely calculate Eastern Time (EDT/EST) midnight and full-day bounds
+ * for the coworking space site in America/New_York.
+ * Guarantees that bookingDate is ALWAYS saved and displayed as 12:00 AM on that exact date in Wix CMS.
  */
-function getDateBounds(dateStr) {
-    if (!dateStr) return { startOfDay: new Date(), endOfDay: new Date() };
-    const parts = dateStr.split('-').map(Number);
-    const y = parts[0];
-    const m = parts[1] - 1;
-    const d = parts[2];
-    const startOfDay = new Date(y, m, d, 0, 0, 0, 0);
-    const endOfDay = new Date(y, m, d, 23, 59, 59, 999);
-    return { startOfDay, endOfDay };
+function getSiteDateBounds(dateStr) {
+    if (!dateStr) return { siteMidnight: new Date(), startOfDay: new Date(), endOfDay: new Date() };
+    const [y, m, d] = dateStr.split('-').map(Number);
+
+    // Determine whether America/New_York is in EDT (-4h) or EST (-5h) on that calendar date
+    const noonUtc = new Date(Date.UTC(y, m - 1, d, 12, 0, 0));
+    const nyStr = noonUtc.toLocaleString('en-US', { timeZone: 'America/New_York', timeZoneName: 'short' });
+    const offsetHours = nyStr.includes('EDT') ? 4 : 5;
+
+    // Midnight in America/New_York (displays as 12:00 AM in Wix CMS on the exact calendar day)
+    const siteMidnight = new Date(Date.UTC(y, m - 1, d, offsetHours, 0, 0, 0));
+    // End of day in America/New_York (11:59:59.999 PM)
+    const siteEndOfDay = new Date(Date.UTC(y, m - 1, d + 1, offsetHours, 0, 0, 0) - 1);
+
+    return { siteMidnight, startOfDay: siteMidnight, endOfDay: siteEndOfDay };
 }
 
 /**
@@ -64,7 +71,7 @@ async function handleGetBookedSlots(payload) {
     }
 
     try {
-        const { startOfDay, endOfDay } = getDateBounds(bookingDate);
+        const { startOfDay, endOfDay } = getSiteDateBounds(bookingDate);
 
         const results = await wixData.query(CONFIG.collectionName)
             .eq('roomName', roomName)
@@ -114,7 +121,7 @@ async function handleBookingSubmission(data) {
     }
 
     try {
-        const { startOfDay, endOfDay } = getDateBounds(bookingDate);
+        const { siteMidnight, startOfDay, endOfDay } = getSiteDateBounds(bookingDate);
 
         // Overlap verification
         const results = await wixData.query(CONFIG.collectionName)
@@ -140,7 +147,7 @@ async function handleBookingSubmission(data) {
         // Insert into RoomBookings
         await wixData.insert(CONFIG.collectionName, {
             roomName,
-            bookingDate: startOfDay,
+            bookingDate: siteMidnight,
             startTime,
             endTime,
             fullName: fullName || '',
