@@ -58,19 +58,18 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ZERO IFRAME SCROLLBAR: Locked overflow on desktop */
+    /* Zero iframe scrollbars on desktop */
     html, body {
       background: transparent;
       color: var(--burb-text-body);
       overflow-x: hidden;
-      overflow-y: hidden; /* Prevents outer iframe scrollbar */
+      overflow-y: hidden;
       font-size: 13.5px;
       line-height: 1.4;
       margin: 0;
       padding: 0;
     }
 
-    /* Thin scrollbar for slots table only */
     ::-webkit-scrollbar {
       width: 4px;
       height: 4px;
@@ -88,18 +87,13 @@
       outline-offset: 1px;
     }
 
-    /* UNIFIED COMPACT VIEWPORT: All steps fit inside ~450px height */
+    /* Main Viewport Container */
     .burb-book-viewport {
       width: 100%;
       max-width: 1100px;
       margin: 0 auto;
       padding: 8px 12px;
       box-sizing: border-box;
-      min-height: 450px;
-      max-height: 500px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
     }
 
     @keyframes burbFadeIn {
@@ -213,7 +207,7 @@
     }
 
     /* ==========================================================================
-       STEP 2: SCHEDULE (CALENDAR & TIME RANGE) - COMPACT FIXED HEIGHT
+       STEP 2: SCHEDULE (CALENDAR & TIME RANGE)
        ========================================================================== */
     #step2-schedule {
       display: none;
@@ -221,7 +215,7 @@
       border-radius: var(--burb-radius-md);
       border: 1px solid var(--burb-border);
       box-shadow: var(--burb-shadow-sm);
-      padding: 12px 18px;
+      padding: 12px 16px 14px;
       animation: burbFadeIn 0.2s ease;
     }
     .burb-book-top-row {
@@ -246,13 +240,13 @@
       color: var(--burb-primary);
     }
     .burb-book-schedule-head h2 {
-      font-size: 18px;
+      font-size: 17.5px;
       font-weight: 700;
       color: var(--burb-text-main);
       display: inline;
     }
     .burb-book-schedule-head p {
-      font-size: 12.5px;
+      font-size: 12px;
       color: var(--burb-text-muted);
       margin-top: 1px;
     }
@@ -261,24 +255,24 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--burb-border);
-      padding-bottom: 6px;
-      margin-bottom: 12px;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
     }
     .burb-book-subbar h3 {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--burb-text-main);
     }
     .burb-book-tz {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--burb-text-muted);
     }
 
     /* 3-Column Schedule Grid */
     .burb-book-schedule-cols {
       display: grid;
-      grid-template-columns: 240px 1fr 240px;
-      gap: 16px;
+      grid-template-columns: 235px 1fr 235px;
+      gap: 14px;
       align-items: start;
     }
 
@@ -336,7 +330,7 @@
       gap: 2px;
     }
     .cal-day-cell {
-      height: 26px;
+      height: 25px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -375,17 +369,17 @@
       background-color: #ffffff;
     }
 
-    /* Column 2: Interactive Slots Table & Time Selection */
+    /* Column 2: Interactive Slots Table & Compact Range */
     .burb-book-time-panel {
       background: var(--burb-bg-muted);
       border: 1px solid var(--burb-border);
       border-radius: var(--burb-radius-sm);
-      padding: 10px 14px;
+      padding: 10px 12px;
       display: flex;
       flex-direction: column;
     }
     .burb-book-time-title {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--burb-text-main);
       margin-bottom: 4px;
@@ -394,25 +388,25 @@
       gap: 5px;
     }
     .burb-book-click-hint {
-      font-size: 11.5px;
+      font-size: 11px;
       color: var(--burb-primary);
       background: var(--burb-primary-light);
       border: 1px dashed var(--burb-primary-border);
       border-radius: 4px;
-      padding: 4px 8px;
-      margin-bottom: 8px;
+      padding: 3px 8px;
+      margin-bottom: 7px;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       font-weight: 500;
     }
 
-    /* Slots Grid: Compact height to fit perfectly */
+    /* Slots Grid: Balanced height (3 rows visible) */
     .burb-book-slots-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 6px;
-      max-height: 140px;
+      max-height: 125px;
       overflow-y: auto;
       padding-right: 3px;
       margin-bottom: 8px;
@@ -459,7 +453,7 @@
     }
     .slot-pill.booked::after {
       content: 'Booked';
-      font-size: 9.5px;
+      font-size: 9px;
       text-decoration: none;
       color: var(--burb-danger);
       background: var(--burb-danger-bg);
@@ -470,25 +464,24 @@
       font-weight: 700;
     }
 
-    /* FROM / TO Controls: Ultra-compact single row */
+    /* FROM / TO Controls: Clean single row with duration badge */
     .burb-book-range-group {
       background: var(--burb-bg-surface);
       border: 1px solid var(--burb-border);
       border-radius: 4px;
-      padding: 6px 10px;
-      margin-bottom: 6px;
+      padding: 5px 8px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
     .burb-book-range-item {
       flex: 1;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
     }
     .burb-book-range-label {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       color: var(--burb-primary);
       text-transform: uppercase;
@@ -501,7 +494,7 @@
     .burb-book-select-wrap::after {
       content: '';
       position: absolute;
-      right: 8px;
+      right: 6px;
       top: 50%;
       transform: translateY(-50%);
       width: 0;
@@ -513,10 +506,10 @@
     }
     .burb-book-select {
       width: 100%;
-      padding: 4px 18px 4px 6px;
+      padding: 4px 16px 4px 5px;
       border: 1px solid var(--burb-border);
       border-radius: 4px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       color: var(--burb-text-main);
       background: var(--burb-bg-surface);
@@ -526,36 +519,18 @@
     }
     .burb-book-range-arrow {
       color: var(--burb-text-muted);
-      font-size: 13px;
-    }
-
-    /* Summary Duration Strip */
-    .burb-book-summary-strip {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--burb-primary-light);
-      border: 1px solid var(--burb-primary-border);
-      border-radius: 4px;
-      padding: 5px 10px;
       font-size: 12px;
-      color: var(--burb-primary);
-      font-weight: 500;
-    }
-    .burb-book-summary-left {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-weight: 600;
     }
     .burb-book-duration-pill {
-      background: #ffffff;
+      background: var(--burb-primary-light);
       color: var(--burb-primary);
       border: 1px solid var(--burb-primary-border);
       border-radius: var(--burb-radius-pill);
-      padding: 1px 7px;
+      padding: 2px 7px;
       font-size: 11px;
       font-weight: 700;
+      white-space: nowrap;
+      display: none;
     }
 
     /* Column 3: Service Details Card */
@@ -568,25 +543,25 @@
       flex-direction: column;
     }
     .burb-book-details-card h4 {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--burb-text-main);
       border-bottom: 1px solid var(--burb-border);
-      padding-bottom: 6px;
-      margin-bottom: 8px;
+      padding-bottom: 5px;
+      margin-bottom: 7px;
     }
     .burb-book-sd-room {
       font-size: 14.5px;
       font-weight: 700;
       color: var(--burb-primary);
-      margin-bottom: 8px;
+      margin-bottom: 7px;
     }
     .burb-book-sd-box {
       font-size: 12px;
       color: var(--burb-text-body);
       line-height: 1.5;
-      margin-bottom: 12px;
-      padding: 8px 10px;
+      margin-bottom: 10px;
+      padding: 7px 9px;
       background: var(--burb-bg-muted);
       border-radius: 4px;
       border-left: 3px solid var(--burb-primary);
@@ -595,7 +570,7 @@
       display: flex;
       align-items: flex-start;
       gap: 6px;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
     .burb-book-sd-item:last-child {
       margin-bottom: 0;
@@ -616,11 +591,11 @@
       background: var(--burb-bg-surface);
       border-radius: var(--burb-radius-md);
       border: 1px solid var(--burb-border);
-      padding: 20px 24px;
+      padding: 18px 22px;
       animation: burbFadeIn 0.2s ease;
     }
     .burb-book-form-head h2 {
-      font-size: 19px;
+      font-size: 18.5px;
       font-weight: 700;
       color: var(--burb-text-main);
     }
@@ -628,13 +603,13 @@
       font-size: 12.5px;
       color: var(--burb-text-muted);
       margin-top: 1px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .burb-book-summary-pill {
       background: var(--burb-bg-muted);
       border-radius: 4px;
-      padding: 10px 12px;
-      margin-bottom: 12px;
+      padding: 8px 12px;
+      margin-bottom: 10px;
       font-size: 12.5px;
       color: var(--burb-text-body);
       border-left: 3px solid var(--burb-primary);
@@ -672,12 +647,12 @@
       background: var(--burb-bg-surface);
       border-radius: var(--burb-radius-md);
       border: 1px solid var(--burb-border);
-      padding: 26px 20px;
+      padding: 24px 18px;
       animation: burbFadeIn 0.2s ease;
     }
     .burb-book-success-icon {
-      width: 48px;
-      height: 48px;
+      width: 46px;
+      height: 46px;
       background: var(--burb-success-bg);
       color: var(--burb-success);
       border: 1px solid var(--burb-success-border);
@@ -686,10 +661,10 @@
       align-items: center;
       justify-content: center;
       font-size: 22px;
-      margin: 0 auto 10px;
+      margin: 0 auto 8px;
     }
     .burb-book-conf-box {
-      margin: 12px auto;
+      margin: 10px auto;
       padding: 12px;
       background: var(--burb-bg-muted);
       border-radius: 4px;
@@ -702,7 +677,7 @@
 
     /* Alerts and Spinner */
     .burb-book-alert {
-      padding: 8px 10px;
+      padding: 7px 10px;
       border-radius: 4px;
       font-size: 12px;
       font-weight: 500;
@@ -735,13 +710,10 @@
       }
       .burb-book-schedule-cols {
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: 10px;
       }
       .burb-book-rooms-grid {
         grid-template-columns: 1fr;
-      }
-      .burb-book-viewport {
-        max-height: none;
       }
     }
   </style>
@@ -831,7 +803,7 @@
             <div class="burb-book-cal-month-title" id="calMonthYearTitle">October 2026</div>
             <button class="burb-book-cal-btn" id="nextMonthBtn" onclick="changeMonth(1)">&gt;</button>
           </div>
-          <div class="burb-book-cal-weekdays">
+          <div class="cal-weekdays">
             <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
           </div>
           <div class="burb-book-cal-grid" id="calDaysGrid"></div>
@@ -851,7 +823,7 @@
           <!-- The Slot Table Grid -->
           <div class="burb-book-slots-grid" id="slotsGrid"></div>
 
-          <!-- Compact FROM / TO row -->
+          <!-- Compact FROM / TO row with inline Duration Pill -->
           <div class="burb-book-range-group">
             <div class="burb-book-range-item">
               <label class="burb-book-range-label" for="fromTimeSelect">From:</label>
@@ -872,15 +844,13 @@
                 </select>
               </div>
             </div>
-          </div>
 
-          <!-- Duration display badge -->
-          <div class="burb-book-summary-strip" id="durationBadge">
-            <div class="burb-book-summary-left">
-              <span id="durationText">Select a slot to book</span>
-            </div>
+            <!-- Inline duration badge -->
             <span class="burb-book-duration-pill" id="rangeHoursBadge"></span>
           </div>
+
+          <!-- Hidden elements to preserve JS compatibility -->
+          <div id="durationBadge" style="display:none;"><span id="durationText"></span></div>
         </div>
 
         <!-- Column 3: Service Details Card -->
