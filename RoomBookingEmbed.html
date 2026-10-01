@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* ==========================================================================
-       THEME VARIABLES & RESET (Scoped to .burb-book-)
+       THEME VARIABLES & RESET
        ========================================================================== */
     :root {
       --burb-primary: #1F5582;
@@ -25,7 +25,6 @@
       
       --burb-border: #e2e8f0;
       --burb-border-hover: #cbd5e1;
-      --burb-border-focus: #1F5582;
       
       --burb-text-main: #0f172a;
       --burb-text-body: #334155;
@@ -41,15 +40,14 @@
 
       --burb-radius-sm: 6px;
       --burb-radius-md: 10px;
-      --burb-radius-lg: 16px;
+      --burb-radius-lg: 14px;
       --burb-radius-pill: 9999px;
 
       --burb-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04);
-      --burb-shadow-md: 0 4px 16px rgba(15, 23, 42, 0.06);
-      --burb-shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --burb-shadow-md: 0 4px 14px rgba(15, 23, 42, 0.06);
 
-      --burb-transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
-      --burb-font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --burb-transition: 150ms ease;
+      --burb-font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
     *, *::before, *::after {
@@ -60,19 +58,22 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    /* ZERO IFRAME SCROLLBAR: Locked overflow on desktop */
     html, body {
       background: transparent;
       color: var(--burb-text-body);
       overflow-x: hidden;
-      overflow-y: auto;
-      font-size: 14px;
-      line-height: 1.5;
+      overflow-y: hidden; /* Prevents outer iframe scrollbar */
+      font-size: 13.5px;
+      line-height: 1.4;
+      margin: 0;
+      padding: 0;
     }
 
-    /* Custom thin scrollbar */
+    /* Thin scrollbar for slots table only */
     ::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
+      width: 4px;
+      height: 4px;
     }
     ::-webkit-scrollbar-track {
       background: transparent;
@@ -81,28 +82,28 @@
       background: #cbd5e1;
       border-radius: 4px;
     }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
 
-    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+    button:focus-visible, input:focus-visible, select:focus-visible {
       outline: 2px solid var(--burb-primary);
-      outline-offset: 2px;
+      outline-offset: 1px;
     }
 
+    /* UNIFIED COMPACT VIEWPORT: All steps fit inside ~450px height */
     .burb-book-viewport {
       width: 100%;
-      max-width: 1200px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 16px 14px;
-      min-height: 600px;
+      padding: 8px 12px;
+      box-sizing: border-box;
+      min-height: 450px;
+      max-height: 500px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
     }
 
     @keyframes burbFadeIn {
-      from { opacity: 0; transform: translateY(5px); }
+      from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -111,47 +112,46 @@
        ========================================================================== */
     #step1-rooms {
       display: block;
-      animation: burbFadeIn 0.25s ease;
+      animation: burbFadeIn 0.2s ease;
     }
     .burb-book-hero-header {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 14px;
     }
     .burb-book-hero-header h1 {
-      font-size: 26px;
+      font-size: 22px;
       font-weight: 700;
       color: var(--burb-text-main);
-      letter-spacing: -0.02em;
+      letter-spacing: -0.01em;
     }
     .burb-book-hero-header p {
-      font-size: 14.5px;
+      font-size: 13px;
       color: var(--burb-text-muted);
-      margin-top: 4px;
+      margin-top: 2px;
     }
     .burb-book-rooms-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
+      gap: 16px;
     }
     .burb-book-room-card {
       background: var(--burb-bg-surface);
-      border-radius: var(--burb-radius-lg);
+      border-radius: var(--burb-radius-md);
       border: 1px solid var(--burb-border);
       box-shadow: var(--burb-shadow-sm);
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      transition: transform var(--burb-transition), box-shadow var(--burb-transition), border-color var(--burb-transition);
+      transition: transform var(--burb-transition), box-shadow var(--burb-transition);
     }
     .burb-book-room-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--burb-shadow-lg);
+      transform: translateY(-2px);
+      box-shadow: var(--burb-shadow-md);
       border-color: var(--burb-primary-border);
     }
     .burb-book-room-img-wrap {
-      position: relative;
       width: 100%;
-      height: 175px;
+      height: 140px;
       overflow: hidden;
       background: var(--burb-bg-subtle);
     }
@@ -159,139 +159,126 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.4s ease;
-    }
-    .burb-book-room-card:hover .burb-book-room-img {
-      transform: scale(1.03);
     }
     .burb-book-room-content {
-      padding: 20px 18px;
+      padding: 14px 16px;
       text-align: center;
       display: flex;
       flex-direction: column;
       flex-grow: 1;
     }
     .burb-book-room-title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
       color: var(--burb-text-main);
-      letter-spacing: -0.01em;
     }
     .burb-book-room-divider {
       width: 60%;
       height: 1px;
       background: var(--burb-border);
-      margin: 12px auto;
+      margin: 8px auto;
     }
     .burb-book-room-tag {
-      display: inline-flex;
+      font-size: 12px;
+      color: var(--burb-text-muted);
+      margin-bottom: 12px;
+      display: flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
-      font-size: 13px;
-      color: var(--burb-text-muted);
-      margin-bottom: 18px;
+      gap: 4px;
     }
     .burb-book-btn-primary {
       width: 100%;
-      padding: 12px 16px;
+      padding: 9px 14px;
       background: var(--burb-primary);
       color: #ffffff;
       border: none;
       border-radius: var(--burb-radius-sm);
-      font-size: 14.5px;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: background var(--burb-transition), transform var(--burb-transition), box-shadow var(--burb-transition);
-    }
-    .burb-book-btn-primary:hover:not(:disabled) {
-      background: var(--burb-primary-hover);
-      box-shadow: 0 4px 12px rgba(31, 85, 130, 0.25);
-    }
-    .burb-book-btn-primary:active:not(:disabled) {
-      background: var(--burb-primary-active);
-      transform: translateY(1px);
-    }
-    .burb-book-btn-primary:disabled {
-      background: #cbd5e1;
-      color: #94a3b8;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    /* ==========================================================================
-       STEP 2: SCHEDULE YOUR SERVICE (CALENDAR & TIME SLOTS)
-       ========================================================================== */
-    #step2-schedule {
-      display: none;
-      background: var(--burb-bg-surface);
-      border-radius: var(--burb-radius-lg);
-      border: 1px solid var(--burb-border);
-      box-shadow: var(--burb-shadow-md);
-      padding: 24px 28px;
-      animation: burbFadeIn 0.25s ease;
-    }
-    .burb-book-back-link {
-      background: none;
-      border: none;
-      color: var(--burb-text-muted);
       font-size: 13.5px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
-      margin-bottom: 12px;
-      padding: 4px 0;
-      transition: color var(--burb-transition);
+      transition: background var(--burb-transition);
+    }
+    .burb-book-btn-primary:hover:not(:disabled) {
+      background: var(--burb-primary-hover);
+    }
+    .burb-book-btn-primary:disabled {
+      background: #cbd5e1;
+      color: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    /* ==========================================================================
+       STEP 2: SCHEDULE (CALENDAR & TIME RANGE) - COMPACT FIXED HEIGHT
+       ========================================================================== */
+    #step2-schedule {
+      display: none;
+      background: var(--burb-bg-surface);
+      border-radius: var(--burb-radius-md);
+      border: 1px solid var(--burb-border);
+      box-shadow: var(--burb-shadow-sm);
+      padding: 12px 18px;
+      animation: burbFadeIn 0.2s ease;
+    }
+    .burb-book-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .burb-book-back-link {
+      background: none;
+      border: none;
+      color: var(--burb-text-muted);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 0;
     }
     .burb-book-back-link:hover {
       color: var(--burb-primary);
     }
-    .burb-book-schedule-head {
-      margin-bottom: 14px;
-    }
     .burb-book-schedule-head h2 {
-      font-size: 24px;
+      font-size: 18px;
       font-weight: 700;
       color: var(--burb-text-main);
-      letter-spacing: -0.02em;
+      display: inline;
     }
     .burb-book-schedule-head p {
-      font-size: 14px;
+      font-size: 12.5px;
       color: var(--burb-text-muted);
-      margin-top: 2px;
+      margin-top: 1px;
     }
     .burb-book-subbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--burb-border);
-      padding-bottom: 8px;
-      margin-bottom: 20px;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
     }
     .burb-book-subbar h3 {
-      font-size: 15px;
+      font-size: 13.5px;
       font-weight: 600;
       color: var(--burb-text-main);
     }
     .burb-book-tz {
-      font-size: 12.5px;
+      font-size: 12px;
       color: var(--burb-text-muted);
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
     }
 
-    /* 3-Column Schedule Layout */
+    /* 3-Column Schedule Grid */
     .burb-book-schedule-cols {
       display: grid;
-      grid-template-columns: 270px 1fr 270px;
-      gap: 22px;
+      grid-template-columns: 240px 1fr 240px;
+      gap: 16px;
       align-items: start;
     }
 
@@ -299,40 +286,38 @@
     .burb-book-cal-card {
       background: var(--burb-bg-surface);
       border: 1px solid var(--burb-border);
-      border-radius: var(--burb-radius-md);
-      padding: 14px;
-      box-shadow: var(--burb-shadow-sm);
+      border-radius: var(--burb-radius-sm);
+      padding: 10px;
     }
     .burb-book-cal-nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
     .burb-book-cal-btn {
       background: var(--burb-bg-muted);
       border: 1px solid var(--burb-border);
-      border-radius: var(--burb-radius-sm);
-      width: 28px;
-      height: 28px;
+      border-radius: 4px;
+      width: 24px;
+      height: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      font-size: 12px;
       color: var(--burb-text-body);
-      transition: background var(--burb-transition), border-color var(--burb-transition);
     }
     .burb-book-cal-btn:hover:not(:disabled) {
       background: var(--burb-primary-light);
-      border-color: var(--burb-primary-border);
       color: var(--burb-primary);
     }
     .burb-book-cal-btn:disabled {
-      opacity: 0.35;
+      opacity: 0.3;
       cursor: not-allowed;
     }
     .burb-book-cal-month-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--burb-text-main);
     }
@@ -340,33 +325,30 @@
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       text-align: center;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 600;
       color: var(--burb-text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     .burb-book-cal-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 3px;
+      gap: 2px;
     }
     .cal-day-cell {
-      height: 32px;
+      height: 26px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      border-radius: var(--burb-radius-sm);
-      font-size: 12.5px;
+      border-radius: 4px;
+      font-size: 11.5px;
       font-weight: 500;
       cursor: pointer;
       position: relative;
       background: transparent;
       border: none;
       color: var(--burb-text-main);
-      transition: background var(--burb-transition), color var(--burb-transition);
     }
     .cal-day-cell:hover:not(.disabled):not(.selected) {
       background: var(--burb-bg-subtle);
@@ -377,8 +359,8 @@
     }
     .cal-day-cell.has-dot::after {
       content: '';
-      width: 4px;
-      height: 4px;
+      width: 3px;
+      height: 3px;
       background-color: var(--burb-primary);
       border-radius: 50%;
       position: absolute;
@@ -388,84 +370,78 @@
       background: var(--burb-primary) !important;
       color: #ffffff !important;
       font-weight: 700;
-      box-shadow: 0 2px 6px rgba(31, 85, 130, 0.35);
     }
     .cal-day-cell.selected::after {
       background-color: #ffffff;
     }
 
-    /* Column 2: Availability Slots Panel (Interactive Slot-by-Slot Selection) */
+    /* Column 2: Interactive Slots Table & Time Selection */
     .burb-book-time-panel {
       background: var(--burb-bg-muted);
       border: 1px solid var(--burb-border);
-      border-radius: var(--burb-radius-md);
-      padding: 16px 18px;
+      border-radius: var(--burb-radius-sm);
+      padding: 10px 14px;
       display: flex;
       flex-direction: column;
     }
     .burb-book-time-title {
-      font-size: 14.5px;
+      font-size: 13.5px;
       font-weight: 700;
       color: var(--burb-text-main);
-      margin-bottom: 8px;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
-
-    /* Slot Click Instruction Banner */
     .burb-book-click-hint {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--burb-primary);
       background: var(--burb-primary-light);
       border: 1px dashed var(--burb-primary-border);
-      border-radius: var(--burb-radius-sm);
-      padding: 6px 10px;
-      margin-bottom: 12px;
+      border-radius: 4px;
+      padding: 4px 8px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       font-weight: 500;
     }
 
-    /* The Main Interactive Slots Grid */
+    /* Slots Grid: Compact height to fit perfectly */
     .burb-book-slots-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      max-height: 230px;
+      gap: 6px;
+      max-height: 140px;
       overflow-y: auto;
-      padding-right: 4px;
-      margin-bottom: 12px;
+      padding-right: 3px;
+      margin-bottom: 8px;
     }
     .slot-pill {
-      padding: 10px 8px;
-      font-size: 13px;
+      padding: 6px 8px;
+      font-size: 12px;
       text-align: center;
-      border-radius: var(--burb-radius-sm);
-      border: 1.5px solid #cbd5e1;
+      border-radius: 4px;
+      border: 1px solid #cbd5e1;
       background: #ffffff;
       cursor: pointer;
       color: var(--burb-text-main);
       font-weight: 600;
       transition: all var(--burb-transition);
-      user-select: none;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 4px;
     }
     .slot-pill:hover:not(.booked):not(.selected):not(.in-range) {
       border-color: var(--burb-primary);
       color: var(--burb-primary);
       background: var(--burb-primary-light);
-      transform: translateY(-1px);
     }
     .slot-pill.selected {
       background: var(--burb-primary) !important;
       color: #ffffff !important;
       border-color: var(--burb-primary) !important;
-      box-shadow: 0 2px 8px rgba(31, 85, 130, 0.35);
     }
     .slot-pill.in-range {
       background: var(--burb-primary-tint) !important;
@@ -479,90 +455,78 @@
       color: var(--burb-text-disabled) !important;
       cursor: not-allowed !important;
       text-decoration: line-through;
-      opacity: 0.75;
-      font-size: 12px;
+      font-size: 11px;
     }
     .slot-pill.booked::after {
       content: 'Booked';
-      font-size: 10px;
+      font-size: 9.5px;
       text-decoration: none;
       color: var(--burb-danger);
       background: var(--burb-danger-bg);
       border: 1px solid var(--burb-danger-border);
-      padding: 1px 4px;
-      border-radius: 3px;
-      margin-left: 4px;
+      padding: 0 3px;
+      border-radius: 2px;
+      margin-left: 2px;
       font-weight: 700;
     }
 
-    /* FROM / TO Select Group (Synchronized with slot clicks) */
+    /* FROM / TO Controls: Ultra-compact single row */
     .burb-book-range-group {
       background: var(--burb-bg-surface);
       border: 1px solid var(--burb-border);
-      border-radius: var(--burb-radius-md);
-      padding: 10px 12px;
-      margin-bottom: 10px;
+      border-radius: 4px;
+      padding: 6px 10px;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      box-shadow: var(--burb-shadow-sm);
+      gap: 8px;
     }
     .burb-book-range-item {
       flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     .burb-book-range-label {
-      display: block;
       font-size: 11px;
       font-weight: 700;
       color: var(--burb-primary);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 3px;
+      white-space: nowrap;
     }
     .burb-book-select-wrap {
+      flex: 1;
       position: relative;
     }
     .burb-book-select-wrap::after {
       content: '';
       position: absolute;
-      right: 10px;
+      right: 8px;
       top: 50%;
       transform: translateY(-50%);
       width: 0;
       height: 0;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      border-top: 5px solid #64748b;
+      border-left: 3px solid transparent;
+      border-right: 3px solid transparent;
+      border-top: 4px solid #64748b;
       pointer-events: none;
     }
     .burb-book-select {
       width: 100%;
-      padding: 7px 22px 7px 8px;
+      padding: 4px 18px 4px 6px;
       border: 1px solid var(--burb-border);
-      border-radius: var(--burb-radius-sm);
-      font-size: 13px;
+      border-radius: 4px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--burb-text-main);
       background: var(--burb-bg-surface);
       appearance: none;
-      -webkit-appearance: none;
       outline: none;
       cursor: pointer;
-      transition: border-color var(--burb-transition);
-    }
-    .burb-book-select:focus {
-      border-color: var(--burb-primary);
-    }
-    .burb-book-select:disabled {
-      background: var(--burb-bg-subtle);
-      color: var(--burb-text-disabled);
-      cursor: not-allowed;
     }
     .burb-book-range-arrow {
       color: var(--burb-text-muted);
-      font-size: 15px;
-      margin-top: 14px;
-      opacity: 0.7;
+      font-size: 13px;
     }
 
     /* Summary Duration Strip */
@@ -572,16 +536,16 @@
       align-items: center;
       background: var(--burb-primary-light);
       border: 1px solid var(--burb-primary-border);
-      border-radius: var(--burb-radius-sm);
-      padding: 8px 12px;
-      font-size: 12.5px;
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 12px;
       color: var(--burb-primary);
       font-weight: 500;
     }
     .burb-book-summary-left {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       font-weight: 600;
     }
     .burb-book-duration-pill {
@@ -589,8 +553,8 @@
       color: var(--burb-primary);
       border: 1px solid var(--burb-primary-border);
       border-radius: var(--burb-radius-pill);
-      padding: 2px 8px;
-      font-size: 11.5px;
+      padding: 1px 7px;
+      font-size: 11px;
       font-weight: 700;
     }
 
@@ -598,41 +562,40 @@
     .burb-book-details-card {
       background: var(--burb-bg-surface);
       border: 1px solid var(--burb-border);
-      border-radius: var(--burb-radius-md);
-      padding: 18px;
-      box-shadow: var(--burb-shadow-sm);
+      border-radius: var(--burb-radius-sm);
+      padding: 12px 14px;
       display: flex;
       flex-direction: column;
     }
     .burb-book-details-card h4 {
-      font-size: 15px;
+      font-size: 13.5px;
       font-weight: 700;
       color: var(--burb-text-main);
       border-bottom: 1px solid var(--burb-border);
-      padding-bottom: 10px;
-      margin-bottom: 12px;
+      padding-bottom: 6px;
+      margin-bottom: 8px;
     }
     .burb-book-sd-room {
-      font-size: 16px;
+      font-size: 14.5px;
       font-weight: 700;
       color: var(--burb-primary);
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
     .burb-book-sd-box {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--burb-text-body);
-      line-height: 1.6;
-      margin-bottom: 16px;
-      padding: 12px;
+      line-height: 1.5;
+      margin-bottom: 12px;
+      padding: 8px 10px;
       background: var(--burb-bg-muted);
-      border-radius: var(--burb-radius-sm);
+      border-radius: 4px;
       border-left: 3px solid var(--burb-primary);
     }
     .burb-book-sd-item {
       display: flex;
       align-items: flex-start;
-      gap: 8px;
-      margin-bottom: 6px;
+      gap: 6px;
+      margin-bottom: 4px;
     }
     .burb-book-sd-item:last-child {
       margin-bottom: 0;
@@ -643,86 +606,78 @@
       margin-top: 2px;
     }
 
-    /* STEP 3: CLIENT DETAILS FORM */
+    /* ==========================================================================
+       STEP 3: CLIENT DETAILS FORM
+       ========================================================================== */
     #step3-client {
       display: none;
-      max-width: 620px;
+      max-width: 580px;
       margin: 0 auto;
       background: var(--burb-bg-surface);
-      border-radius: var(--burb-radius-lg);
+      border-radius: var(--burb-radius-md);
       border: 1px solid var(--burb-border);
-      box-shadow: var(--burb-shadow-md);
-      padding: 26px 30px;
-      animation: burbFadeIn 0.25s ease;
+      padding: 20px 24px;
+      animation: burbFadeIn 0.2s ease;
     }
     .burb-book-form-head h2 {
-      font-size: 22px;
+      font-size: 19px;
       font-weight: 700;
       color: var(--burb-text-main);
     }
     .burb-book-form-head p {
-      font-size: 13.5px;
+      font-size: 12.5px;
       color: var(--burb-text-muted);
-      margin-top: 2px;
-      margin-bottom: 16px;
+      margin-top: 1px;
+      margin-bottom: 12px;
     }
     .burb-book-summary-pill {
       background: var(--burb-bg-muted);
-      border-radius: var(--burb-radius-sm);
-      padding: 12px 14px;
-      margin-bottom: 16px;
-      font-size: 13px;
+      border-radius: 4px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      font-size: 12.5px;
       color: var(--burb-text-body);
-      border-left: 4px solid var(--burb-primary);
-      line-height: 1.5;
+      border-left: 3px solid var(--burb-primary);
     }
     .burb-book-form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-    .burb-book-input-group {
-      margin-bottom: 12px;
+      gap: 10px;
+      margin-bottom: 8px;
     }
     .burb-book-input-group label {
       display: block;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--burb-text-body);
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
     .burb-book-input {
       width: 100%;
-      padding: 9px 12px;
-      border: 1.5px solid var(--burb-border);
-      border-radius: var(--burb-radius-sm);
-      font-size: 13.5px;
+      padding: 7px 10px;
+      border: 1px solid var(--burb-border);
+      border-radius: 4px;
+      font-size: 12.5px;
       color: var(--burb-text-main);
       background: var(--burb-bg-surface);
       outline: none;
-      transition: border-color var(--burb-transition);
-    }
-    .burb-book-input:focus {
-      border-color: var(--burb-primary);
     }
 
-    /* STEP 4: CONFIRMATION SUCCESS */
+    /* STEP 4: CONFIRMATION */
     #step4-confirm {
       display: none;
-      max-width: 520px;
+      max-width: 480px;
       margin: 0 auto;
       text-align: center;
       background: var(--burb-bg-surface);
-      border-radius: var(--burb-radius-lg);
+      border-radius: var(--burb-radius-md);
       border: 1px solid var(--burb-border);
-      padding: 34px 22px;
-      box-shadow: var(--burb-shadow-md);
-      animation: burbFadeIn 0.25s ease;
+      padding: 26px 20px;
+      animation: burbFadeIn 0.2s ease;
     }
     .burb-book-success-icon {
-      width: 54px;
-      height: 54px;
+      width: 48px;
+      height: 48px;
       background: var(--burb-success-bg);
       color: var(--burb-success);
       border: 1px solid var(--burb-success-border);
@@ -730,39 +685,34 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      margin: 0 auto 12px;
+      font-size: 22px;
+      margin: 0 auto 10px;
     }
     .burb-book-conf-box {
-      margin: 16px auto;
-      padding: 14px;
+      margin: 12px auto;
+      padding: 12px;
       background: var(--burb-bg-muted);
-      border-radius: var(--burb-radius-sm);
+      border-radius: 4px;
       text-align: left;
-      font-size: 13.5px;
+      font-size: 12.5px;
       color: var(--burb-text-body);
-      line-height: 1.6;
+      line-height: 1.5;
       border: 1px solid var(--burb-border);
     }
 
-    /* Feedback Alerts */
+    /* Alerts and Spinner */
     .burb-book-alert {
-      padding: 10px 12px;
-      border-radius: var(--burb-radius-sm);
-      font-size: 12.5px;
+      padding: 8px 10px;
+      border-radius: 4px;
+      font-size: 12px;
       font-weight: 500;
-      margin-top: 12px;
+      margin-top: 8px;
       display: none;
     }
     .burb-book-alert-error {
       background: var(--burb-danger-bg);
       color: var(--burb-danger);
       border: 1px solid var(--burb-danger-border);
-    }
-    .burb-book-alert-success {
-      background: var(--burb-success-bg);
-      color: var(--burb-success);
-      border: 1px solid var(--burb-success-border);
     }
     .burb-book-spinner {
       border: 2px solid rgba(255,255,255,0.3);
@@ -778,68 +728,20 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* RESPONSIVE BREAKPOINTS (900px, 620px, 480px, 360px) */
-    @media (max-width: 900px) {
+    /* Mobile view allows auto scroll if screen is very short */
+    @media (max-width: 768px) {
+      html, body {
+        overflow-y: auto;
+      }
+      .burb-book-schedule-cols {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
       .burb-book-rooms-grid {
         grid-template-columns: 1fr;
       }
-      .burb-book-schedule-cols {
-        grid-template-columns: 1fr 1fr;
-      }
-      .burb-book-details-card {
-        grid-column: span 2;
-        margin-top: 8px;
-      }
-    }
-
-    @media (max-width: 620px) {
-      .burb-book-schedule-cols {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
-      .burb-book-details-card {
-        grid-column: span 1;
-        position: sticky;
-        bottom: 10px;
-        background: #ffffff;
-        box-shadow: 0 -4px 18px rgba(15, 23, 42, 0.12);
-        border: 1px solid var(--burb-primary-border);
-        z-index: 10;
-        padding: 14px;
-      }
-      .burb-book-sd-box {
-        display: none;
-      }
-      .burb-book-form-grid {
-        grid-template-columns: 1fr;
-      }
-      #step2-schedule, #step3-client {
-        padding: 16px 14px;
-      }
-    }
-
-    @media (max-width: 480px) {
       .burb-book-viewport {
-        padding: 8px 6px;
-      }
-      .burb-book-slots-grid {
-        grid-template-columns: 1fr;
-      }
-      .burb-book-range-group {
-        flex-direction: column;
-        gap: 8px;
-      }
-      .burb-book-range-arrow {
-        display: none;
-      }
-    }
-
-    @media (max-width: 360px) {
-      .burb-book-hero-header h1 {
-        font-size: 20px;
-      }
-      .burb-book-schedule-head h2 {
-        font-size: 19px;
+        max-height: none;
       }
     }
   </style>
@@ -865,7 +767,7 @@
             <h3 class="burb-book-room-title">Large Conference Room</h3>
             <div class="burb-book-room-divider"></div>
             <div class="burb-book-room-tag">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
               <span>30 min increments</span>
             </div>
             <button class="burb-book-btn-primary" onclick="selectRoom('Large Conference Room')">Book Now</button>
@@ -881,7 +783,7 @@
             <h3 class="burb-book-room-title">Small Conference Room</h3>
             <div class="burb-book-room-divider"></div>
             <div class="burb-book-room-tag">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
               <span>30 min increments</span>
             </div>
             <button class="burb-book-btn-primary" onclick="selectRoom('Small Conference Room')">Book Now</button>
@@ -897,7 +799,7 @@
             <h3 class="burb-book-room-title">Private Office</h3>
             <div class="burb-book-room-divider"></div>
             <div class="burb-book-room-tag">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
               <span>30 min increments</span>
             </div>
             <button class="burb-book-btn-primary" onclick="selectRoom('Private Office')">Book Now</button>
@@ -908,22 +810,16 @@
 
     <!-- ==================== STEP 2: SCHEDULE (CALENDAR & TIME SLOTS) ==================== -->
     <div id="step2-schedule">
-      <button class="burb-book-back-link" onclick="goToStep(1)" aria-label="Go back to room selection">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-        <span>Back to Rooms</span>
-      </button>
-      
-      <div class="burb-book-schedule-head">
-        <h2>Schedule your service</h2>
-        <p>Check out our availability and book the date and time that works for you</p>
+      <div class="burb-book-top-row">
+        <button class="burb-book-back-link" onclick="goToStep(1)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          <span>Back to Rooms</span>
+        </button>
+        <div class="burb-book-tz">Time zone: Eastern Daylight Time (EDT) ⌵</div>
       </div>
-
+      
       <div class="burb-book-subbar">
-        <h3>Select a Date and Time</h3>
-        <span class="burb-book-tz">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-          <span>Time zone: Eastern Daylight Time (EDT) ⌵</span>
-        </span>
+        <h3>Schedule your service — Select Date & Time</h3>
       </div>
 
       <div class="burb-book-schedule-cols">
@@ -931,9 +827,9 @@
         <!-- Column 1: Mini Calendar -->
         <div class="burb-book-cal-card">
           <div class="burb-book-cal-nav">
-            <button class="burb-book-cal-btn" id="prevMonthBtn" onclick="changeMonth(-1)" aria-label="Previous month">&lt;</button>
+            <button class="burb-book-cal-btn" id="prevMonthBtn" onclick="changeMonth(-1)">&lt;</button>
             <div class="burb-book-cal-month-title" id="calMonthYearTitle">October 2026</div>
-            <button class="burb-book-cal-btn" id="nextMonthBtn" onclick="changeMonth(1)" aria-label="Next month">&gt;</button>
+            <button class="burb-book-cal-btn" id="nextMonthBtn" onclick="changeMonth(1)">&gt;</button>
           </div>
           <div class="burb-book-cal-weekdays">
             <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
@@ -941,40 +837,38 @@
           <div class="burb-book-cal-grid" id="calDaysGrid"></div>
         </div>
 
-        <!-- Column 2: Interactive Slots Grid Table (Direct Slot-by-Slot Booking) -->
+        <!-- Column 2: Interactive Slots Table & Compact Range -->
         <div class="burb-book-time-panel">
           <div class="burb-book-time-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             <span id="availabilityHeading">Availability for Oct 1</span>
           </div>
 
-          <!-- Helpful Hint for direct click -->
           <div class="burb-book-click-hint">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            <span>Click any slot below to book. Click a 2nd slot to extend your time!</span>
+            <span>Click slot to book. Click 2nd slot to extend time.</span>
           </div>
 
           <!-- The Slot Table Grid -->
           <div class="burb-book-slots-grid" id="slotsGrid"></div>
 
-          <!-- Two-way Synchronized FROM and TO Selectors -->
+          <!-- Compact FROM / TO row -->
           <div class="burb-book-range-group">
             <div class="burb-book-range-item">
-              <label class="burb-book-range-label" for="fromTimeSelect">From (Start):</label>
+              <label class="burb-book-range-label" for="fromTimeSelect">From:</label>
               <div class="burb-book-select-wrap">
-                <select id="fromTimeSelect" class="burb-book-select" onchange="onFromTimeChanged()" aria-label="Start Time">
-                  <option value="" disabled selected>Select Start</option>
+                <select id="fromTimeSelect" class="burb-book-select" onchange="onFromTimeChanged()">
+                  <option value="" disabled selected>Start</option>
                 </select>
               </div>
             </div>
             
-            <div class="burb-book-range-arrow" aria-hidden="true">→</div>
+            <span class="burb-book-range-arrow">→</span>
 
             <div class="burb-book-range-item">
-              <label class="burb-book-range-label" for="toTimeSelect">To (End):</label>
+              <label class="burb-book-range-label" for="toTimeSelect">To:</label>
               <div class="burb-book-select-wrap">
-                <select id="toTimeSelect" class="burb-book-select" onchange="onToTimeChanged()" disabled aria-label="End Time">
-                  <option value="" disabled selected>Select End</option>
+                <select id="toTimeSelect" class="burb-book-select" onchange="onToTimeChanged()" disabled>
+                  <option value="" disabled selected>End</option>
                 </select>
               </div>
             </div>
@@ -983,8 +877,7 @@
           <!-- Duration display badge -->
           <div class="burb-book-summary-strip" id="durationBadge">
             <div class="burb-book-summary-left">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              <span id="durationText">Choose a slot to book</span>
+              <span id="durationText">Select a slot to book</span>
             </div>
             <span class="burb-book-duration-pill" id="rangeHoursBadge"></span>
           </div>
@@ -1005,14 +898,14 @@
 
     <!-- ==================== STEP 3: CLIENT DETAILS ==================== -->
     <div id="step3-client">
-      <button class="burb-book-back-link" onclick="goToStep(2)" aria-label="Go back to date and time selection">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <button class="burb-book-back-link" onclick="goToStep(2)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         <span>Back to Date & Time</span>
       </button>
       
       <div class="burb-book-form-head">
         <h2>Enter Your Details</h2>
-        <p>Please enter your contact information to finalize the booking.</p>
+        <p>Please provide your contact information to finalize the booking.</p>
       </div>
 
       <div class="burb-book-summary-pill" id="clientBookingSummary"></div>
@@ -1035,12 +928,12 @@
             <input type="tel" id="clientPhone" class="burb-book-input" placeholder="e.g. (781) 400-2347" required>
           </div>
           <div class="burb-book-input-group">
-            <label for="clientNotes">Meeting Notes / Details</label>
+            <label for="clientNotes">Meeting Notes</label>
             <input type="text" id="clientNotes" class="burb-book-input" placeholder="e.g. 6 guests, presentation">
           </div>
         </div>
 
-        <button type="submit" id="finalBookBtn" class="burb-book-btn-primary" style="margin-top: 8px;">
+        <button type="submit" id="finalBookBtn" class="burb-book-btn-primary" style="margin-top: 6px;">
           <span class="burb-book-spinner" id="finalSpinner"></span>
           <span id="finalBtnText">Book Now</span>
         </button>
@@ -1052,31 +945,18 @@
     <!-- ==================== STEP 4: CONFIRMATION ==================== -->
     <div id="step4-confirm">
       <div class="burb-book-success-icon">✓</div>
-      <h2 style="font-size: 22px; color: var(--burb-text-main); font-weight: 700;">Booking Confirmed!</h2>
-      <p style="color: var(--burb-text-muted); margin-top: 4px; font-size: 13.5px;">Your meeting room reservation is successfully secured.</p>
+      <h2 style="font-size: 20px; color: var(--burb-text-main); font-weight: 700;">Booking Confirmed!</h2>
+      <p style="color: var(--burb-text-muted); margin-top: 2px; font-size: 13px;">Your meeting room reservation is successfully secured.</p>
       
       <div class="burb-book-conf-box" id="confDetailsText"></div>
 
-      <button class="burb-book-btn-primary" style="max-width: 220px; margin: 16px auto 0;" onclick="goToStep(1)">Book Another Room</button>
+      <button class="burb-book-btn-primary" style="max-width: 200px; margin: 12px auto 0;" onclick="goToStep(1)">Book Another Room</button>
     </div>
 
   </div>
 
   <script>
-    /* ==========================================================================
-       CONFIG: Customize colors, hours, and labels
-       ========================================================================== */
     const THEME_CONFIG = {
-      colors: {
-        primary: '#1F5582',
-        primaryHover: '#164367',
-        primaryActive: '#0f314d',
-        primaryLight: '#eff6fb',
-        primaryTint: '#e0eef8',
-        border: '#e2e8f0',
-        textMain: '#0f172a',
-        textMuted: '#64748b'
-      },
       booking: {
         startHour: 8,       // 08:00 AM
         endHour: 18,        // 06:00 PM
@@ -1182,12 +1062,10 @@
         btn.type = 'button';
         btn.className = 'cal-day-cell';
         btn.textContent = day;
-        btn.setAttribute('aria-label', `${monthNames[state.currentMonth]} ${day}, ${state.currentYear}`);
 
         if (cellDate < today) {
           btn.classList.add('disabled');
           btn.disabled = true;
-          btn.setAttribute('aria-disabled', 'true');
         } else {
           btn.classList.add('has-dot');
           btn.onclick = () => onSelectDate(cellDate);
@@ -1195,7 +1073,6 @@
 
         if (cellDate.getTime() === state.selectedDate.setHours(0,0,0,0)) {
           btn.classList.add('selected');
-          btn.setAttribute('aria-selected', 'true');
         }
 
         calDaysGrid.appendChild(btn);
@@ -1219,7 +1096,7 @@
       state.startTime = '';
       state.endTime = '';
       toTimeSelect.disabled = true;
-      toTimeSelect.innerHTML = '<option value="" disabled selected>Select End</option>';
+      toTimeSelect.innerHTML = '<option value="" disabled selected>End</option>';
       updateSidebarDetails();
       renderCalendar();
       fetchBookedSlotsForDate();
@@ -1230,7 +1107,7 @@
       const options = { weekday: 'short', month: 'short', day: 'numeric' };
       availabilityHeading.textContent = `Availability for ${state.selectedDate.toLocaleDateString('en-US', options)}`;
       
-      slotsGrid.innerHTML = '<div style="grid-column: span 2; padding: 14px; text-align: center; color: var(--burb-text-muted); font-size: 12.5px;">Loading availability…</div>';
+      slotsGrid.innerHTML = '<div style="grid-column: span 2; padding: 10px; text-align: center; color: var(--burb-text-muted); font-size: 11.5px;">Loading slots…</div>';
 
       const isoDate = state.selectedDate.toISOString().split('T')[0];
       window.parent.postMessage({
@@ -1255,8 +1132,8 @@
 
     // 5. Populate Dropdowns & Slots Table
     function populateFromTimeDropdown() {
-      fromTimeSelect.innerHTML = '<option value="" disabled selected>Select Start</option>';
-      toTimeSelect.innerHTML = '<option value="" disabled selected>Select End</option>';
+      fromTimeSelect.innerHTML = '<option value="" disabled selected>Start</option>';
+      toTimeSelect.innerHTML = '<option value="" disabled selected>End</option>';
       toTimeSelect.disabled = true;
 
       for (let h = CONFIG.startHour; h < CONFIG.endHour; h++) {
@@ -1274,9 +1151,6 @@
       }
     }
 
-    /* ==========================================================================
-       DIRECT SLOT CLICK ENGINE: Click one slot to book, or click a 2nd to extend
-       ========================================================================== */
     function renderQuickSlotsGrid() {
       slotsGrid.innerHTML = '';
       let availableCount = 0;
@@ -1296,19 +1170,11 @@
           if (isBooked) {
             pill.classList.add('booked');
             pill.setAttribute('aria-disabled', 'true');
-            pill.title = "This slot is already booked";
           } else {
             availableCount++;
             pill.onclick = () => onSlotPillClicked(t24);
-            pill.onkeydown = (e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                onSlotPillClicked(t24);
-              }
-            };
           }
 
-          // Visual highlighting: Selected start slot, range, and end slot
           if (state.startTime && state.endTime) {
             const startM = timeToMins(state.startTime);
             const endM = timeToMins(state.endTime);
@@ -1328,29 +1194,21 @@
       }
 
       if (availableCount === 0) {
-        slotsGrid.innerHTML = '<div style="grid-column: span 2; padding: 14px; text-align: center; color: var(--burb-text-muted); font-size: 12.5px;">No availability on this day, try another date.</div>';
+        slotsGrid.innerHTML = '<div style="grid-column: span 2; padding: 10px; text-align: center; color: var(--burb-text-muted); font-size: 11.5px;">No availability on this date.</div>';
       }
     }
 
-    /**
-     * When user clicks any slot pill directly in the table:
-     * - If no slot chosen yet or clicking an earlier slot: books that single 30-min slot.
-     * - If user already selected a start slot and clicks a LATER slot: extends the booking to cover that slot!
-     */
     function onSlotPillClicked(t24) {
       const clickedMins = timeToMins(t24);
 
-      // Case 1: Fresh selection or clicking earlier slot -> Select single 30-min slot
       if (!state.startTime || clickedMins < timeToMins(state.startTime) || (state.startTime && state.endTime && clickedMins === timeToMins(state.startTime))) {
         setSingleSlot(t24);
         return;
       }
 
-      // Case 2: Clicking a later slot -> Extend range up to the end of that slot
       const startMins = timeToMins(state.startTime);
       const targetEndMins = clickedMins + CONFIG.stepMinutes;
 
-      // Check if any booked interval blocks this range
       const hasConflict = state.bookedIntervals.some(b => {
         const bStart = timeToMins(b.startTime);
         const bEnd = timeToMins(b.endTime);
@@ -1358,7 +1216,6 @@
       });
 
       if (hasConflict) {
-        // Can't jump across a booked slot; start fresh from clicked slot
         setSingleSlot(t24);
       } else {
         const endHour = Math.floor(targetEndMins / 60);
@@ -1372,9 +1229,6 @@
       }
     }
 
-    /**
-     * Set a single 30-minute slot booking immediately on click
-     */
     function setSingleSlot(t24) {
       state.startTime = t24;
       fromTimeSelect.value = t24;
@@ -1395,7 +1249,6 @@
       renderQuickSlotsGrid();
     }
 
-    // 6. Handle "From" and "To" Dropdowns (Two-way sync)
     function onFromTimeChanged() {
       const selectedStart = fromTimeSelect.value;
       if (!selectedStart) return;
@@ -1403,7 +1256,7 @@
     }
 
     function populateToTimeDropdown(selectedStart) {
-      toTimeSelect.innerHTML = '<option value="" disabled selected>Select End</option>';
+      toTimeSelect.innerHTML = '<option value="" disabled selected>End</option>';
       toTimeSelect.disabled = false;
 
       const startMins = timeToMins(selectedStart);
@@ -1422,7 +1275,7 @@
         const t24 = `${String(h).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
         const t12 = formatTo12Hr(h, min);
         const durationM = m - startMins;
-        const durStr = durationM < 60 ? `${durationM} min` : `${durationM / 60} hr${durationM > 60 ? 's' : ''}`;
+        const durStr = durationM < 60 ? `${durationM}m` : `${durationM / 60}h`;
 
         const opt = document.createElement('option');
         opt.value = t24;
@@ -1447,7 +1300,7 @@
         const min = diffM % 60;
         let durationFormatted = '';
         if (hr > 0 && min > 0) durationFormatted = `${hr} hr ${min} min`;
-        else if (hr > 0) durationFormatted = `${hr} hour${hr > 1 ? 's' : ''}`;
+        else if (hr > 0) durationFormatted = `${hr} hr${hr > 1 ? 's' : ''}`;
         else durationFormatted = `${min} min`;
 
         const s12 = formatTo12HrStr(state.startTime);
@@ -1458,24 +1311,24 @@
         rangeHoursBadge.style.display = 'inline-block';
         nextToDetailsBtn.disabled = false;
 
-        const dateStr = state.selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+        const dateStr = state.selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
         
         sdTimeInfo.innerHTML = `
           <div class="burb-book-sd-item">
-            <svg class="burb-book-sd-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <svg class="burb-book-sd-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             <span>${dateStr}</span>
           </div>
           <div class="burb-book-sd-item">
-            <svg class="burb-book-sd-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <svg class="burb-book-sd-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             <span>${s12} – ${e12}</span>
           </div>
           <div class="burb-book-sd-item">
-            <svg class="burb-book-sd-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+            <svg class="burb-book-sd-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
             <span style="font-weight: 600; color: var(--burb-primary);">${durationFormatted}</span>
           </div>
         `;
       } else {
-        durationText.textContent = 'Choose a slot to book';
+        durationText.textContent = 'Select a slot to book';
         rangeHoursBadge.textContent = '';
         rangeHoursBadge.style.display = 'none';
         nextToDetailsBtn.disabled = true;
