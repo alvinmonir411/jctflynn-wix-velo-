@@ -145,12 +145,32 @@ async function handleBookingSubmission(data) {
             return;
         }
 
+        // Pre-format 12-hour times and date text for Wix Automations dynamic values
+        const dateFormatted = new Date(siteMidnight).toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            timeZone: 'America/New_York'
+        });
+        const s12 = formatTime12(startTime);
+        const e12 = formatTime12(endTime);
+        const timeRange12 = `${s12} - ${e12}`;
+
         // Insert into RoomBookings
         await wixData.insert(CONFIG.collectionName, {
             roomName,
             bookingDate: siteMidnight,
+            bookingDateText: dateFormatted,
+            formattedDate: dateFormatted,
+            date: dateFormatted,
             startTime,
             endTime,
+            startTime12: s12,
+            endTime12: e12,
+            bookingTime: timeRange12,
+            formattedTime: timeRange12,
+            time: timeRange12,
             fullName: fullName || '',
             email: email || '',
             phone: phone || '',
@@ -181,4 +201,12 @@ function timeToMinutes(timeStr) {
     if (!timeStr) return 0;
     const [hours, minutes] = timeStr.split(':').map(Number);
     return hours * 60 + minutes;
+}
+
+function formatTime12(t24) {
+    if (!t24) return '';
+    const [h, m] = t24.split(':').map(Number);
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const h12 = h % 12 || 12;
+    return `${h12}:${String(m).padStart(2, '0')} ${ampm}`;
 }

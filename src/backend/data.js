@@ -61,6 +61,62 @@ export async function RoomBookings_beforeInsert(item, context) {
         throw new Error('This time slot is already booked. Please choose another time.');
     }
 
+    // Format date in America/New_York (the coworking space site timezone)
+    const dateFormatted = new Date(bookingDate).toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        timeZone: 'America/New_York'
+    });
+
+    // 12-hour clock times (e.g. "9:00 AM", "6:00 PM", "9:00 AM - 6:00 PM")
+    const s12 = formatTime12(startTime);
+    const e12 = formatTime12(endTime);
+    const timeRange12 = `${s12} - ${e12}`;
+
+    // Pre-formatted text fields for Wix Automations dynamic values (avoids raw Date parsing bugs)
+    item.bookingDateText = item.bookingDateText || dateFormatted;
+    item.formattedDate = item.formattedDate || dateFormatted;
+    item.date = item.date || dateFormatted;
+    item.startTime12 = item.startTime12 || s12;
+    item.endTime12 = item.endTime12 || e12;
+    item.bookingTime = item.bookingTime || timeRange12;
+    item.formattedTime = item.formattedTime || timeRange12;
+    item.time = item.time || timeRange12;
+
+    return item;
+}
+
+/**
+ * Wix Data Hook: Runs before an item is updated in 'RoomBookings'.
+ * Keeps 12-hour time and date text strings synchronized.
+ */
+export async function RoomBookings_beforeUpdate(item, context) {
+    if (item.bookingDate) {
+        const dateFormatted = new Date(item.bookingDate).toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            timeZone: 'America/New_York'
+        });
+        item.bookingDateText = dateFormatted;
+        item.formattedDate = dateFormatted;
+        item.date = dateFormatted;
+    }
+    if (item.startTime) {
+        item.startTime12 = formatTime12(item.startTime);
+    }
+    if (item.endTime) {
+        item.endTime12 = formatTime12(item.endTime);
+    }
+    if (item.startTime && item.endTime) {
+        const timeRange12 = `${formatTime12(item.startTime)} - ${formatTime12(item.endTime)}`;
+        item.bookingTime = timeRange12;
+        item.formattedTime = timeRange12;
+        item.time = timeRange12;
+    }
     return item;
 }
 

@@ -58,12 +58,13 @@
     body {
       background: transparent;
       color: var(--burb-text-body);
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
       font-size: 14px;
       line-height: 1.5;
       margin: 0;
       padding: 0;
-      height: 100%;
+      min-height: 100%;
     }
 
     ::-webkit-scrollbar {
@@ -87,19 +88,17 @@
       outline-offset: 2px;
     }
 
-    /* EXACT UNIFIED COMPONENT HEIGHT (565px total across all views) */
+    /* EMBED VIEWPORT: 1200px max-width with spacious responsive layout */
     .burb-book-viewport {
       width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 10px 14px 14px;
+      padding: 14px 18px 24px;
       box-sizing: border-box;
-      height: 565px;
-      max-height: 565px;
+      min-height: 585px;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      overflow: hidden;
     }
 
     @keyframes burbFadeIn {
@@ -115,66 +114,59 @@
     }
 
     /* ==========================================================================
-       STEP 1: 3 ROOM CARDS GRID (EXACT 535px HEIGHT)
+       STEP 1: 3 ROOM CARDS GRID (PROMINENT LARGE ROOM PHOTOS)
        ========================================================================== */
     #step1-rooms {
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       animation: burbFadeIn 0.25s ease;
-      height: 535px;
-      max-height: 535px;
+      min-height: 540px;
       box-sizing: border-box;
-      overflow: hidden;
+      width: 100%;
     }
 
     .burb-book-hero-header {
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 24px;
     }
 
     .burb-book-hero-header h1 {
-      font-size: 22px;
+      font-size: 28px;
       font-weight: 700;
       color: var(--burb-text-main);
-      letter-spacing: -0.01em;
-    }
-
-    .burb-book-hero-header p {
-      font-size: 13px;
-      color: var(--burb-text-muted);
-      margin-top: 2px;
+      letter-spacing: -0.015em;
     }
 
     .burb-book-rooms-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
+      gap: 26px;
     }
 
     .burb-book-room-card {
       background: var(--burb-bg-surface);
       border-radius: var(--burb-radius-lg);
       border: 1px solid var(--burb-border);
-      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+      box-shadow: 0 6px 24px rgba(15, 23, 42, 0.08);
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      height: 435px;
+      height: 550px;
       box-sizing: border-box;
       transition: transform var(--burb-transition), box-shadow var(--burb-transition), border-color var(--burb-transition);
     }
 
     .burb-book-room-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--burb-shadow-lg);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.14);
       border-color: var(--burb-primary-border);
     }
 
-    /* Generous balanced room photo */
+    /* Extra large prominent room photos (400px height) */
     .burb-book-room-img-wrap {
       width: 100%;
-      height: 220px;
+      height: 400px;
       overflow: hidden;
       background: var(--burb-bg-subtle);
     }
@@ -183,55 +175,41 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.4s ease;
+      transition: transform 0.45s ease;
     }
 
     .burb-book-room-card:hover .burb-book-room-img {
-      transform: scale(1.04);
+      transform: scale(1.06);
     }
 
     .burb-book-room-content {
-      padding: 16px 18px 18px;
+      padding: 20px 22px 22px;
       text-align: center;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      align-items: center;
       flex-grow: 1;
+      box-sizing: border-box;
     }
 
     .burb-book-room-title {
-      font-size: 17.5px;
+      font-size: 21px;
       font-weight: 700;
       color: var(--burb-text-main);
       letter-spacing: -0.01em;
-    }
-
-    .burb-book-room-divider {
-      width: 44px;
-      height: 1px;
-      background: var(--burb-border);
-      margin: 8px auto;
-    }
-
-    .burb-book-room-tag {
-      font-size: 12.5px;
-      color: var(--burb-text-muted);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
+      margin-bottom: 8px;
     }
 
     .burb-book-btn-primary {
       width: 100%;
-      padding: 11px 16px;
+      padding: 13px 20px;
       background: var(--burb-primary);
       color: #ffffff;
       border: none;
       border-radius: var(--burb-radius-sm);
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -261,12 +239,10 @@
       border-radius: var(--burb-radius-lg);
       border: 1px solid var(--burb-border);
       box-shadow: var(--burb-shadow-md);
-      padding: 14px 20px;
+      padding: 16px 22px;
       animation: burbFadeIn 0.25s ease;
-      height: 535px;
-      max-height: 535px;
+      min-height: 535px;
       box-sizing: border-box;
-      overflow: hidden;
     }
 
     .burb-book-top-row {
@@ -736,18 +712,16 @@
        ========================================================================== */
     #step3-client {
       display: none;
-      max-width: 680px;
+      max-width: 700px;
       margin: 0 auto;
       background: var(--burb-bg-surface);
       border-radius: var(--burb-radius-lg);
       border: 1px solid var(--burb-border);
       box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-      padding: 20px 32px;
+      padding: 22px 34px;
       animation: burbFadeIn 0.25s ease;
-      height: 535px;
-      max-height: 535px;
+      min-height: 535px;
       box-sizing: border-box;
-      overflow: hidden;
     }
 
     .burb-book-form-head {
@@ -963,7 +937,7 @@
        ========================================================================== */
     #step4-confirm {
       display: none;
-      max-width: 580px;
+      max-width: 600px;
       margin: 0 auto;
       text-align: center;
       background: var(--burb-bg-surface);
@@ -972,10 +946,8 @@
       box-shadow: var(--burb-shadow-md);
       padding: 40px 30px;
       animation: burbFadeIn 0.25s ease;
-      height: 535px;
-      max-height: 535px;
+      min-height: 535px;
       box-sizing: border-box;
-      overflow: hidden;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -1131,7 +1103,6 @@
     <div id="step1-rooms">
       <div class="burb-book-hero-header">
         <h1>Book a Meeting Space</h1>
-        <p>Select a room to choose your date, start time, and stop time.</p>
       </div>
 
       <div class="burb-book-rooms-grid">
@@ -1144,15 +1115,6 @@
           </div>
           <div class="burb-book-room-content">
             <h3 class="burb-book-room-title">Large Conference Room</h3>
-            <div class="burb-book-room-divider"></div>
-            <div class="burb-book-room-tag">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-              </svg>
-              <span>30 min increments</span>
-            </div>
             <button class="burb-book-btn-primary" onclick="selectRoom('Large Conference Room')">Book Now</button>
           </div>
         </div>
@@ -1166,15 +1128,6 @@
           </div>
           <div class="burb-book-room-content">
             <h3 class="burb-book-room-title">Small Conference Room</h3>
-            <div class="burb-book-room-divider"></div>
-            <div class="burb-book-room-tag">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-              </svg>
-              <span>30 min increments</span>
-            </div>
             <button class="burb-book-btn-primary" onclick="selectRoom('Small Conference Room')">Book Now</button>
           </div>
         </div>
@@ -1188,15 +1141,6 @@
           </div>
           <div class="burb-book-room-content">
             <h3 class="burb-book-room-title">Private Office</h3>
-            <div class="burb-book-room-divider"></div>
-            <div class="burb-book-room-tag">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-              </svg>
-              <span>30 min increments</span>
-            </div>
             <button class="burb-book-btn-primary" onclick="selectRoom('Private Office')">Book Now</button>
           </div>
         </div>
@@ -1928,13 +1872,25 @@
       hideClientAlert();
 
       const isoDate = getLocalDateISO(state.selectedDate);
+      const s12 = formatTo12HrStr(state.startTime);
+      const e12 = formatTo12HrStr(state.endTime);
+      const dateFormatted = state.selectedDate.toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
       window.parent.postMessage({
         action: 'SUBMIT_BOOKING',
         payload: {
           roomName: state.roomName,
           bookingDate: isoDate,
+          bookingDateText: dateFormatted,
           startTime: state.startTime,
           endTime: state.endTime,
+          startTime12: s12,
+          endTime12: e12,
+          bookingTime: `${s12} - ${e12}`,
           fullName: name,
           email: email,
           phone: phone,
@@ -1986,7 +1942,7 @@
     }
 
     function formatTo12Hr(h, m) {
-      const suffix = h >= 12 ? 'pm' : 'am';
+      const suffix = h >= 12 ? 'PM' : 'AM';
       const hr12 = h % 12 === 0 ? 12 : h % 12;
       return `${hr12}:${String(m).padStart(2, '0')} ${suffix}`;
     }
