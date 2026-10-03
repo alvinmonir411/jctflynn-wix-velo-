@@ -145,32 +145,15 @@ async function handleBookingSubmission(data) {
             return;
         }
 
-        // Pre-format 12-hour times and date text for Wix Automations dynamic values
-        const dateFormatted = new Date(siteMidnight).toLocaleDateString('en-US', {
-            weekday: 'short',
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-            timeZone: 'America/New_York'
-        });
         const s12 = formatTime12(startTime);
         const e12 = formatTime12(endTime);
-        const timeRange12 = `${s12} - ${e12}`;
 
-        // Insert into RoomBookings
+        // Insert into RoomBookings with ONLY the 9 defined schema fields
         await wixData.insert(CONFIG.collectionName, {
             roomName,
             bookingDate: siteMidnight,
-            bookingDateText: dateFormatted,
-            formattedDate: dateFormatted,
-            date: dateFormatted,
-            startTime,
-            endTime,
-            startTime12: s12,
-            endTime12: e12,
-            bookingTime: timeRange12,
-            formattedTime: timeRange12,
-            time: timeRange12,
+            startTime: s12,
+            endTime: e12,
             fullName: fullName || '',
             email: email || '',
             phone: phone || '',
@@ -199,14 +182,55 @@ function sendResponse(success, message) {
 
 function timeToMinutes(timeStr) {
     if (!timeStr) return 0;
-    const [hours, minutes] = timeStr.split(':').map(Number);
-    return hours * 60 + minutes;
+    const s = String(timeStr).trim();
+    const match = s.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
+    if (match) {
+        let h = parseInt(match[1], 10);
+        const m = parseInt(match[2], 10) || 0;
+        const ampm = match[3] ? match[3].toUpperCase() : null;
+        if (ampm === 'PM' && h < 12) h += 12;
+        if (ampm === 'AM' && h === 12) h = 0;
+        return h * 60 + m;
+    }
+    const digits = s.match(/\b(\d{1,2})[:\.]?(\d{2})?\b/);
+    if (digits) {
+        let h = parseInt(digits[1], 10);
+        const m = digits[2] ? parseInt(digits[2], 10) : 0;
+        if (/pm/i.test(s) && h < 12) h += 12;
+        if (/am/i.test(s) && h === 12) h = 0;
+        return h * 60 + m;
+    }
+    return 0;
 }
 
-function formatTime12(t24) {
-    if (!t24) return '';
-    const [h, m] = t24.split(':').map(Number);
-    const ampm = h >= 12 ? 'PM' : 'AM';
-    const h12 = h % 12 || 12;
-    return `${h12}:${String(m).padStart(2, '0')} ${ampm}`;
+function formatTime12(timeVal) {
+    if (!timeVal) return '';
+    const s = String(timeVal).trim();
+    const match12 = s.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+    if (match12) {
+        let h = parseInt(match12[1], 10);
+        const m = String(parseInt(match12[2], 10)).padStart(2, '0');
+        const ampm = match12[3].toUpperCase();
+        if (h === 0) h = 12;
+        if (h > 12) h = h % 12 || 12;
+        return `${h}:${m} ${ampm}`;
+    }
+    const match24 = s.match(/^(\d{1,2}):(\d{2})$/);
+    if (match24) {
+        const h = parseInt(match24[1], 10);
+        const m = String(parseInt(match24[2], 10)).padStart(2, '0');
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        const h12 = h % 12 || 12;
+        return `${h12}:${m} ${ampm}`;
+    }
+    const digits = s.match(/\b(\d{1,2})[:\.]?(\d{2})?\b/);
+    if (digits) {
+        let h = parseInt(digits[1], 10);
+        const m = digits[2] ? String(parseInt(digits[2], 10)).padStart(2, '0') : '00';
+        const ampm = /pm/i.test(s) ? 'PM' : 'AM';
+        if (h === 0) h = 12;
+        if (h > 12) h = h % 12 || 12;
+        return `${h}:${m} ${ampm}`;
+    }
+    return s;
 }

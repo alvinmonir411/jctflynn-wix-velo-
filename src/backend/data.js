@@ -3,23 +3,68 @@ import { contacts, triggeredEmails } from 'wix-crm-backend';
 import { notifications } from 'wix-notifications-backend';
 
 /**
- * Helper: Convert "HH:mm" time string into total minutes from midnight
+ * Helper: Convert time string ("HH:mm" or "h:mm AM/PM") into total minutes from midnight
  */
 function timeToMinutes(timeStr) {
     if (!timeStr) return 0;
-    const [hours, minutes] = timeStr.split(':').map(Number);
-    return hours * 60 + minutes;
+    const s = String(timeStr).trim();
+    const match = s.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
+    if (match) {
+        let h = parseInt(match[1], 10);
+        const m = parseInt(match[2], 10) || 0;
+        const ampm = match[3] ? match[3].toUpperCase() : null;
+        if (ampm === 'PM' && h < 12) h += 12;
+        if (ampm === 'AM' && h === 12) h = 0;
+        return h * 60 + m;
+    }
+    // Fallback: extract digits
+    const digits = s.match(/\b(\d{1,2})[:\.]?(\d{2})?\b/);
+    if (digits) {
+        let h = parseInt(digits[1], 10);
+        const m = digits[2] ? parseInt(digits[2], 10) : 0;
+        if (/pm/i.test(s) && h < 12) h += 12;
+        if (/am/i.test(s) && h === 12) h = 0;
+        return h * 60 + m;
+    }
+    return 0;
 }
 
 /**
- * Helper: Convert 24-hour time "HH:mm" to user-friendly "h:mm AM/PM"
+ * Helper: Convert time string to user-friendly 12-hour "h:mm AM/PM" (safe from NaN)
  */
-function formatTime12(t24) {
-    if (!t24) return '';
-    const [h, m] = t24.split(':').map(Number);
-    const ampm = h >= 12 ? 'PM' : 'AM';
-    const h12 = h % 12 || 12;
-    return `${h12}:${String(m).padStart(2, '0')} ${ampm}`;
+function formatTime12(timeVal) {
+    if (!timeVal) return '';
+    const s = String(timeVal).trim();
+    // Valid 12-hour: e.g. "8:00 AM", "10:30 PM"
+    const match12 = s.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+    if (match12) {
+        let h = parseInt(match12[1], 10);
+        const m = String(parseInt(match12[2], 10)).padStart(2, '0');
+        const ampm = match12[3].toUpperCase();
+        if (h === 0) h = 12;
+        if (h > 12) h = h % 12 || 12;
+        return `${h}:${m} ${ampm}`;
+    }
+    // Valid 24-hour: e.g. "08:00", "14:30"
+    const match24 = s.match(/^(\d{1,2}):(\d{2})$/);
+    if (match24) {
+        const h = parseInt(match24[1], 10);
+        const m = String(parseInt(match24[2], 10)).padStart(2, '0');
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        const h12 = h % 12 || 12;
+        return `${h12}:${m} ${ampm}`;
+    }
+    // Repair corrupted strings like "8:NaN AM"
+    const digits = s.match(/\b(\d{1,2})[:\.]?(\d{2})?\b/);
+    if (digits) {
+        let h = parseInt(digits[1], 10);
+        const m = digits[2] ? String(parseInt(digits[2], 10)).padStart(2, '0') : '00';
+        const ampm = /pm/i.test(s) ? 'PM' : 'AM';
+        if (h === 0) h = 12;
+        if (h > 12) h = h % 12 || 12;
+        return `${h}:${m} ${ampm}`;
+    }
+    return s;
 }
 
 /**
@@ -61,62 +106,49 @@ export async function RoomBookings_beforeInsert(item, context) {
         throw new Error('This time slot is already booked. Please choose another time.');
     }
 
-    // Format date in America/New_York (the coworking space site timezone)
-    const dateFormatted = new Date(bookingDate).toLocaleDateString('en-US', {
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-        timeZone: 'America/New_York'
-    });
+    // Standardize startTime & endTime to 12-hour format ("8:00 AM", "9:30 AM")
+    item.startTime = formatTime12(item.startTime || startTime);
+    item.endTime = formatTime12(item.endTime || endTime);
 
-    // 12-hour clock times (e.g. "9:00 AM", "6:00 PM", "9:00 AM - 6:00 PM")
-    const s12 = formatTime12(startTime);
-    const e12 = formatTime12(endTime);
-    const timeRange12 = `${s12} - ${e12}`;
-
-    // Pre-formatted text fields for Wix Automations dynamic values (avoids raw Date parsing bugs)
-    item.bookingDateText = item.bookingDateText || dateFormatted;
-    item.formattedDate = item.formattedDate || dateFormatted;
-    item.date = item.date || dateFormatted;
-    item.startTime12 = item.startTime12 || s12;
-    item.endTime12 = item.endTime12 || e12;
-    item.bookingTime = item.bookingTime || timeRange12;
-    item.formattedTime = item.formattedTime || timeRange12;
-    item.time = item.time || timeRange12;
+    // Explicitly delete any extra/undefined fields so Wix CMS never shows undefined field warnings
+    delete item.startTime24;
+    delete item.endTime24;
+    delete item.startTime12;
+    delete item.endTime12;
+    delete item.bookingTime;
+    delete item.formattedTime;
+    delete item.time;
+    delete item.bookingDateText;
+    delete item.formattedDate;
+    delete item.date;
 
     return item;
 }
 
 /**
  * Wix Data Hook: Runs before an item is updated in 'RoomBookings'.
- * Keeps 12-hour time and date text strings synchronized.
+ * Keeps 12-hour time clean and deletes undefined fields.
  */
 export async function RoomBookings_beforeUpdate(item, context) {
-    if (item.bookingDate) {
-        const dateFormatted = new Date(item.bookingDate).toLocaleDateString('en-US', {
-            weekday: 'short',
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-            timeZone: 'America/New_York'
-        });
-        item.bookingDateText = dateFormatted;
-        item.formattedDate = dateFormatted;
-        item.date = dateFormatted;
-    }
     if (item.startTime) {
-        item.startTime12 = formatTime12(item.startTime);
+        item.startTime = formatTime12(item.startTime);
     }
     if (item.endTime) {
-        item.endTime12 = formatTime12(item.endTime);
+        item.endTime = formatTime12(item.endTime);
     }
-    if (item.startTime && item.endTime) {
-        const timeRange12 = `${formatTime12(item.startTime)} - ${formatTime12(item.endTime)}`;
-        item.bookingTime = timeRange12;
-        item.formattedTime = timeRange12;
-        item.time = timeRange12;
-    }
+
+    // Explicitly delete any extra/undefined fields
+    delete item.startTime24;
+    delete item.endTime24;
+    delete item.startTime12;
+    delete item.endTime12;
+    delete item.bookingTime;
+    delete item.formattedTime;
+    delete item.time;
+    delete item.bookingDateText;
+    delete item.formattedDate;
+    delete item.date;
+
     return item;
 }
 

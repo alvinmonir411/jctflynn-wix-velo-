@@ -1874,23 +1874,14 @@
       const isoDate = getLocalDateISO(state.selectedDate);
       const s12 = formatTo12HrStr(state.startTime);
       const e12 = formatTo12HrStr(state.endTime);
-      const dateFormatted = state.selectedDate.toLocaleDateString('en-US', {
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-      });
+
       window.parent.postMessage({
         action: 'SUBMIT_BOOKING',
         payload: {
           roomName: state.roomName,
           bookingDate: isoDate,
-          bookingDateText: dateFormatted,
-          startTime: state.startTime,
-          endTime: state.endTime,
-          startTime12: s12,
-          endTime12: e12,
-          bookingTime: `${s12} - ${e12}`,
+          startTime: s12,
+          endTime: e12,
           fullName: name,
           email: email,
           phone: phone,
@@ -1937,8 +1928,25 @@
 
     function timeToMins(str) {
       if (!str) return 0;
-      const [h, m] = str.split(':').map(Number);
-      return h * 60 + m;
+      const s = String(str).trim();
+      const match12 = s.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
+      if (match12) {
+        let h = parseInt(match12[1], 10);
+        const m = parseInt(match12[2], 10) || 0;
+        const ampm = match12[3] ? match12[3].toUpperCase() : null;
+        if (ampm === 'PM' && h < 12) h += 12;
+        if (ampm === 'AM' && h === 12) h = 0;
+        return h * 60 + m;
+      }
+      const digits = s.match(/\b(\d{1,2})[:\.]?(\d{2})?\b/);
+      if (digits) {
+        let h = parseInt(digits[1], 10);
+        const m = digits[2] ? parseInt(digits[2], 10) : 0;
+        if (/pm/i.test(s) && h < 12) h += 12;
+        if (/am/i.test(s) && h === 12) h = 0;
+        return h * 60 + m;
+      }
+      return 0;
     }
 
     function formatTo12Hr(h, m) {
@@ -1947,10 +1955,31 @@
       return `${hr12}:${String(m).padStart(2, '0')} ${suffix}`;
     }
 
-    function formatTo12HrStr(str24) {
-      if (!str24) return '';
-      const [h, m] = str24.split(':').map(Number);
-      return formatTo12Hr(h, m);
+    function formatTo12HrStr(timeVal) {
+      if (!timeVal) return '';
+      const s = String(timeVal).trim();
+      const match12 = s.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+      if (match12) {
+        let h = parseInt(match12[1], 10);
+        const m = String(parseInt(match12[2], 10)).padStart(2, '0');
+        const ampm = match12[3].toUpperCase();
+        if (h === 0) h = 12;
+        if (h > 12) h = h % 12 || 12;
+        return `${h}:${m} ${ampm}`;
+      }
+      const match24 = s.match(/^(\d{1,2}):(\d{2})$/);
+      if (match24) {
+        return formatTo12Hr(parseInt(match24[1], 10), parseInt(match24[2], 10));
+      }
+      const digits = s.match(/\b(\d{1,2})[:\.]?(\d{2})?\b/);
+      if (digits) {
+        let h = parseInt(digits[1], 10);
+        const m = digits[2] ? parseInt(digits[2], 10) : 0;
+        const isPm = /pm/i.test(s);
+        if (isPm && h < 12) h += 12;
+        return formatTo12Hr(h, m);
+      }
+      return s;
     }
 
     // Ensure Step 1 is explicitly initialized on initial render
