@@ -137,8 +137,8 @@ export async function RoomBookings_beforeInsert(item, context) {
         timeZone: 'America/New_York'
     });
 
-    item.bookingDateText = item.bookingDateText || dateFormatted;
-    item.dateText = item.dateText || dateFormatted;
+    item.dateText = dateFormatted;
+    item.bookingDateText = dateFormatted;
 
     // Remove redundant duplicate time & date fields
     delete item.startTime12;
