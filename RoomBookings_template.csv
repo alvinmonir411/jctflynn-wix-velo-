@@ -1,4 +1,4 @@
-roomName,bookingDate,dateText,bookingDateText,startTime,endTime,fullName,email,phone,notes,memberId
-Large Conference Room,2026-10-10T00:00:00.000Z,"Sat, Oct 10, 2026","Sat, Oct 10, 2026",8:00 AM,9:30 AM,John Doe,john@example.com,+1 555-0199,Quarterly team sync,sample_member_001
-Small Conference Room,2026-10-10T00:00:00.000Z,"Sat, Oct 10, 2026","Sat, Oct 10, 2026",10:00 AM,11:30 AM,Sarah Smith,sarah@example.com,+1 555-0144,Client presentation,sample_member_002
-Private Office,2026-10-11T00:00:00.000Z,"Sun, Oct 11, 2026","Sun, Oct 11, 2026",2:00 PM,4:00 PM,Alex Wong,alex@example.com,+1 555-0182,Focused sprint,sample_member_003
+roomName,bookingDate,bookingDateText,startTime,endTime,startTime12,endTime12,startTime24,endTime24,bookingTime,Fullname,Email,Phone,Notes,memberId
+Large Conference Room,2026-10-10T00:00:00.000Z,"Sat, Oct 10, 2026",8:00 AM,9:30 AM,8:00 AM,9:30 AM,08:00,09:30,8:00 AM - 9:30 AM,John Doe,john@example.com,+1 555-0199,Quarterly team sync,sample_member_001
+Small Conference Room,2026-10-10T00:00:00.000Z,"Sat, Oct 10, 2026",10:00 AM,11:30 AM,10:00 AM,11:30 AM,10:00,11:30,10:00 AM - 11:30 AM,Sarah Smith,sarah@example.com,+1 555-0144,Client presentation,sample_member_002
+Private Office,2026-10-11T00:00:00.000Z,"Sun, Oct 11, 2026",2:00 PM,4:00 PM,2:00 PM,4:00 PM,14:00,16:00,2:00 PM - 4:00 PM,Alex Wong,alex@example.com,+1 555-0182,Focused sprint,sample_member_003

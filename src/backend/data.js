@@ -67,6 +67,21 @@ function formatTime12(timeVal) {
     return s;
 }
 
+function formatTime24(timeVal) {
+    if (!timeVal) return '';
+    const s = String(timeVal).trim();
+    const match24 = s.match(/^(\d{1,2}):(\d{2})$/);
+    if (match24) {
+        const h = String(parseInt(match24[1], 10)).padStart(2, '0');
+        const m = String(parseInt(match24[2], 10)).padStart(2, '0');
+        return `${h}:${m}`;
+    }
+    const mins = timeToMinutes(s);
+    const h = String(Math.floor(mins / 60)).padStart(2, '0');
+    const m = String(mins % 60).padStart(2, '0');
+    return `${h}:${m}`;
+}
+
 /**
  * Wix Data Hook: Runs on the server before any booking is inserted into 'RoomBookings'.
  * Guarantees zero double-booking / race conditions across all users.
@@ -106,11 +121,21 @@ export async function RoomBookings_beforeInsert(item, context) {
         throw new Error('This time slot is already booked. Please choose another time.');
     }
 
-    // Standardize startTime & endTime to 12-hour format ("8:00 AM", "9:30 AM")
+    // Standardize 12-hour and 24-hour time strings
     const s12 = formatTime12(item.startTime || startTime);
     const e12 = formatTime12(item.endTime || endTime);
+    const s24 = formatTime24(item.startTime || startTime);
+    const e24 = formatTime24(item.endTime || endTime);
+    const timeRange12 = `${s12} - ${e12}`;
+
+    // Fill all 6 start/end time variations + bookingTime
     item.startTime = s12;
     item.endTime = e12;
+    item.startTime12 = s12;
+    item.endTime12 = e12;
+    item.startTime24 = s24;
+    item.endTime24 = e24;
+    item.bookingTime = timeRange12;
 
     // Format date in America/New_York (the coworking space site timezone)
     const dateFormatted = new Date(bookingDate).toLocaleDateString('en-US', {
@@ -120,31 +145,30 @@ export async function RoomBookings_beforeInsert(item, context) {
         year: 'numeric',
         timeZone: 'America/New_York'
     });
-    const timeRange12 = `${s12} - ${e12}`;
 
-    // Auto-populate all date text field variants so any column key in Wix CMS is filled
+    // Populate all date text field variants
     item.bookingDateText = item.bookingDateText || dateFormatted;
     item.dateText = item.dateText || dateFormatted;
     item.date_text = item.date_text || dateFormatted;
     item.formattedDate = item.formattedDate || dateFormatted;
     item.date = item.date || dateFormatted;
 
-    // Auto-populate time text field variants
-    item.startTime12 = item.startTime12 || s12;
-    item.endTime12 = item.endTime12 || e12;
-    item.bookingTime = item.bookingTime || timeRange12;
-    item.formattedTime = item.formattedTime || timeRange12;
-    item.time = item.time || timeRange12;
-
-    delete item.startTime24;
-    delete item.endTime24;
+    // Also support uppercase field names from Wix CMS schema
+    if (item.fullName) item.Fullname = item.fullName;
+    if (item.Fullname) item.fullName = item.Fullname;
+    if (item.email) item.Email = item.email;
+    if (item.Email) item.email = item.Email;
+    if (item.phone) item.Phone = item.phone;
+    if (item.Phone) item.phone = item.Phone;
+    if (item.notes) item.Notes = item.notes;
+    if (item.Notes) item.notes = item.Notes;
 
     return item;
 }
 
 /**
  * Wix Data Hook: Runs before an item is updated in 'RoomBookings'.
- * Keeps 12-hour time and date text clean and synchronized.
+ * Keeps 12-hour time, 24-hour time, and date text clean and synchronized.
  */
 export async function RoomBookings_beforeUpdate(item, context) {
     if (item.bookingDate) {
@@ -162,22 +186,34 @@ export async function RoomBookings_beforeUpdate(item, context) {
         item.date = dateFormatted;
     }
     if (item.startTime) {
-        item.startTime = formatTime12(item.startTime);
-        item.startTime12 = item.startTime;
+        const s12 = formatTime12(item.startTime);
+        const s24 = formatTime24(item.startTime);
+        item.startTime = s12;
+        item.startTime12 = s12;
+        item.startTime24 = s24;
     }
     if (item.endTime) {
-        item.endTime = formatTime12(item.endTime);
-        item.endTime12 = item.endTime;
+        const e12 = formatTime12(item.endTime);
+        const e24 = formatTime24(item.endTime);
+        item.endTime = e12;
+        item.endTime12 = e12;
+        item.endTime24 = e24;
     }
     if (item.startTime && item.endTime) {
-        const timeRange12 = `${item.startTime} - ${item.endTime}`;
+        const timeRange12 = `${formatTime12(item.startTime)} - ${formatTime12(item.endTime)}`;
         item.bookingTime = timeRange12;
         item.formattedTime = timeRange12;
         item.time = timeRange12;
     }
 
-    delete item.startTime24;
-    delete item.endTime24;
+    if (item.fullName) item.Fullname = item.fullName;
+    if (item.Fullname) item.fullName = item.Fullname;
+    if (item.email) item.Email = item.email;
+    if (item.Email) item.email = item.Email;
+    if (item.phone) item.Phone = item.phone;
+    if (item.Phone) item.phone = item.Phone;
+    if (item.notes) item.Notes = item.notes;
+    if (item.Notes) item.notes = item.Notes;
 
     return item;
 }

@@ -1885,10 +1885,19 @@
           dateText: dateStr,
           startTime: s12,
           endTime: e12,
+          startTime12: s12,
+          endTime12: e12,
+          startTime24: state.startTime,
+          endTime24: state.endTime,
+          bookingTime: `${s12} - ${e12}`,
           fullName: name,
+          Fullname: name,
           email: email,
+          Email: email,
           phone: phone,
-          notes: notes
+          Phone: phone,
+          notes: notes,
+          Notes: notes
         }
       }, '*');
     }

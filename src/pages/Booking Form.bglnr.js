@@ -145,9 +145,11 @@ async function handleBookingSubmission(data) {
 
         const s12 = formatTime12(startTime);
         const e12 = formatTime12(endTime);
+        const s24 = formatTime24(startTime);
+        const e24 = formatTime24(endTime);
         const timeRange12 = `${s12} - ${e12}`;
 
-        // Insert into RoomBookings including dateText & bookingDateText
+        // Insert into RoomBookings including all 6 time fields and bookingDateText
         await wixData.insert(CONFIG.collectionName, {
             roomName,
             bookingDate: siteMidnight,
@@ -160,13 +162,19 @@ async function handleBookingSubmission(data) {
             endTime: e12,
             startTime12: s12,
             endTime12: e12,
+            startTime24: s24,
+            endTime24: e24,
             bookingTime: timeRange12,
             formattedTime: timeRange12,
             time: timeRange12,
             fullName: fullName || '',
+            Fullname: fullName || '',
             email: email || '',
+            Email: email || '',
             phone: phone || '',
+            Phone: phone || '',
             notes: notes || '',
+            Notes: notes || '',
             memberId
         });
 
@@ -242,4 +250,19 @@ function formatTime12(timeVal) {
         return `${h}:${m} ${ampm}`;
     }
     return s;
+}
+
+function formatTime24(timeVal) {
+    if (!timeVal) return '';
+    const s = String(timeVal).trim();
+    const match24 = s.match(/^(\d{1,2}):(\d{2})$/);
+    if (match24) {
+        const h = String(parseInt(match24[1], 10)).padStart(2, '0');
+        const m = String(parseInt(match24[2], 10)).padStart(2, '0');
+        return `${h}:${m}`;
+    }
+    const mins = timeToMinutes(s);
+    const h = String(Math.floor(mins / 60)).padStart(2, '0');
+    const m = String(mins % 60).padStart(2, '0');
+    return `${h}:${m}`;
 }
