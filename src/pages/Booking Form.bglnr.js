@@ -10,31 +10,22 @@ $w.onReady(function () {
         if ($w('#html1').onMessage) {
             $w('#html1').onMessage(async (event) => {
                 const { action, payload } = event.data || {};
-
-                // 1. Fetch existing bookings for a room & date so the calendar marks booked slots
                 if (action === 'GET_BOOKED_SLOTS') {
                     await handleGetBookedSlots(payload);
                 }
 
-                // 2. Submit new booking with client details
+
                 if (action === 'SUBMIT_BOOKING') {
                     await handleBookingSubmission(payload);
                 }
             });
         }
     } catch (e) {
-        // #html1 not present
     }
 });
 
-// In-memory slots cache to make repeat requests 0ms instant
 const veloSlotsCache = {};
 
-/**
- * Safely calculate Eastern Time (EDT/EST) midnight and full-day bounds
- * for the coworking space site in America/New_York.
- * Guarantees that bookingDate is ALWAYS saved and displayed as 12:00 AM on that exact date in Wix CMS.
- */
 function getSiteDateBounds(dateStr) {
     if (!dateStr) return { siteMidnight: new Date(), startOfDay: new Date(), endOfDay: new Date() };
     const [y, m, d] = dateStr.split('-').map(Number);
@@ -144,15 +135,34 @@ async function handleBookingSubmission(data) {
             return;
         }
 
+        const dateFormatted = new Date(siteMidnight).toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            timeZone: 'America/New_York'
+        });
+
         const s12 = formatTime12(startTime);
         const e12 = formatTime12(endTime);
+        const timeRange12 = `${s12} - ${e12}`;
 
-        // Insert into RoomBookings with ONLY the 9 defined schema fields
+        // Insert into RoomBookings including dateText & bookingDateText
         await wixData.insert(CONFIG.collectionName, {
             roomName,
             bookingDate: siteMidnight,
+            bookingDateText: dateFormatted,
+            dateText: dateFormatted,
+            date_text: dateFormatted,
+            formattedDate: dateFormatted,
+            date: dateFormatted,
             startTime: s12,
             endTime: e12,
+            startTime12: s12,
+            endTime12: e12,
+            bookingTime: timeRange12,
+            formattedTime: timeRange12,
+            time: timeRange12,
             fullName: fullName || '',
             email: email || '',
             phone: phone || '',

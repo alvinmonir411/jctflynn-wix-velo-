@@ -1874,12 +1874,15 @@
       const isoDate = getLocalDateISO(state.selectedDate);
       const s12 = formatTo12HrStr(state.startTime);
       const e12 = formatTo12HrStr(state.endTime);
+      const dateStr = state.selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
 
       window.parent.postMessage({
         action: 'SUBMIT_BOOKING',
         payload: {
           roomName: state.roomName,
           bookingDate: isoDate,
+          bookingDateText: dateStr,
+          dateText: dateStr,
           startTime: s12,
           endTime: e12,
           fullName: name,

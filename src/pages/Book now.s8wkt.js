@@ -145,15 +145,34 @@ async function handleBookingSubmission(data) {
             return;
         }
 
+        const dateFormatted = new Date(siteMidnight).toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            timeZone: 'America/New_York'
+        });
+
         const s12 = formatTime12(startTime);
         const e12 = formatTime12(endTime);
+        const timeRange12 = `${s12} - ${e12}`;
 
-        // Insert into RoomBookings with ONLY the 9 defined schema fields
+        // Insert into RoomBookings including dateText & bookingDateText
         await wixData.insert(CONFIG.collectionName, {
             roomName,
             bookingDate: siteMidnight,
+            bookingDateText: dateFormatted,
+            dateText: dateFormatted,
+            date_text: dateFormatted,
+            formattedDate: dateFormatted,
+            date: dateFormatted,
             startTime: s12,
             endTime: e12,
+            startTime12: s12,
+            endTime12: e12,
+            bookingTime: timeRange12,
+            formattedTime: timeRange12,
+            time: timeRange12,
             fullName: fullName || '',
             email: email || '',
             phone: phone || '',

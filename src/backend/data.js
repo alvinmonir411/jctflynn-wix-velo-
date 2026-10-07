@@ -107,47 +107,77 @@ export async function RoomBookings_beforeInsert(item, context) {
     }
 
     // Standardize startTime & endTime to 12-hour format ("8:00 AM", "9:30 AM")
-    item.startTime = formatTime12(item.startTime || startTime);
-    item.endTime = formatTime12(item.endTime || endTime);
+    const s12 = formatTime12(item.startTime || startTime);
+    const e12 = formatTime12(item.endTime || endTime);
+    item.startTime = s12;
+    item.endTime = e12;
 
-    // Explicitly delete any extra/undefined fields so Wix CMS never shows undefined field warnings
+    // Format date in America/New_York (the coworking space site timezone)
+    const dateFormatted = new Date(bookingDate).toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        timeZone: 'America/New_York'
+    });
+    const timeRange12 = `${s12} - ${e12}`;
+
+    // Auto-populate all date text field variants so any column key in Wix CMS is filled
+    item.bookingDateText = item.bookingDateText || dateFormatted;
+    item.dateText = item.dateText || dateFormatted;
+    item.date_text = item.date_text || dateFormatted;
+    item.formattedDate = item.formattedDate || dateFormatted;
+    item.date = item.date || dateFormatted;
+
+    // Auto-populate time text field variants
+    item.startTime12 = item.startTime12 || s12;
+    item.endTime12 = item.endTime12 || e12;
+    item.bookingTime = item.bookingTime || timeRange12;
+    item.formattedTime = item.formattedTime || timeRange12;
+    item.time = item.time || timeRange12;
+
     delete item.startTime24;
     delete item.endTime24;
-    delete item.startTime12;
-    delete item.endTime12;
-    delete item.bookingTime;
-    delete item.formattedTime;
-    delete item.time;
-    delete item.bookingDateText;
-    delete item.formattedDate;
-    delete item.date;
 
     return item;
 }
 
 /**
  * Wix Data Hook: Runs before an item is updated in 'RoomBookings'.
- * Keeps 12-hour time clean and deletes undefined fields.
+ * Keeps 12-hour time and date text clean and synchronized.
  */
 export async function RoomBookings_beforeUpdate(item, context) {
+    if (item.bookingDate) {
+        const dateFormatted = new Date(item.bookingDate).toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            timeZone: 'America/New_York'
+        });
+        item.bookingDateText = dateFormatted;
+        item.dateText = dateFormatted;
+        item.date_text = dateFormatted;
+        item.formattedDate = dateFormatted;
+        item.date = dateFormatted;
+    }
     if (item.startTime) {
         item.startTime = formatTime12(item.startTime);
+        item.startTime12 = item.startTime;
     }
     if (item.endTime) {
         item.endTime = formatTime12(item.endTime);
+        item.endTime12 = item.endTime;
+    }
+    if (item.startTime && item.endTime) {
+        const timeRange12 = `${item.startTime} - ${item.endTime}`;
+        item.bookingTime = timeRange12;
+        item.formattedTime = timeRange12;
+        item.time = timeRange12;
     }
 
-    // Explicitly delete any extra/undefined fields
     delete item.startTime24;
     delete item.endTime24;
-    delete item.startTime12;
-    delete item.endTime12;
-    delete item.bookingTime;
-    delete item.formattedTime;
-    delete item.time;
-    delete item.bookingDateText;
-    delete item.formattedDate;
-    delete item.date;
 
     return item;
 }
