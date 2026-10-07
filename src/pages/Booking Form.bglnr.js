@@ -145,36 +145,19 @@ async function handleBookingSubmission(data) {
 
         const s12 = formatTime12(startTime);
         const e12 = formatTime12(endTime);
-        const s24 = formatTime24(startTime);
-        const e24 = formatTime24(endTime);
-        const timeRange12 = `${s12} - ${e12}`;
 
-        // Insert into RoomBookings including all 6 time fields and bookingDateText
+        // Insert into RoomBookings: strictly 12-hour times and bookingDateText
         await wixData.insert(CONFIG.collectionName, {
             roomName,
             bookingDate: siteMidnight,
             bookingDateText: dateFormatted,
             dateText: dateFormatted,
-            date_text: dateFormatted,
-            formattedDate: dateFormatted,
-            date: dateFormatted,
             startTime: s12,
             endTime: e12,
-            startTime12: s12,
-            endTime12: e12,
-            startTime24: s24,
-            endTime24: e24,
-            bookingTime: timeRange12,
-            formattedTime: timeRange12,
-            time: timeRange12,
             fullName: fullName || '',
-            Fullname: fullName || '',
             email: email || '',
-            Email: email || '',
             phone: phone || '',
-            Phone: phone || '',
             notes: notes || '',
-            Notes: notes || '',
             memberId
         });
 
