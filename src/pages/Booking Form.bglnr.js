@@ -1,28 +1,145 @@
 import wixData from 'wix-data';
 import { currentMember } from 'wix-members-frontend';
+import { getConferenceRooms } from 'backend/rooms.jsw';
 
 const CONFIG = {
-    collectionName: 'RoomBookings'
+    collectionName: 'RoomBookings',
+    roomsCollection: 'Conferanceroom'
 };
 
 $w.onReady(function () {
+    console.log('[RoomBooking] Booking Form page onReady initialized');
     try {
         if ($w('#html1').onMessage) {
             $w('#html1').onMessage(async (event) => {
                 const { action, payload } = event.data || {};
+                console.log('[RoomBooking] Message received from #html1:', action);
+
+                // 1. Fetch conference rooms (pictures & titles) from CMS collection 'Conferanceroom'
+                if (action === 'GET_ROOMS' || action === 'GET_CONFERENCE_ROOMS') {
+                    await handleGetRooms();
+                }
+
+                // 2. Fetch existing bookings for a room & date so the calendar marks booked slots
                 if (action === 'GET_BOOKED_SLOTS') {
                     await handleGetBookedSlots(payload);
                 }
 
-
+                // 3. Submit new booking with client details
                 if (action === 'SUBMIT_BOOKING') {
                     await handleBookingSubmission(payload);
                 }
             });
         }
+
+        // Proactively fetch and push CMS rooms to #html1
+        handleGetRooms();
     } catch (e) {
+        console.warn('[RoomBooking] #html1 element not found on page:', e);
     }
 });
+
+// In-memory cache for CMS conference rooms
+let veloRoomsCache = null;
+
+/**
+ * Format Wix image URI into a browser-loadable web image URL
+ */
+function formatWixImageUrl(img) {
+    if (!img) return '';
+    if (typeof img === 'object' && img !== null) {
+        img = img.src || img.url || '';
+    }
+    if (typeof img !== 'string') return '';
+    const trimmed = img.trim();
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:')) {
+        return trimmed;
+    }
+    if (trimmed.startsWith('wix:image://v1/')) {
+        const withoutPrefix = trimmed.replace('wix:image://v1/', '');
+        const fileId = withoutPrefix.split('/')[0];
+        return `https://static.wixstatic.com/media/${fileId}`;
+    }
+    if (trimmed.includes('~mv2') || trimmed.match(/^[a-zA-Z0-9_-]+\.(jpg|jpeg|png|webp|gif)/i)) {
+        return `https://static.wixstatic.com/media/${trimmed}`;
+    }
+    return trimmed;
+}
+
+/**
+ * Fetch rooms from CMS collection 'Conferanceroom' and send to #html1
+ */
+async function handleGetRooms() {
+    console.log('[RoomBooking] handleGetRooms called');
+    if (veloRoomsCache && veloRoomsCache.length > 0) {
+        console.log('[RoomBooking] Serving from cache:', veloRoomsCache.length);
+        sendRoomsResponse(veloRoomsCache);
+        return;
+    }
+
+    try {
+        let items = [];
+        try {
+            items = await getConferenceRooms();
+            console.log('[RoomBooking] Backend getConferenceRooms returned:', items ? items.length : 0);
+        } catch (backendErr) {
+            console.warn('[RoomBooking] Backend query error:', backendErr);
+        }
+
+        if (!items || items.length === 0) {
+            const candidates = ['Conferanceroom', 'Conferance room', 'ConferanceRoom', 'conferance_room', 'ConferenceRoom', 'Conference room'];
+            for (const colId of candidates) {
+                try {
+                    const res = await wixData.query(colId).limit(50).find();
+                    if (res && res.items && res.items.length > 0) {
+                        items = res.items;
+                        console.log(`[RoomBooking] Direct frontend query on "${colId}" found:`, items.length);
+                        break;
+                    }
+                } catch (queryErr) {
+                    // Try next candidate
+                }
+            }
+        }
+
+        if (items && items.length > 0) {
+            const rooms = items.map(item => {
+                const title = item.title || item.Title || item.name || item.Name || item.roomName || item.RoomName || 'Conference Room';
+                let rawImg = item.picture || item.Picture || item.image || item.Image || item.photo || item.Photo || item.roomImage || item.coverImage || item.mainImage || item.img || '';
+                const imageUrl = formatWixImageUrl(rawImg);
+
+                return {
+                    id: item._id,
+                    title: title,
+                    image: imageUrl,
+                    imageUrl: imageUrl,
+                    description: item.description || item.Description || '',
+                    capacity: item.capacity || item.Capacity || ''
+                };
+            });
+
+            console.log('[RoomBooking] Mapped rooms count:', rooms.length);
+            veloRoomsCache = rooms;
+            sendRoomsResponse(rooms);
+        } else {
+            console.warn(`[RoomBooking] No rooms found in CMS collection "${CONFIG.roomsCollection}".`);
+        }
+    } catch (err) {
+        console.error('[RoomBooking] Error in handleGetRooms:', err);
+    }
+}
+
+function sendRoomsResponse(rooms) {
+    try {
+        console.log('[RoomBooking] Posting ROOMS_RESPONSE to #html1');
+        $w('#html1').postMessage({
+            action: 'ROOMS_RESPONSE',
+            rooms: rooms
+        });
+    } catch (e) {
+        console.error('[RoomBooking] Failed to post rooms to #html1:', e);
+    }
+}
 
 const veloSlotsCache = {};
 
@@ -146,7 +263,7 @@ async function handleBookingSubmission(data) {
         const s12 = formatTime12(startTime);
         const e12 = formatTime12(endTime);
 
-        // Insert into RoomBookings: strictly 12-hour times and bookingDateText
+        // Insert into RoomBookings
         await wixData.insert(CONFIG.collectionName, {
             roomName,
             bookingDate: siteMidnight,
@@ -155,9 +272,13 @@ async function handleBookingSubmission(data) {
             startTime: s12,
             endTime: e12,
             fullName: fullName || '',
+            Fullname: fullName || '',
             email: email || '',
+            Email: email || '',
             phone: phone || '',
+            Phone: phone || '',
             notes: notes || '',
+            Notes: notes || '',
             memberId
         });
 

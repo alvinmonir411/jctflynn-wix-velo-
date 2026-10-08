@@ -140,7 +140,7 @@
 
     .burb-book-rooms-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 26px;
     }
 
@@ -1105,7 +1105,7 @@
         <h1>Book a Meeting Space</h1>
       </div>
 
-      <div class="burb-book-rooms-grid">
+      <div class="burb-book-rooms-grid" id="roomsGrid">
         <!-- Large Conference Room -->
         <div class="burb-book-room-card">
           <div class="burb-book-room-img-wrap">
@@ -1391,6 +1391,108 @@
     const durationText = document.getElementById('durationText');
     const rangeHoursBadge = document.getElementById('rangeHoursBadge');
     const slotsGrid = document.getElementById('slotsGrid');
+    const roomsGrid = document.getElementById('roomsGrid');
+
+    // Default Fallback Rooms (dynamically overwritten when CMS collection 'Conferanceroom' loads)
+    const DEFAULT_ROOMS = [
+      {
+        title: 'Large Conference Room',
+        image: 'https://static.wixstatic.com/media/b95dae_36530dbd512d44ed9fad2ae9963a3e09~mv2.jpg'
+      },
+      {
+        title: 'Small Conference Room',
+        image: 'https://static.wixstatic.com/media/b95dae_c726334b29934448aa5eaf1fb5835d7a~mv2.jpg'
+      },
+      {
+        title: 'Private Office',
+        image: 'https://static.wixstatic.com/media/b95dae_0ab92caf5971498590ef9ea22c48d87e~mv2.jpg'
+      }
+    ];
+
+    let currentRooms = [...DEFAULT_ROOMS];
+
+    // Helper: Convert Wix image URI into direct web-loadable URL
+    function formatImageUrl(img) {
+      if (!img) return '';
+      if (typeof img === 'object' && img !== null) {
+        img = img.src || img.url || '';
+      }
+      if (typeof img !== 'string') return '';
+      const trimmed = img.trim();
+      if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:')) {
+        return trimmed;
+      }
+      if (trimmed.startsWith('wix:image://v1/')) {
+        const fileId = trimmed.replace('wix:image://v1/', '').split('/')[0];
+        return `https://static.wixstatic.com/media/${fileId}`;
+      }
+      if (trimmed.includes('~mv2') || trimmed.match(/^[a-zA-Z0-9_-]+\.(jpg|jpeg|png|webp|gif)/i)) {
+        return `https://static.wixstatic.com/media/${trimmed}`;
+      }
+      return trimmed;
+    }
+
+    // Dynamically render room cards from CMS collection Conferanceroom
+    function renderRooms(roomsList) {
+      if (!roomsGrid) return;
+      if (!Array.isArray(roomsList) || roomsList.length === 0) return;
+
+      currentRooms = roomsList;
+      roomsGrid.innerHTML = '';
+
+      roomsList.forEach(room => {
+        const rawTitle = room.title || room.Title || room.name || room.Name || room.roomName || room.RoomName || 'Conference Room';
+        const rawImg = room.image || room.Image || room.picture || room.Picture || room.photo || room.Photo || room.coverImage || room.mainImage || room.imageUrl || '';
+        const imgSrc = formatImageUrl(rawImg) || 'https://static.wixstatic.com/media/b95dae_36530dbd512d44ed9fad2ae9963a3e09~mv2.jpg';
+
+        const card = document.createElement('div');
+        card.className = 'burb-book-room-card';
+
+        const imgWrap = document.createElement('div');
+        imgWrap.className = 'burb-book-room-img-wrap';
+
+        const img = document.createElement('img');
+        img.className = 'burb-book-room-img';
+        img.src = imgSrc;
+        img.alt = rawTitle;
+        img.loading = 'lazy';
+        img.onerror = function () {
+          this.src = 'https://static.wixstatic.com/media/b95dae_36530dbd512d44ed9fad2ae9963a3e09~mv2.jpg';
+        };
+        imgWrap.appendChild(img);
+
+        const content = document.createElement('div');
+        content.className = 'burb-book-room-content';
+
+        const titleEl = document.createElement('h3');
+        titleEl.className = 'burb-book-room-title';
+        titleEl.textContent = rawTitle;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'burb-book-btn-primary';
+        btn.textContent = 'Book Now';
+        btn.onclick = () => selectRoom(rawTitle);
+
+        content.appendChild(titleEl);
+        content.appendChild(btn);
+
+        card.appendChild(imgWrap);
+        card.appendChild(content);
+        roomsGrid.appendChild(card);
+      });
+    }
+
+    function requestRoomsFromVelo() {
+      try {
+        console.log('[Embed] Sending GET_ROOMS to parent window...');
+        window.parent.postMessage({
+          action: 'GET_ROOMS'
+        }, '*');
+      } catch (e) {
+        console.warn('[Embed] Could not postMessage to parent:', e);
+      }
+    }
 
     const sdRoomTitle = document.getElementById('sdRoomTitle');
     const sdTimeInfo = document.getElementById('sdTimeInfo');
@@ -1551,7 +1653,16 @@
     }
 
     window.addEventListener('message', (event) => {
-      const { action, bookedSlots, roomName, bookingDate, success, message } = event.data || {};
+      const { action, rooms, bookedSlots, roomName, bookingDate, success, message } = event.data || {};
+
+      if (action === 'ROOMS_RESPONSE' || action === 'SET_ROOMS' || action === 'CONFERENCE_ROOMS_RESPONSE') {
+        console.log('[Embed] Received ROOMS_RESPONSE from Wix:', rooms);
+        if (Array.isArray(rooms) && rooms.length > 0) {
+          renderRooms(rooms);
+        } else {
+          console.warn('[Embed] ROOMS_RESPONSE had empty or non-array rooms:', rooms);
+        }
+      }
       if (action === 'BOOKED_SLOTS_RESPONSE') {
         clearTimeout(window._slotSyncTimer);
         const isoDate = getLocalDateISO(state.selectedDate);
@@ -1987,6 +2098,11 @@
 
     // Ensure Step 1 is explicitly initialized on initial render
     goToStep(1);
+
+    // Request rooms from CMS collection Conferanceroom
+    requestRoomsFromVelo();
+    setTimeout(requestRoomsFromVelo, 400);
+    setTimeout(requestRoomsFromVelo, 1500);
   </script>
 </body>
 

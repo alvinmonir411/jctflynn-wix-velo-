@@ -1,5 +1,18 @@
 {
   "web-methods": {
+    "backend/rooms.jsw": {
+      "getConferenceRooms": {
+        "siteOwner": {
+          "invoke": true
+        },
+        "siteMember": {
+          "invoke": true
+        },
+        "anonymous": {
+          "invoke": true
+        }
+      }
+    },
     "*": {
       "*": {
         "siteOwner": {
